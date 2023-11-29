@@ -20,8 +20,8 @@ export default {
   },
   methods: {
       unirseSala() {
-   
-   const socket = io('http://localhost:3000'); // Reemplaza con la URL de tu servidor
+   socket.emit('altaUser',nombre);
+
 
  
    socket.emit('jugadorUnido', { nombre: this.nombre, id: obtenerIdUsuario() });
