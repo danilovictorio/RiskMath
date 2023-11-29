@@ -13,7 +13,7 @@ use App\Http\Controllers\PreguntaController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/preguntas/{id}', [PreguntaController::class, 'mostrarPregunta']);
+Route::get('/preguntas', [PreguntaController::class, 'mostrarPreguntas']);
 
 Route::get('/', function () {
     return view('welcome');

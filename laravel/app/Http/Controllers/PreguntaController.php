@@ -6,10 +6,9 @@ use Illuminate\Http\Request;
 
 class PreguntaController extends Controller
 {
-    public function mostrarPregunta($id)
+    public function mostrarPreguntas()
     {
-        $pregunta = Pregunta::findOrFail($id);
-
-        return view('pregunta.mostrar', ['pregunta' => $pregunta]);
-}
+        $preguntas = Pregunta::all();
+        return view('mostrar', ['preguntas' => $preguntas]);
+    }
 }
