@@ -1,9 +1,32 @@
-<script setup>
-import TheWelcome from '../components/TheWelcome.vue'
-</script>
-
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <div>
+ 
+    <form @submit.prevent="unirseSala">
+      <label for="nombre">Nombre del Jugador:</label>
+      <input v-model="nombre" type="text" id="nombre" required>
+      <button type="submit">Unirse</button>
+    </form>
+  </div>
 </template>
+
+<script>
+import io from 'socket.io-client';
+
+export default {
+  data() {
+    return {
+      nombre: '',
+    };
+  },
+  methods: {
+      unirseSala() {
+   
+   const socket = io('http://localhost:3000'); // Reemplaza con la URL de tu servidor
+
+ 
+   socket.emit('jugadorUnido', { nombre: this.nombre, id: obtenerIdUsuario() });
+
+  
+},
+  },
+};
