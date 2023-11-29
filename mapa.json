@@ -1,0 +1,30 @@
+{
+    "paises": [
+      {
+        "id": 1,
+        "nombre": "pais1",
+        "ocupante": ""
+      },
+      {
+        "id": 2,
+        "nombre": "pais2",
+        "ocupante": ""
+      },
+      {
+        "id": 3,
+        "nombre": "pais3",
+        "ocupante": ""
+      },
+      {
+        "id": 4,
+        "nombre": "pais4",
+        "ocupante": ""
+      },
+      {
+        "id": 5,
+        "nombre": "pais5",
+        "ocupante": ""
+      }
+    ]
+  }
+  
