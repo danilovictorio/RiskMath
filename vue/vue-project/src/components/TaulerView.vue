@@ -1,58 +1,62 @@
 <template>
-  <div class="mapa">
-    <ul @click="atacar(pais.nombre)">
-      <li v-for="pais in paises" :key="pais.id">
-        {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
-      </li>
-    </ul>
-  </div>
-  <div class="preguntes">
-    <div class="preguntes pregunta">
-      <h1>{{ mostrarPregunta() }}</h1>
+  <div>
+    <div class="mapa">
+      <ul @click="atacar(pais.nombre)">
+        <li v-for="pais in paises" :key="pais.id">
+          {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
+        </li>
+      </ul>
     </div>
-    <div class="preguntes resposta1">
-      <button v-on:click="resposta(1)">{{ respuesta[0] }}</button>
-    </div>
-    <div class="preguntes resposta2">
-      <button v-on:click="resposta(2)">{{ respuesta[1] }}</button>
-    </div>
-    <div class="preguntes resposta3">
-      <button v-on:click="resposta(3)">{{ respuesta[2] }}</button>
-    </div>
-    <div class="preguntes resposta4">
-      <button v-on:click="resposta(4)">{{ respuesta[3] }}</button>
+    <div class="preguntas">
+      <div v-for="pregunta in preguntas" :key="pregunta.id" class="pregunta">
+        <h1>{{ pregunta.pregunta }}</h1>
+        <ul>
+          <li v-for="(opcion, index) in pregunta.opciones" :key="index">
+            {{ opcion }}
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-  import dataPaises from '../../../../laravel/mapa.json';
-  import dataPreguntes from '../../../../laravel/preguntes.json';
+import dataPaises from '../../../../laravel/mapa.json';
+import dataPreguntes from '../../../../laravel/preguntes.json';
 
-  export default {
-    data() {
-      return {
-        paises: [],
-        preguntes: [],
-        respuesta: [] 
-      }
-    },
-    methods: { 
-      mostrarPregunta() {
-        //const pregNum = this.preguntes.length; 
-        //const aleatorio = Math.floor(Math.random() * pregNum); 
-        //return this.preguntes[aleatorio].pregunta; // Devuelve la pregunta
-      },
-      resposta(numResp) {
-        // Lógica para manejar la respuesta seleccionada
-      }
-    },
-    created() {
-      this.paises = dataPaises.paises;
-      this.preguntes = dataPreguntes.preguntes;
-      this.respuesta = [
-        // Agrega aquí las respuestas para cada botón, según la estructura de tu JSON
-      ];
+export default {
+  data() {
+    return {
+      paises: [],
+      preguntas: [],
+      respuesta: []
     }
+  },
+  methods: {
+    async obtenerPreguntas() {
+      try {
+        const response = await fetch('http://localhost:8000/api/mostrar-preguntas');
+        const data = await response.json();
+
+        this.preguntas = data.preguntas;
+        this.respuesta = data.preguntas[0].opciones;
+      } catch (error) {
+        console.error('Error al obtener preguntas:', error);
+      }
+    },
+    resposta(numResp) {
+      
+    }
+  },
+  async mounted() {
+    await this.obtenerPreguntas();
+   
+  },
+  created() {
+    this.paises = dataPaises.paises;
+    this.respuesta = [
+     
+    ];
   }
+}
 </script>

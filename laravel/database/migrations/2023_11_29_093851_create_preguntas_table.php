@@ -20,6 +20,7 @@ return new class extends Migration
         $table->text('b');
         $table->text('c');
         $table->text('d');
+        $table->text('respuesta_correcta');
         $table->timestamps();
         });
     }
