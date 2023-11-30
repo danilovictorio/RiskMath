@@ -1,6 +1,6 @@
 <template>
   <div class="mapa">
-    <ul>
+    <ul @click="atacar(pais.nombre)">
       <li v-for="pais in paises" :key="pais.id">
         {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
       </li>
@@ -26,33 +26,33 @@
 </template>
 
 <script>
-import dataPaises from '../../../../laravel/mapa.json';
-import dataPreguntes from '../../../../laravel/mapa.json';
+  import dataPaises from '../../../../laravel/mapa.json';
+  import dataPreguntes from '../../../../laravel/preguntes.json';
 
-export default {
-  data() {
-    return {
-      paises: [],
-      preguntes: [],
-      respuesta: [] // Array para almacenar las respuestas
-    }
-  },
-  methods: { 
-    mostrarPregunta() {
-      const pregNum = this.preguntes.length; 
-      const aleatorio = Math.floor(Math.random() * pregNum); 
-      return this.preguntes[aleatorio].pregunta; // Devuelve la pregunta
+  export default {
+    data() {
+      return {
+        paises: [],
+        preguntes: [],
+        respuesta: [] 
+      }
     },
-    resposta(numResp) {
-      // Lógica para manejar la respuesta seleccionada
+    methods: { 
+      mostrarPregunta() {
+        //const pregNum = this.preguntes.length; 
+        //const aleatorio = Math.floor(Math.random() * pregNum); 
+        //return this.preguntes[aleatorio].pregunta; // Devuelve la pregunta
+      },
+      resposta(numResp) {
+        // Lógica para manejar la respuesta seleccionada
+      }
+    },
+    created() {
+      this.paises = dataPaises.paises;
+      this.preguntes = dataPreguntes.preguntes;
+      this.respuesta = [
+        // Agrega aquí las respuestas para cada botón, según la estructura de tu JSON
+      ];
     }
-  },
-  created() {
-    this.paises = dataPaises.paises;
-    this.preguntes = dataPreguntes.preguntes;
-    this.respuesta = [
-      // Agrega aquí las respuestas para cada botón, según la estructura de tu JSON
-    ];
   }
-}
 </script>
