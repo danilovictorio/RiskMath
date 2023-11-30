@@ -8,11 +8,20 @@
       </ul>
     </div>
     <div class="preguntas">
-      <div v-for="pregunta in preguntas" :key="pregunta.id" class="pregunta">
-        <h1>{{ pregunta.pregunta }}</h1>
+      <div class="pregunta">
+        <h1>{{ preguntas.pregunta }}</h1>
         <ul>
-          <li v-for="(opcion, index) in pregunta.opciones" :key="index">
-            {{ opcion }}
+          <li >
+            {{ preguntas.a }}
+          </li>
+          <li >
+            {{ preguntas[0].opciones[0] }}
+          </li>
+          <li >
+            {{ preguntas[0].opciones[0] }}
+          </li>
+          <li >
+            {{ preguntas[0].opciones[0] }}
           </li>
         </ul>
       </div>
@@ -36,10 +45,12 @@ export default {
     async obtenerPreguntas() {
       try {
         const response = await fetch('http://localhost:8000/api/mostrar-preguntas');
+        console.log(response);
         const data = await response.json();
-
         this.preguntas = data.preguntas;
-        this.respuesta = data.preguntas[0].opciones;
+        this.respuesta = data.preguntas.forEach(element => {
+          data.preguntas[0].opciones
+        });;
       } catch (error) {
         console.error('Error al obtener preguntas:', error);
       }
