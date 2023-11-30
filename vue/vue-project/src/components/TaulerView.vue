@@ -7,15 +7,18 @@
         </li>
       </ul>
     </div>
-    <div class="preguntas">
-      <div v-for="pregunta in preguntas" :key="pregunta.id" class="pregunta">
-        <h1>{{ pregunta.pregunta }}</h1>
+    <div v-if="currentQuestion !== null">
+      <div class="pregunta">
+        <h1>{{ preguntas[currentQuestion].pregunta }}</h1>
         <ul>
-          <li v-for="(opcion, index) in pregunta.opciones" :key="index">
-            {{ opcion }}
+          <li>
+            <button @click="resposta(preguntas[currentQuestion].id, 'a')">a: {{ preguntas[currentQuestion].a }}</button>
+            <button @click="resposta(preguntas[currentQuestion].id, 'b')">b: {{ preguntas[currentQuestion].b }}</button>
+            <button @click="resposta(preguntas[currentQuestion].id, 'c')">c: {{ preguntas[currentQuestion].c }}</button>
           </li>
         </ul>
       </div>
+      <button @click="nextQuestion" v-if="currentQuestion < preguntas.length - 1">Next</button>
     </div>
   </div>
 </template>
@@ -29,8 +32,9 @@ export default {
     return {
       paises: [],
       preguntas: [],
-      respuesta: []
-    }
+      respuesta: [],
+      currentQuestion: null
+    };
   },
   methods: {
     async obtenerPreguntas() {
@@ -40,23 +44,62 @@ export default {
 
         this.preguntas = data.preguntas;
         this.respuesta = data.preguntas[0].opciones;
+
+        console.log(data.preguntas);
       } catch (error) {
         console.error('Error al obtener preguntas:', error);
       }
     },
-    resposta(numResp) {
-      
+    resposta(questionId, option) {
+
+      console.log(`Selected option: ${option} for question ID: ${questionId}`);
+
+
+      this.validateResponse(questionId, option);
+    },
+    validateResponse(questionId, selectedOption) {
+      const apiUrl = 'http://localhost:8000/api/validar-respuesta';
+
+      const requestData = {
+        questionId: questionId,
+        selectedOption: selectedOption
+      };
+
+      fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData),
+      })
+        .then(response => response.json())
+        .then(result => {
+
+          if (result.success) {
+            console.log('Answer is correct!');
+
+          } else {
+            console.log('Answer is incorrect.');
+
+          }
+        })
+        .catch(error => {
+          console.error('Error validating response:', error);
+        });
+    },
+
+    nextQuestion() {
+      this.currentQuestion += 1;
     }
   },
   async mounted() {
     await this.obtenerPreguntas();
-   
+    this.currentQuestion = 0;
   },
   created() {
     this.paises = dataPaises.paises;
-    this.respuesta = [
-     
-    ];
+    this.respuesta = [];
   }
-}
+};
 </script>
+
