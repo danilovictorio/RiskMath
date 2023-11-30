@@ -18,3 +18,6 @@ Route::get('/preguntas', [PreguntaController::class, 'mostrarPreguntas']);
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/game', function () {
+    return view('gameview');
+});
