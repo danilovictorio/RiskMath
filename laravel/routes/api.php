@@ -15,7 +15,7 @@ use App\Http\Controllers\PreguntaController;
 */
 
 Route::get('/mostrar-preguntas', [PreguntaController::class, 'mostrarPreguntas']);
-Route::post('/verificar-respuesta', [PreguntaController::class, 'verificarRespuesta']);
+Route::post('/validar-respuesta', [PreguntaController::class, 'validarRespuesta']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
