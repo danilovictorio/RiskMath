@@ -1,20 +1,25 @@
 <template>
-  <div>
+  <div class="container">
     <div class="mapa">
+      <!-- Your existing code for the map -->
       <ul @click="atacar(pais.nombre)">
         <li v-for="pais in paises" :key="pais.id">
           {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
         </li>
       </ul>
+      <img src="../../../../laravel/resources/img/mapa1.jpg" alt="">
     </div>
-    <div v-if="currentQuestion !== null">
+    <div v-if="currentQuestion !== null" class="pregunta-container">
       <div class="pregunta">
         <h1>{{ preguntas[currentQuestion].pregunta }}</h1>
         <ul>
           <li>
-            <button @click="resposta(preguntas[currentQuestion].id, 'a')">a: {{ preguntas[currentQuestion].a }}</button>
-            <button @click="resposta(preguntas[currentQuestion].id, 'b')">b: {{ preguntas[currentQuestion].b }}</button>
-            <button @click="resposta(preguntas[currentQuestion].id, 'c')">c: {{ preguntas[currentQuestion].c }}</button>
+            <button @click="resposta('a')">a: {{ preguntas[currentQuestion].a }}</button>
+            <button @click="resposta('b')">b: {{ preguntas[currentQuestion].b }}</button>
+          </li>
+          <li>
+            <button @click="resposta('c')">c: {{ preguntas[currentQuestion].c }}</button>
+            <button @click="resposta('d')">d: {{ preguntas[currentQuestion].d }}</button>
           </li>
         </ul>
       </div>
@@ -102,4 +107,38 @@ export default {
   }
 };
 </script>
+<style scoped>
+.container {
+  display: flex;
+  height: 100vh; 
+}
+
+.mapa {
+  width: 50%;
+ 
+}
+
+.pregunta-container {
+  width: 50%;
+  padding: 20px;
+  box-sizing: border-box;
+ 
+}
+
+.pregunta {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li button {
+  margin-bottom: 10px;
+
+}
+</style>
 
