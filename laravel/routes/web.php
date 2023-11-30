@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PreguntaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,7 +13,11 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/preguntas', [PreguntaController::class, 'mostrarPreguntas']);
 
 Route::get('/', function () {
     return view('welcome');
+});
+Route::get('/game', function () {
+    return view('gameview');
 });
