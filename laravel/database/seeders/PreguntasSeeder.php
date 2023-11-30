@@ -15,7 +15,10 @@ class PreguntasSeeder extends Seeder
             foreach ($preguntas as $preguntaData) {
                 Pregunta::create([
                     'pregunta' => $preguntaData['pregunta'],
-                    'opciones' => json_encode($preguntaData['opciones']),
+                    'a' => $preguntaData.opciones[0], 
+                    'b' => $preguntaData.opciones[1],
+                    'c' => $preguntaData.opciones[2],
+                    'd' => $preguntaData.opciones[3],
                     'respuesta_correcta' => $preguntaData['respuesta_correcta'],
                 ]);
             }

@@ -16,8 +16,10 @@ return new class extends Migration
         Schema::create('preguntas', function (Blueprint $table) {
         $table->id();
         $table->text('pregunta');
-        $table->json('opciones');
-        $table->string('respuesta_correcta');
+        $table->text('a');
+        $table->text('b');
+        $table->text('c');
+        $table->text('d');
         $table->timestamps();
         });
     }
