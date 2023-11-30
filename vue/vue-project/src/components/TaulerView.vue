@@ -8,19 +8,19 @@
   </div>
   <div class="preguntes">
     <div class="preguntes pregunta">
-      <h1>{{ mostrarPregunta() }}</h1>
+      <h1>{{ getPreguntes().pregunta }}</h1>
     </div>
     <div class="preguntes resposta1">
-      <button v-on:click="resposta(1)">{{ respuesta[0] }}</button>
+      <button v-on:click="resposta(1)">{{ getPreguntes().opciones[0] }}</button>
     </div>
     <div class="preguntes resposta2">
-      <button v-on:click="resposta(2)">{{ respuesta[1] }}</button>
+      <button v-on:click="resposta(2)">{{ getPreguntes().opciones[1] }}</button>
     </div>
     <div class="preguntes resposta3">
-      <button v-on:click="resposta(3)">{{ respuesta[2] }}</button>
+      <button v-on:click="resposta(3)">{{ getPreguntes().opciones[2] }}</button>
     </div>
     <div class="preguntes resposta4">
-      <button v-on:click="resposta(4)">{{ respuesta[3] }}</button>
+      <button v-on:click="resposta(4)">{{ getPreguntes().opciones[3] }}</button>
     </div>
   </div>
 </template>
@@ -33,16 +33,23 @@
     data() {
       return {
         paises: [],
-        preguntes: [],
-        respuesta: [] 
+        preguntes: []
       }
     },
     methods: { 
-      mostrarPregunta() {
-        //const pregNum = this.preguntes.length; 
-        //const aleatorio = Math.floor(Math.random() * pregNum); 
-        //return this.preguntes[aleatorio].pregunta; // Devuelve la pregunta
-      },
+      async getPreguntes() {
+        try{
+          const response= await fetch('http://localhost:8000/api/pregunta')
+          if (!response.ok) {
+            throw new Error('Error de red - Código $(response.status)');
+          }
+          const data = await response.json();
+          console.log('Respuesta de la API',data);
+
+        }catch(error){
+          console.error('Error al obtener datos de la API:',error)
+        }
+    },
       resposta(numResp) {
         // Lógica para manejar la respuesta seleccionada
       }
