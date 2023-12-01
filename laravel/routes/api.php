@@ -19,7 +19,7 @@ Route::get('/mostrar-preguntas', [PreguntaController::class, 'mostrarPreguntas']
 Route::post('/verificar-respuesta', [PreguntaController::class, 'verificarRespuesta']);
 
 //Rutas de paisos
-Route::get('/api/paises', [PaisController::class, 'obtenerPaises']);
+Route::get('/paises', [PaisController::class, 'obtenerPaises']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

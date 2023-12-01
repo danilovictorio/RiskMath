@@ -1,13 +1,14 @@
 <template>
   <div class="container">
     <div class="mapa">
+      
       <!-- Your existing code for the map -->
       <ul @click="atacar(pais.nombre)">
         <li v-for="pais in paises" :key="pais.id">
           {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
         </li>
       </ul>
-      <img src="../../../../laravel/resources/img/mapa1.jpg" alt="">
+      
     </div>
     <div v-if="currentQuestion !== null" class="pregunta-container">
       <div class="pregunta">
@@ -56,9 +57,10 @@ export default {
       }
     },async obtenerDatosPaises() {
       try {
-        const response = await fetch('http://localhost:5173/api/paises'); // Reemplaza la URL con la correcta
+        const response = await fetch('http://localhost:8000/api/paises'); 
         const data = await response.json();
         this.paises = data.paises;
+        console.log(data);
       } catch (error) {
         console.error('Error al obtener datos de países:', error);
       }
@@ -70,12 +72,12 @@ export default {
 
       this.validateResponse(questionId, option);
     },
-    validateResponse(questionId, selectedOption) {
+    validateResponse(preguntaId, respuestaUsuario) {
       const apiUrl = 'http://localhost:8000/api/validar-respuesta';
 
       const requestData = {
-        questionId: questionId,
-        selectedOption: selectedOption
+        preguntaId: preguntaId,
+        respuestaUsuario: respuestaUsuario
       };
 
       fetch(apiUrl, {
@@ -100,7 +102,6 @@ export default {
           console.error('Error validating response:', error);
         });
     },
-
     nextQuestion() {
       this.currentQuestion += 1;
     }
@@ -111,7 +112,7 @@ export default {
     this.currentQuestion = 0;
   },
   created() {
-    this.paises = dataPaises.paises;
+    
     this.respuesta = [];
   }
 };
