@@ -54,6 +54,14 @@ export default {
       } catch (error) {
         console.error('Error al obtener preguntas:', error);
       }
+    },async obtenerDatosPaises() {
+      try {
+        const response = await fetch('http://localhost:5173/api/paises'); // Reemplaza la URL con la correcta
+        const data = await response.json();
+        this.paises = data.paises;
+      } catch (error) {
+        console.error('Error al obtener datos de países:', error);
+      }
     },
     resposta(questionId, option) {
 
@@ -99,6 +107,7 @@ export default {
   },
   async mounted() {
     await this.obtenerPreguntas();
+    this.obtenerDatosPaises();
     this.currentQuestion = 0;
   },
   created() {
