@@ -12,7 +12,7 @@ class PreguntaController extends Controller
     return response()->json(['preguntas' => $preguntas]);
 }
 
-
+ 
     public function verificarRespuesta(Request $request)
     {
     $preguntaId = $request->input('pregunta_id');
