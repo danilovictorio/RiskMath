@@ -9,21 +9,21 @@
       </ul>
       <img src="../../../../laravel/resources/img/mapa1.jpg" alt="">
     </div>
-    <div v-if="currentQuestion !== null" class="pregunta-container">
+    <div v-if="preguntaActual !== null" class="pregunta-container">
       <div class="pregunta">
-        <h1>{{ preguntas[currentQuestion].pregunta }}</h1>
+        <h1>{{ preguntas[preguntaActual].pregunta }}</h1>
         <ul>
           <li>
-            <button @click="resposta('a')">a: {{ preguntas[currentQuestion].a }}</button>
-            <button @click="resposta('b')">b: {{ preguntas[currentQuestion].b }}</button>
+            <button @click="resposta('a')">a: {{ preguntas[preguntaActual].a }}</button>
+            <button @click="resposta('b')">b: {{ preguntas[preguntaActual].b }}</button>
           </li>
           <li>
-            <button @click="resposta('c')">c: {{ preguntas[currentQuestion].c }}</button>
-            <button @click="resposta('d')">d: {{ preguntas[currentQuestion].d }}</button>
+            <button @click="resposta('c')">c: {{ preguntas[preguntaActual].c }}</button>
+            <button @click="resposta('d')">d: {{ preguntas[preguntaActual].d }}</button>
           </li>
         </ul>
       </div>
-      <button @click="nextQuestion" v-if="currentQuestion < preguntas.length - 1">Next</button>
+      <button @click="seguentPregunta" v-if="preguntaActual < preguntas.length - 1">Següent</button>
     </div>
   </div>
 </template>
@@ -38,7 +38,7 @@ export default {
       paises: [],
       preguntas: [],
       respuesta: [],
-      currentQuestion: null
+      preguntaActual: null
     };
   },
   methods: {
@@ -70,12 +70,12 @@ export default {
 
       this.validateResponse(questionId, option);
     },
-    validateResponse(questionId, selectedOption) {
+    validateResponse(preguntaId, respuestaUsuario) {
       const apiUrl = 'http://localhost:8000/api/validar-respuesta';
 
       const requestData = {
-        questionId: questionId,
-        selectedOption: selectedOption
+        preguntaId: preguntaId,
+        respuestaUsuario: respuestaUsuario
       };
 
       fetch(apiUrl, {
@@ -101,14 +101,14 @@ export default {
         });
     },
 
-    nextQuestion() {
-      this.currentQuestion += 1;
+    seguentPregunta() {
+      this.preguntaActual += 1;
     }
   },
   async mounted() {
     await this.obtenerPreguntas();
     this.obtenerDatosPaises();
-    this.currentQuestion = 0;
+    this.preguntaActual = 0;
   },
   created() {
     this.paises = dataPaises.paises;
