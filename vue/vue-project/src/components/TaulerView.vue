@@ -54,23 +54,26 @@ export default {
       } catch (error) {
         console.error('Error al obtener preguntas:', error);
       }
-    },async obtenerDatosPaises() {
+    },
+
+    async obtenerDatosPaises() {
       try {
-        const response = await fetch('http://localhost:5173/api/paises'); // Reemplaza la URL con la correcta
+        const response = await fetch('http://localhost:5173/api/paises');
         const data = await response.json();
         this.paises = data.paises;
       } catch (error) {
         console.error('Error al obtener datos de países:', error);
       }
     },
-    resposta(questionId, option) {
 
-      console.log(`Selected option: ${option} for question ID: ${questionId}`);
+    resposta(preguntaId, opcio) {
+
+      console.log(`Selected option: ${opcio} for question ID: ${preguntaId}`);
 
 
-      this.validateResponse(questionId, option);
+      this.validateResponse(preguntaId, opcio);
     },
-    validateResponse(preguntaId, respuestaUsuario) {
+    async validateResponse(preguntaId, respuestaUsuario) {
       const apiUrl = 'http://localhost:8000/api/validar-respuesta';
 
       const requestData = {
@@ -78,27 +81,25 @@ export default {
         respuestaUsuario: respuestaUsuario
       };
 
-      fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestData),
-      })
-        .then(response => response.json())
-        .then(result => {
-
-          if (result.success) {
-            console.log('Answer is correct!');
-
-          } else {
-            console.log('Answer is incorrect.');
-
-          }
-        })
-        .catch(error => {
-          console.error('Error validating response:', error);
+      try {
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestData),
         });
+
+        const resultat = await response.json();
+
+        if (resultat.success) {
+          console.log('Answer is correct!');
+        } else {
+          console.log('Answer is incorrect.');
+        }
+      } catch (error) {
+        console.error('Error validating response:', error);
+      }
     },
 
     seguentPregunta() {
@@ -119,19 +120,19 @@ export default {
 <style scoped>
 .container {
   display: flex;
-  height: 100vh; 
+  height: 100vh;
 }
 
 .mapa {
   width: 50%;
- 
+
 }
 
 .pregunta-container {
   width: 50%;
   padding: 20px;
   box-sizing: border-box;
- 
+
 }
 
 .pregunta {
