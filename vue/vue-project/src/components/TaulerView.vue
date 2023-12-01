@@ -73,8 +73,8 @@ export default {
     validateResponse(questionId, selectedOption) {
       const apiUrl = 'http://localhost:8000/api/verificarRespuesta';
       const requestData = {
-        preguntaId = questionId,
-        respuestaUsuario = selectedOption
+        preguntaId : questionId,
+        respuestaUsuario : selectedOption
       };
 
       fetch(apiUrl, {
