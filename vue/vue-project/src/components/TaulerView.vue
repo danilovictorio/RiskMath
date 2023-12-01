@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <div class="mapa">
-      <!-- Your existing code for the map -->
       <ul @click="atacar(pais.nombre)">
         <li v-for="pais in paises" :key="pais.id">
           {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
@@ -58,7 +57,7 @@ export default {
 
     async obtenerDatosPaises() {
       try {
-        const response = await fetch('http://localhost:5173/api/paises');
+        const response = await fetch('http://localhost:8000/api/paises');
         const data = await response.json();
         this.paises = data.paises;
       } catch (error) {
