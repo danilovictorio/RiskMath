@@ -20,6 +20,7 @@ Route::post('/verificar-respuesta', [PreguntaController::class, 'verificarRespue
 
 //Rutas de paisos
 Route::get('/paises', [PaisController::class, 'obtenerPaises']);
+Route::post('/atacar', [TuControlador::class, 'atacar'])->name('atacar');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

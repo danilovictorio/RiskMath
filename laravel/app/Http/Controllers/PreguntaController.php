@@ -29,6 +29,7 @@ class PreguntaController extends Controller
     $esCorrecta = ($respuestaUsuario == $respuestaCorrecta);
 
     return response()->json(['es_correcta' => $esCorrecta]);
+    
     }
 
 }

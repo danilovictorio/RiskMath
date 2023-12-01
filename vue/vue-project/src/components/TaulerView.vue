@@ -1,14 +1,14 @@
 <template>
   <div class="container">
     <div class="mapa">
-      
-      <!-- Your existing code for the map -->
+
+
       <ul @click="atacar(pais.nombre)">
         <li v-for="pais in paises" :key="pais.id">
           {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
         </li>
       </ul>
-      
+
     </div>
     <div v-if="currentQuestion !== null" class="pregunta-container">
       <div class="pregunta">
@@ -55,9 +55,11 @@ export default {
       } catch (error) {
         console.error('Error al obtener preguntas:', error);
       }
-    },async obtenerDatosPaises() {
+    },
+
+    async obtenerDatosPaises() {
       try {
-        const response = await fetch('http://localhost:8000/api/paises'); 
+        const response = await fetch('http://localhost:8000/api/paises');
         const data = await response.json();
         this.paises = data.paises;
         console.log(data);
@@ -65,6 +67,31 @@ export default {
         console.error('Error al obtener datos de países:', error);
       }
     },
+
+
+    async atacar(nombrePais, usuarioActual) {
+      const apiUrl = 'http://localhost:8000/api/pais-seleccionado';
+
+      const requestData = {
+        nombrePais: nombrePais,
+        usuarioActual: usuarioActual
+      };
+
+      try {
+        await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestData),
+        });
+
+        console.log('Solicitud de ataque enviada correctamente.');
+      } catch (error) {
+        console.error('Error al enviar la solicitud de ataque:', error);
+      }
+    },
+
     resposta(questionId, option) {
 
       console.log(`Selected option: ${option} for question ID: ${questionId}`);
@@ -72,8 +99,10 @@ export default {
 
       this.validateResponse(questionId, option);
     },
+
+
     validateResponse(preguntaId, respuestaUsuario) {
-      const apiUrl = 'http://localhost:8000/api/validar-respuesta';
+      const apiUrl = 'http://localhost:8000/api/verificar-respuesta';
 
       const requestData = {
         preguntaId: preguntaId,
@@ -90,12 +119,10 @@ export default {
         .then(response => response.json())
         .then(result => {
 
-          if (result.success) {
+          if (result.es_correcta) {
             console.log('Answer is correct!');
-
           } else {
             console.log('Answer is incorrect.');
-
           }
         })
         .catch(error => {
@@ -112,7 +139,7 @@ export default {
     this.currentQuestion = 0;
   },
   created() {
-    
+
     this.respuesta = [];
   }
 };
@@ -120,19 +147,19 @@ export default {
 <style scoped>
 .container {
   display: flex;
-  height: 100vh; 
+  height: 100vh;
 }
 
 .mapa {
   width: 50%;
- 
+
 }
 
 .pregunta-container {
   width: 50%;
   padding: 20px;
   box-sizing: border-box;
- 
+
 }
 
 .pregunta {
