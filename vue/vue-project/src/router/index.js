@@ -4,14 +4,16 @@ import HomeView from '../components/PaginaPrincipal.vue';
 import TaulerView from '../components/TaulerView.vue';
 import { createApp } from 'vue';
 import App from './App.vue';
-import { store } from './store'; 
+import { createPinia } from 'pinia';
+import { useStore } from './store';
 
+const pinia = createPinia();
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'HomeView',
       component: HomeView,
     },
     {
@@ -24,6 +26,5 @@ const router = createRouter({
 
 const app = createApp(App);
 app.use(router);
-app.use(store);
-
+app.use(pinia);
 app.mount('#app');
