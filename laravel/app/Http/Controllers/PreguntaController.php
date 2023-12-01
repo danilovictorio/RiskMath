@@ -13,20 +13,36 @@ class PreguntaController extends Controller
         return response()->json(['preguntas' => $preguntas]);
     }
 
-    public function verificarRespuesta($id, $resposta)
-    {
-        $pregunta = Pregunta::find($id);
+    // public function verificarRespuesta($request)
+    // {
+    //     $preguntaId = $request->input('preguntaId');
+    //     $respuestaUsuario = $request->input('respuestaUsuario');
 
-        if (!$pregunta) {
-            return response()->json(['mensaje' => 'La pregunta no fue encontrada'], 404);
-        }
+    //     $pregunta = Pregunta::find($preguntaId);
+    //     $respuestaCorrecta = $pregunta->respuesta_correcta;
+    //     $esCorrecta = $respuestaUsuario === $respuestaCorrecta;
 
-        $respuesta_correcta = $pregunta->respuesta_correcta;
+    //     return response()->json(['success' => $esCorrecta]);
+    // }
 
-        if ($resposta == $respuesta_correcta) {
-            return response()->json(['resultado' => true]);
-        } else {
-            return response()->json(['resultado' => false]);
-        }
+
+     public function verificarRespuesta(Request $request){
+
+        
+         $respostaJugador = $request->respuestaUsuario;
+         $pregunta = $request->preguntaId;
+         $pregunta = Pregunta::find($request->preguntaId);
+         if (!$pregunta) {
+             return response()->json(['mensaje' => 'La pregunta no fue encontrada'], 404);
+         }
+
+         $respuesta_correcta = $pregunta->respuesta_correcta;
+
+         if ($respostaJugador == $respuesta_correcta) {
+             return response()->json(['resultado' => true]);
+         } else {
+             return response()->json(['resultado' => false]);
+         }
+     }
+
     }
-}

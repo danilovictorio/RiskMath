@@ -59,11 +59,10 @@ export default {
       this.validateResponse(questionId, option);
     },
     validateResponse(questionId, selectedOption) {
-      const apiUrl = 'http://localhost:8000/api/validar-respuesta';
-
+      const apiUrl = 'http://localhost:8000/api/verificarRespuesta';
       const requestData = {
-        questionId: questionId,
-        selectedOption: selectedOption
+        preguntaId = questionId,
+        respuestaUsuario = selectedOption
       };
 
       fetch(apiUrl, {
@@ -75,13 +74,10 @@ export default {
       })
         .then(response => response.json())
         .then(result => {
-
-          if (result.success) {
-            console.log('Answer is correct!');
-
+          if (result.resultado === true) {
+            console.log('La respuesta es verdadera');
           } else {
-            console.log('Answer is incorrect.');
-
+            console.log('La respuesta es falsa');
           }
         })
         .catch(error => {
