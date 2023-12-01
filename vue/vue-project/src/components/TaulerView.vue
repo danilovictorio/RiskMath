@@ -46,8 +46,8 @@ export default {
         const response = await fetch('http://localhost:8000/api/mostrar-preguntas');
         const data = await response.json();
 
-        this.preguntas = data.preguntas;
-        this.respuesta = data.preguntas[0].opciones;
+        this.preguntas : data.preguntas;
+        this.respuesta : data.preguntas[0].opciones;
 
         console.log(data.preguntas);
       } catch (error) {
