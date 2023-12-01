@@ -46,8 +46,8 @@ export default {
         const response = await fetch('http://localhost:8000/api/mostrar-preguntas');
         const data = await response.json();
 
-        this.preguntas : data.preguntas;
-        this.respuesta : data.preguntas[0].opciones;
+        this.preguntas = data.preguntas;
+        this.respuesta = data.preguntas[0].opciones;
 
         console.log(data.preguntas);
       } catch (error) {
@@ -73,8 +73,8 @@ export default {
     validateResponse(questionId, selectedOption) {
       const apiUrl = 'http://localhost:8000/api/verificarRespuesta';
       const requestData = {
-        preguntaId : questionId,
-        respuestaUsuario : selectedOption
+        preguntaId = questionId,
+        respuestaUsuario = selectedOption
       };
 
       fetch(apiUrl, {
