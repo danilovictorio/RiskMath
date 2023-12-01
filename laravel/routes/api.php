@@ -16,7 +16,7 @@ use App\Http\Controllers\PaisController;
 */
 //Rutas de Preguntas con las respuestas
 Route::get('/mostrar-preguntas', [PreguntaController::class, 'mostrarPreguntas']);
-Route::post('/verificar-respuesta', [PreguntaController::class, 'verificarRespuesta']);
+Route::post('/verificarRespuesta', [PreguntaController::class, 'verificarRespuesta']);
 
 //Rutas de paisos
 Route::get('/paises', [PaisController::class, 'obtenerPaises']);

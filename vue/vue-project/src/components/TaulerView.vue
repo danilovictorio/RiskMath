@@ -15,12 +15,10 @@
         <h1>{{ preguntas[currentQuestion].pregunta }}</h1>
         <ul>
           <li>
-            <button @click="resposta('a')">a: {{ preguntas[currentQuestion].a }}</button>
-            <button @click="resposta('b')">b: {{ preguntas[currentQuestion].b }}</button>
-          </li>
-          <li>
-            <button @click="resposta('c')">c: {{ preguntas[currentQuestion].c }}</button>
-            <button @click="resposta('d')">d: {{ preguntas[currentQuestion].d }}</button>
+            <button @click="resposta(preguntas[currentQuestion].id, 'a')">a: {{ preguntas[currentQuestion].a }}</button>
+            <button @click="resposta(preguntas[currentQuestion].id, 'b')">b: {{ preguntas[currentQuestion].b }}</button>
+            <button @click="resposta(preguntas[currentQuestion].id, 'c')">c: {{ preguntas[currentQuestion].c }}</button>
+            <button @click="resposta(preguntas[currentQuestion].id, 'c')">d: {{ preguntas[currentQuestion].d }}</button>
           </li>
         </ul>
       </div>
@@ -72,12 +70,11 @@ export default {
 
       this.validateResponse(questionId, option);
     },
-    validateResponse(preguntaId, respuestaUsuario) {
-      const apiUrl = 'http://localhost:8000/api/validar-respuesta';
-
+    validateResponse(questionId, selectedOption) {
+      const apiUrl = 'http://localhost:8000/api/verificarRespuesta';
       const requestData = {
-        preguntaId: preguntaId,
-        respuestaUsuario: respuestaUsuario
+        preguntaId = questionId,
+        respuestaUsuario = selectedOption
       };
 
       fetch(apiUrl, {
@@ -89,13 +86,10 @@ export default {
       })
         .then(response => response.json())
         .then(result => {
-
-          if (result.success) {
-            console.log('Answer is correct!');
-
+          if (result.resultado === true) {
+            console.log('La respuesta es verdadera');
           } else {
-            console.log('Answer is incorrect.');
-
+            console.log('La respuesta es falsa');
           }
         })
         .catch(error => {
