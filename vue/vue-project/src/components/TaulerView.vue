@@ -25,7 +25,7 @@
 <script>
 //import dataPaises from '../../../../laravel/mapa.json';
 //import dataPreguntes from '../../../../laravel/preguntes.json';
-
+import { useSessionStore } from '@/stores/sessionStore';
 export default {
   data() {
     return {
@@ -97,6 +97,9 @@ export default {
     },
 
     async enviarAtac(name, idUser) {
+      const sessionStore = useSessionStore();
+      const jugador = sessionStore.getPlayer(sessionStore.userId);
+
       console.log('hola');
       try {
         const response = await fetch('http://localhost:8000/api/enviar-atac', {
@@ -106,7 +109,7 @@ export default {
           },
           body: JSON.stringify({
             name: name,
-            idUser: idUser,
+             idUser: sessionStore.userId,
           }),
         });
 
@@ -118,6 +121,7 @@ export default {
         console.log('Respuesta del servidor:', data);
 
         this.pregunta = {
+          id: data.pregunta.id,
           pregunta: data.pregunta.pregunta,
           respuesta_a: data.pregunta.respuesta_a,
           respuesta_b: data.pregunta.respuesta_b,
@@ -137,9 +141,7 @@ export default {
     }
   },
   async mounted() {
-    await this.obtenerPreguntas();
-    this.obtenerDatosPaises();
-    this.currentQuestion = 0;
+    
   },
   created() {
 

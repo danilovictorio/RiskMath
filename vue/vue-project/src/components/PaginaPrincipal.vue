@@ -24,7 +24,7 @@
         sessionStore.addPlayer({ id: this.userId });
   
        
-        this.$router.push('/sala-espera');
+        this.$router.push('/SalaEspera');
       },
     },
   };

@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../components/PaginaPrincipal.vue'
 import TaulerView from '../components/TaulerView.vue'
+import SalaEspera from '../components/SalaEspera.vue'; 
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,6 +17,11 @@ const router = createRouter({
       name: 'TaulerView',
       component: TaulerView
     },
+    {
+      path: '/SalaEspera',
+      name: '/SalaEspera',
+      component: SalaEspera
+    }
     
   ]
 })
