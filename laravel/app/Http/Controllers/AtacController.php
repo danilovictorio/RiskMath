@@ -15,11 +15,14 @@ class AtacController extends Controller
      
         $pregunta = Pregunta::inRandomOrder()->first();
 
-      
+       $estat="P_ENVIADA";
+
+       
         $atac = new Atac();
         $atac->name = $name;
         $atac->idUser = $idUser;
         $atac->idPregunta = $pregunta->id;
+        $atac->estat = $estat;
         $atac->save();
 
        

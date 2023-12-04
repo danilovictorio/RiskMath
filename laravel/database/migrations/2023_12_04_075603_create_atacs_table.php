@@ -20,7 +20,7 @@ return new class extends Migration
                 ->references('id')
                 ->on('preguntas')
                 ->onDelete('cascade');
-
+            $table->string('estat');
             $table->timestamps();
         });
     }

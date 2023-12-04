@@ -11,7 +11,8 @@ class Atac extends Model
     protected $fillable = [
         'name',
         'idUser',
-        'idPregunta'
+        'idPregunta',
+        'estat'
     ];
 
 }
