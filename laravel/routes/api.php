@@ -17,7 +17,7 @@ use App\Http\Controllers\AtacController;
 */
 //Rutas de Preguntas con las respuestas
 Route::get('/mostrar-preguntas', [PreguntaController::class, 'mostrarPreguntas']);
-Route::post('/verificar-Respuesta', [PreguntaController::class, 'verificarRespuesta']);
+Route::post('/verificar-respuesta', [PreguntaController::class, 'verificarRespuesta']);
 Route::post('/enviar-atac', [AtacController::class, 'enviarAtac']);
 
 //Rutas de paisos

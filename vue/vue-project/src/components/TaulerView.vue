@@ -12,10 +12,10 @@
     <div v-if="mostrar !== null" class="pregunta-container">
       <div class="pregunta">
         <h2>{{ pregunta ? pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
-        <p @click="validateResponse(pregunta.id, 1)" v-if="pregunta">Respuesta A: {{ pregunta.respuesta_a }}</p>
-        <p  @click="validateResponse(pregunta.id, 2)" v-if="pregunta">Respuesta B: {{ pregunta.respuesta_b }}</p>
-        <p  @click="validateResponse(pregunta.id, 3)" v-if="pregunta">Respuesta C: {{ pregunta.respuesta_c }}</p>
-        <p  @click="validateResponse(pregunta.id, 4)" v-if="pregunta">Respuesta D: {{ pregunta.respuesta_d }}</p>
+        <p @click="validateResponse(pregunta.id, 'a')" v-if="pregunta">Respuesta A: {{ pregunta.respuesta_a }}</p>
+        <p  @click="validateResponse(pregunta.id, 'b')" v-if="pregunta">Respuesta B: {{ pregunta.respuesta_b }}</p>
+        <p  @click="validateResponse(pregunta.id, 'c')" v-if="pregunta">Respuesta C: {{ pregunta.respuesta_c }}</p>
+        <p  @click="validateResponse(pregunta.id, 'd')" v-if="pregunta">Respuesta D: {{ pregunta.respuesta_d }}</p>
       </div>
     </div>
 
@@ -62,14 +62,8 @@ export default {
         console.error('Error al obtener datos de países:', error);
       }
     },
-    resposta(questionId, option) {
-
-      console.log(`Selected option: ${option} for question ID: ${questionId}`);
-
-
-      this.validateResponse(questionId, option);
-    },
     validateResponse(questionId, selectedOption) {
+      console.log('Pregunta ID:', questionId); 
       const apiUrl = 'http://localhost:8000/api/verificar-respuesta';
       const requestData = {
         preguntaId: questionId,
@@ -118,6 +112,7 @@ export default {
         console.log('Respuesta del servidor:', data);
 
         this.pregunta = {
+          id: data.pregunta.id,
           pregunta: data.pregunta.pregunta,
           respuesta_a: data.pregunta.respuesta_a,
           respuesta_b: data.pregunta.respuesta_b,
