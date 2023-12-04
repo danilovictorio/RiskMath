@@ -1,27 +1,23 @@
 <template>
   <div class="container">
     <div class="mapa">
-      
-      <ul @click="atacar(pais.nombre)">
-        <li v-for="pais in paises" :key="pais.id">
+      <div @click="atacar(pais.nombre)">
+      </div>
+        <div v-for="pais in paises" :key="pais.id">
           {{ pais.nombre }} - Propietario: {{ pais.ocupante || 'Vacío' }}
-        </li>
-      </ul>
-      
+        </div>
     </div>
-    <div v-if="currentQuestion !== null" class="pregunta-container">
+
+    <div v-if="currentQuestion !== null" class="preguntaRespostes__container">
       <div class="pregunta">
         <h1>{{ preguntas[currentQuestion].pregunta }}</h1>
-        <ul>
-          <li>
-            <button @click="resposta(preguntas[currentQuestion].id, 'a')">a: {{ preguntas[currentQuestion].a }}</button>
-            <button @click="resposta(preguntas[currentQuestion].id, 'b')">b: {{ preguntas[currentQuestion].b }}</button>
-            <button @click="resposta(preguntas[currentQuestion].id, 'c')">c: {{ preguntas[currentQuestion].c }}</button>
-            <button @click="resposta(preguntas[currentQuestion].id, 'c')">d: {{ preguntas[currentQuestion].d }}</button>
-          </li>
-        </ul>
       </div>
-      <button @click="nextQuestion" v-if="currentQuestion < preguntas.length - 1">Next</button>
+      <div class="respostes">
+        <button class="button__respostes" @click="resposta(preguntas[currentQuestion].id, 'a')">a: {{ preguntas[currentQuestion].a }}</button>
+        <button class="button__respostes" @click="resposta(preguntas[currentQuestion].id, 'b')">b: {{ preguntas[currentQuestion].b }}</button>
+        <button class="button__respostes" @click="resposta(preguntas[currentQuestion].id, 'c')">c: {{ preguntas[currentQuestion].c }}</button>
+        <button class="button__respostes" @click="resposta(preguntas[currentQuestion].id, 'c')">d: {{ preguntas[currentQuestion].d }}</button>
+      </div>
     </div>
   </div>
 </template>
@@ -53,10 +49,10 @@ export default {
         console.error('Error al obtener preguntas:', error);
       }
     },
-    
+
     async obtenerDatosPaises() {
       try {
-        const response = await fetch('http://localhost:8000/api/paises'); 
+        const response = await fetch('http://localhost:8000/api/paises');
         const data = await response.json();
         this.paises = data.paises;
         console.log(data);
@@ -120,7 +116,7 @@ export default {
     this.currentQuestion = 0;
   },
   created() {
-    
+
     this.respuesta = [];
   }
 };
@@ -128,35 +124,48 @@ export default {
 </script>
 <style scoped>
 .container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "mapa preguntes-respostes";
   height: 100vh;
+  width: 100vw;
 }
 
-.mapa {
-  width: 50%;
- 
-}
-
-.pregunta-container {
-  width: 50%;
+.preguntaRespostes__container {
   padding: 20px;
-  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .pregunta {
   border: 1px solid #ccc;
   padding: 20px;
-  margin-bottom: 20px;
+  grid-area: preguntes-respostes;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
+.respostes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 20px;
+  margin-top: 10px;
 }
 
-li button {
-  margin-bottom: 10px;
+.button__respostes {
+  border-radius: 20px;
+  background-color:tan;
+  padding: 5px;
+}
 
+.mapa {
+  grid-area: mapa;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  
+  
 }
 </style>
 
