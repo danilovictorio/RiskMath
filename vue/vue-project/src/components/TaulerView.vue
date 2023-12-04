@@ -1,19 +1,18 @@
 <template>
   <div class="container">
     <div class="mapa">
-      <ul @click="atacar(pais.nombre)">
+      <ul @click="fetchQuestion()">
         <li v-for="pais in paises" :key="pais.id">
           {{ pais.nombre }} - Propietario: {{ pais.ocupante || 'Vacío' }}
         </li>
       </ul>
       <ul>
-        <li v-for="pais in paises" :key="pais.id"  @click="enviarAtac(pais && pais.nombre, idUser)">
+        <li v-for="pais in paises" :key="pais.id"  @click="enviarAtac(pais.nombre, idUser)">
           {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
         </li>
       </ul>
-
     </div>
-    <div v-if="mostrar !== null" class="pregunta-container">
+    <div v-if="mostrar" class="pregunta-container">
       <div class="pregunta">
         <h2>{{ pregunta ? pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
         <p v-if="pregunta">Respuesta A: {{ pregunta.respuesta_a }}</p>
@@ -22,24 +21,20 @@
         <p v-if="pregunta">Respuesta D: {{ pregunta.respuesta_d }}</p>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-//import dataPaises from '../../../../laravel/mapa.json';
-//import dataPreguntes from '../../../../laravel/preguntes.json';
-
 export default {
   data() {
     return {
       paises: [],
       preguntas: [],
       respuesta: [],
-      pregunta: {},
+      pregunta: null,
       idUser: 1,
       currentQuestion: null,
-      mostrar: null,
+      mostrar: false,
       paisSeleccionado: false
     };
   },
@@ -59,7 +54,7 @@ export default {
     },
     async obtenerDatosPaises() {
       try {
-        const response = await fetch('http://localhost:8000/api/paises');
+        const response = await fetch('http://localhost:8000/api/obtenerPaises');
         const data = await response.json();
         this.paises = data.paises;
         console.log(data);
@@ -67,40 +62,23 @@ export default {
         console.error('Error al obtener datos de países:', error);
       }
     },
-
-    resposta(questionId, option) {
-
-      console.log(`Selected option: ${option} for question ID: ${questionId}`);
-
-
-      this.validateResponse(questionId, option);
-    },
-    validateResponse(questionId, selectedOption) {
-      const apiUrl = 'http://localhost:8000/api/verificar-respuesta';
-      const requestData = {
-        preguntaId: questionId,
-        respuestaUsuario: selectedOption
-      };
-
-    async fetchQuestion(countryId) {
-      const userId = 4;
+    async fetchQuestion() {
       try {
-        const response = await fetch('http://localhost:/api//obtener-Pregunta-Aleatoria'){
+        const response = await fetch('http://localhost:8000/api/obtener-Pregunta-Aleatoria', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            preguntaId : pregunta_id;
+            userId: this.idUser,
           }),
-        };
+        });
         const data = await response.json();
-        this.question = data.question;
+        this.pregunta = data.question;
       } catch (error) {
         console.error('Error al obtener la pregunta:', error);
       }
     },
-
     async enviarAtac(name, idUser) {
       console.log('hola');
       try {
@@ -130,13 +108,11 @@ export default {
           respuesta_d: data.pregunta.respuesta_d,
         };
 
-        this.mostrar = 1;
-
+        this.mostrar = true;
       } catch (error) {
         console.error('Error en la solicitud:', error);
       }
-    }
-    ,
+    },
     nextQuestion() {
       this.currentQuestion += 1;
     }
@@ -147,16 +123,14 @@ export default {
     this.currentQuestion = 0;
   },
   created() {
-
     this.respuesta = [];
   }
 };
-
 </script>
+
 <style scoped>
 .container {
   display: flex;
-  height: 100vh;
   height: 100vh;
 }
 
