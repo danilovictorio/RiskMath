@@ -17,7 +17,6 @@ class AtacController extends Controller
 
        $estat="P_ENVIADA";
 
-       
         $atac = new Atac();
         $atac->name = $name;
         $atac->idUser = $idUser;

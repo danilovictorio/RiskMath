@@ -12,10 +12,10 @@
     <div v-if="mostrar !== null" class="pregunta-container">
       <div class="pregunta">
         <h2>{{ pregunta ? pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
-        <p v-if="pregunta">Respuesta A: {{ pregunta.respuesta_a }}</p>
-        <p v-if="pregunta">Respuesta B: {{ pregunta.respuesta_b }}</p>
-        <p v-if="pregunta">Respuesta C: {{ pregunta.respuesta_c }}</p>
-        <p v-if="pregunta">Respuesta D: {{ pregunta.respuesta_d }}</p>
+        <p @click="validateResponse(pregunta.id, 1)" v-if="pregunta">Respuesta A: {{ pregunta.respuesta_a }}</p>
+        <p  @click="validateResponse(pregunta.id, 2)" v-if="pregunta">Respuesta B: {{ pregunta.respuesta_b }}</p>
+        <p  @click="validateResponse(pregunta.id, 3)" v-if="pregunta">Respuesta C: {{ pregunta.respuesta_c }}</p>
+        <p  @click="validateResponse(pregunta.id, 4)" v-if="pregunta">Respuesta D: {{ pregunta.respuesta_d }}</p>
       </div>
     </div>
 
