@@ -12,4 +12,7 @@ class PaisController extends Controller
         $paises = Pais::all();
         return response()->json(['paises' => $paises]);
     }
+    public function insertarDatosOcupante($preguntaId){
+
+    }
 }

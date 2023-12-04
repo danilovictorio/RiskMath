@@ -6,7 +6,7 @@
       </div>
       <div v-else>
         <p>¡Todos los jugadores están listos! ¡Comencemos!</p>
-        <router-link to="/tablero">Ir al Tablero</router-link>
+        <router-link to="/TaulerView">Ir al Tablero</router-link>
       </div>
     </div>
   </template>

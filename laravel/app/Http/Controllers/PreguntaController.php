@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pregunta;
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\PaisController;
 class PreguntaController extends Controller
 {
     public function mostrarPreguntas()
@@ -39,7 +39,10 @@ class PreguntaController extends Controller
          $respuesta_correcta = $pregunta->respuesta_correcta;
 
          if ($respostaJugador == $respuesta_correcta) {
+            app()->call([PaisController::class, 'insertarDatosOcupante'], compact($pregunta,$respostaJugador));
              return response()->json(['resultado' => true]);
+
+             
          } else {
              return response()->json(['resultado' => false]);
          }
