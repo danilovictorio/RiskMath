@@ -20,8 +20,10 @@ Route::get('/mostrar-preguntas', [PreguntaController::class, 'mostrarPreguntas']
 Route::post('/verificar-respuesta', [PreguntaController::class, 'verificarRespuesta']);
 Route::post('/enviar-atac', [AtacController::class, 'enviarAtac']);
 
+
 //Rutas de paisos
 Route::get('/paises', [PaisController::class, 'obtenerPaises']);
+Route::get('/confirmar-ataque', [PaisController::class, 'confirmar-ataque']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

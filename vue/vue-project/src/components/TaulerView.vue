@@ -81,6 +81,7 @@ export default {
         .then(result => {
           if (result.resultado === true) {
             console.log('La respuesta es verdadera');
+            this.confirmarAtaque($idUser,);
           } else {
             console.log('La respuesta es falsa');
           }
@@ -89,7 +90,27 @@ export default {
           console.error('Error validating response:', error);
         });
     },
+    async confirmarAtaque(idUser, pais){
+      try {
+        const response = await fetch('http://localhost:8000/api/confirmar-ataque', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            idUser: idUser,
+            pais: pais,
+          }),
+        });
 
+        if (!response.ok) {
+          throw new Error(`Error en la solicitud: ${response.status}`);
+        }
+
+      } catch (error) {
+        console.error('Error en la solicitud:', error);
+      }
+    },
     async enviarAtac(name, idUser) {
       console.log('hola');
       try {

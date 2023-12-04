@@ -12,4 +12,10 @@ class PaisController extends Controller
         $paises = Pais::all();
         return response()->json(['paises' => $paises]);
     }
+
+
+    public function confirmarAtaque(Request $request){
+        $idUser = $request->idUser;
+        $pais = $request->pais;
+    }
 }
