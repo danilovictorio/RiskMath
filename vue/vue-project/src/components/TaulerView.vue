@@ -3,7 +3,7 @@
     <div class="mapa">
       <ul @click="atacar(pais.nombre)">
         <li v-for="pais in paises" :key="pais.id">
-          {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
+          {{ pais.nombre }} - Propietario: {{ pais.ocupante || 'Vacío' }}
         </li>
       </ul>
     </div>
@@ -50,7 +50,9 @@ export default {
       } catch (error) {
         console.error('Error al obtener preguntas:', error);
       }
-    },async obtenerDatosPaises() {
+    },
+    
+    async obtenerDatosPaises() {
       try {
         const response = await fetch('http://localhost:8000/api/obtenerPaises'); 
         const data = await response.json();
@@ -60,6 +62,7 @@ export default {
         console.error('Error al obtener datos de países:', error);
       }
     },
+
     resposta(questionId, option) {
 
       console.log(`Selected option: ${option} for question ID: ${questionId}`);
@@ -67,32 +70,44 @@ export default {
 
       this.validateResponse(questionId, option);
     },
-    validateResponse(questionId, selectedOption) {
-      const apiUrl = 'http://localhost:8000/api/verificarRespuesta';
-      const requestData = {
-        preguntaId : questionId,
-        respuestaUsuario : selectedOption
-      };
 
-      fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestData),
-      })
-        .then(response => response.json())
-        .then(result => {
-          if (result.resultado === true) {
-            console.log('La respuesta es verdadera');
-          } else {
-            console.log('La respuesta es falsa');
-          }
-        })
-        .catch(error => {
-          console.error('Error validating response:', error);
-        });
+    async fetchQuestion(countryId) {
+      const userId = 4;
+      try {
+        const response = await fetch();
+        const data = await response.json();
+        this.question = data.question;
+      } catch (error) {
+        console.error('Error al obtener la pregunta:', error);
+      }
     },
+
+    // validateResponse(questionId, selectedOption) {
+    //   const apiUrl = 'http://localhost:8000/api/verificarRespuesta';
+    //   const requestData = {
+    //     preguntaId = questionId,
+    //     respuestaUsuario = selectedOption
+    //   };
+
+    //   fetch(apiUrl, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(requestData),
+    //   })
+    //     .then(response => response.json())
+    //     .then(result => {
+    //       if (result.resultado === true) {
+    //         console.log('La respuesta es verdadera');
+    //       } else {
+    //         console.log('La respuesta es falsa');
+    //       }
+    //     })
+    //     .catch(error => {
+    //       console.error('Error validating response:', error);
+    //     });
+    // },
     nextQuestion() {
       this.currentQuestion += 1;
     }
@@ -107,11 +122,12 @@ export default {
     this.respuesta = [];
   }
 };
+
 </script>
 <style scoped>
 .container {
   display: flex;
-  height: 100vh; 
+  height: 100vh;
 }
 
 .mapa {
@@ -123,7 +139,6 @@ export default {
   width: 50%;
   padding: 20px;
   box-sizing: border-box;
- 
 }
 
 .pregunta {
