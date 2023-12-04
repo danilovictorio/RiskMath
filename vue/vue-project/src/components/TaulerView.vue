@@ -1,14 +1,11 @@
 <template>
   <div class="container">
     <div class="mapa">
-      
-      <!-- Your existing code for the map -->
       <ul @click="atacar(pais.nombre)">
         <li v-for="pais in paises" :key="pais.id">
           {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
         </li>
       </ul>
-      
     </div>
     <div v-if="currentQuestion !== null" class="pregunta-container">
       <div class="pregunta">
@@ -18,7 +15,7 @@
             <button @click="resposta(preguntas[currentQuestion].id, 'a')">a: {{ preguntas[currentQuestion].a }}</button>
             <button @click="resposta(preguntas[currentQuestion].id, 'b')">b: {{ preguntas[currentQuestion].b }}</button>
             <button @click="resposta(preguntas[currentQuestion].id, 'c')">c: {{ preguntas[currentQuestion].c }}</button>
-            <button @click="resposta(preguntas[currentQuestion].id, 'c')">d: {{ preguntas[currentQuestion].d }}</button>
+            <button @click="resposta(preguntas[currentQuestion].id, 'd')">d: {{ preguntas[currentQuestion].d }}</button>
           </li>
         </ul>
       </div>
@@ -37,7 +34,7 @@ export default {
       paises: [],
       preguntas: [],
       respuesta: [],
-      currentQuestion: null
+      currentQuestion: null,
     };
   },
   methods: {
@@ -55,7 +52,7 @@ export default {
       }
     },async obtenerDatosPaises() {
       try {
-        const response = await fetch('http://localhost:8000/api/paises'); 
+        const response = await fetch('http://localhost:8000/api/obtenerPaises'); 
         const data = await response.json();
         this.paises = data.paises;
         console.log(data);
@@ -73,8 +70,8 @@ export default {
     validateResponse(questionId, selectedOption) {
       const apiUrl = 'http://localhost:8000/api/verificarRespuesta';
       const requestData = {
-        preguntaId = questionId,
-        respuestaUsuario = selectedOption
+        preguntaId : questionId,
+        respuestaUsuario : selectedOption
       };
 
       fetch(apiUrl, {

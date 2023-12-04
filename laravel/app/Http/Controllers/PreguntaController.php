@@ -7,11 +7,12 @@ use Illuminate\Http\Request;
 
 class PreguntaController extends Controller
 {
-    public function mostrarPreguntas()
-    {
+    public function mostrarPreguntas(){
         $preguntas = Pregunta::all();
         return response()->json(['preguntas' => $preguntas]);
     }
+
+    
 
     // public function verificarRespuesta($request)
     // {
