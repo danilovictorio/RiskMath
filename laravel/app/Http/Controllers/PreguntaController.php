@@ -12,7 +12,16 @@ class PreguntaController extends Controller
         return response()->json(['preguntas' => $preguntas]);
     }
 
-    
+    public function obtenerPreguntaAleatoria(){
+        $preguntaAleatoria = Pregunta::inRandomOrder()->first(); 
+
+        if (!$preguntaAleatoria) {
+            return response()->json(['mensaje' => 'No se encontraron preguntas'], 404);
+        }
+
+        return response()->json(['pregunta_id' => $preguntaAleatoria->id]);
+    }
+
 
     // public function verificarRespuesta($request)
     // {

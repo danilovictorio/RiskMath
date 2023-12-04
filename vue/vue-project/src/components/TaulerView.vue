@@ -4,7 +4,8 @@
       <ul @click="atacar(pais.nombre)">
         <li v-for="pais in paises" :key="pais.id">
           {{ pais.nombre }} - Propietario: {{ pais.ocupante || 'Vacío' }}
-
+        </li>
+      </ul>
       <ul>
         <li v-for="pais in paises" :key="pais.id"  @click="enviarAtac(pais && pais.nombre, idUser)">
           {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
@@ -38,7 +39,8 @@ export default {
       pregunta: {},
       idUser: 1,
       currentQuestion: null,
-      mostrar: null
+      mostrar: null,
+      paisSeleccionado: false
     };
   },
   methods: {
@@ -83,7 +85,15 @@ export default {
     async fetchQuestion(countryId) {
       const userId = 4;
       try {
-        const response = await fetch();
+        const response = await fetch('http://localhost:/api//obtener-Pregunta-Aleatoria'){
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            preguntaId : pregunta_id;
+          }),
+        };
         const data = await response.json();
         this.question = data.question;
       } catch (error) {

@@ -17,6 +17,7 @@ use App\Http\Controllers\AtacController;
 */
 //Rutas de Preguntas con las respuestas
 Route::get('/mostrar-preguntas', [PreguntaController::class, 'mostrarPreguntas']);
+Route::get('/obtener-Pregunta-Aleatoria', [PreguntaController::class, 'obtenerPreguntaAleatoria']);
 Route::post('/verificar-Respuesta', [PreguntaController::class, 'verificarRespuesta']);
 Route::post('/enviar-atac', [AtacController::class, 'enviarAtac']);
 
