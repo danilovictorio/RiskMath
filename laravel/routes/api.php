@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PreguntaController;
 use App\Http\Controllers\PaisController;
+use App\Http\Controllers\AtacController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,7 +17,8 @@ use App\Http\Controllers\PaisController;
 */
 //Rutas de Preguntas con las respuestas
 Route::get('/mostrar-preguntas', [PreguntaController::class, 'mostrarPreguntas']);
-Route::post('/verificarRespuesta', [PreguntaController::class, 'verificarRespuesta']);
+Route::post('/verificar-Respuesta', [PreguntaController::class, 'verificarRespuesta']);
+Route::post('/enviar-atac', [AtacController::class, 'enviarAtac']);
 
 //Rutas de paisos
 Route::get('/paises', [PaisController::class, 'obtenerPaises']);
