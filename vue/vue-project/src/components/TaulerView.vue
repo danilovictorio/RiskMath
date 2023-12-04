@@ -3,7 +3,7 @@
     <div class="mapa">
 
       <ul>
-        <li v-for="pais in paises" :key="pais.id"  @click="enviarAtac(pais && pais.nombre, idUser)">
+        <li v-for="pais in paises" :key="pais.id"  @click="enviarAtac(pais && pais.nombre, pais.id, idUser)">
           {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
         </li>
       </ul>
@@ -34,6 +34,7 @@ export default {
       respuesta: [],
       pregunta: {},
       idUser: 1,
+      paisSeleccionado : null,
       currentQuestion: null,
       mostrar: null
     };
@@ -81,7 +82,7 @@ export default {
         .then(result => {
           if (result.resultado === true) {
             console.log('La respuesta es verdadera');
-            this.confirmarAtaque($idUser,);
+            this.confirmarAtaque(this.idUser, this.paisSeleccionado);
           } else {
             console.log('La respuesta es falsa');
           }
@@ -90,29 +91,34 @@ export default {
           console.error('Error validating response:', error);
         });
     },
-    async confirmarAtaque(idUser, pais){
+    async confirmarAtaque(idUser, paisSeleccionado){
+      
       try {
         const response = await fetch('http://localhost:8000/api/confirmar-ataque', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            idUser: idUser,
-            pais: pais,
-          }),
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                idUser: idUser, // Asegúrate de tener this.idUser definido en tu componente Vue
+                paisSeleccionado: paisSeleccionado,   // Asegúrate de tener this.pais definido en tu componente Vue
+            }),
         });
 
         if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
+            throw new Error(`Error en la solicitud: ${response.status}`);
         }
 
-      } catch (error) {
+        const result = await response.json();
+        console.log(result.message);
+        console.log('Usuario: '+ idUser, 'Conquista Pais: '+paisSeleccionado)
+
+    } catch (error) {
         console.error('Error en la solicitud:', error);
-      }
+    }
     },
-    async enviarAtac(name, idUser) {
-      console.log('hola');
+    async enviarAtac(name,paisId, idUser) {
+
       try {
         const response = await fetch('http://localhost:8000/api/enviar-atac', {
           method: 'POST',
@@ -143,6 +149,7 @@ export default {
 
         this.mostrar = 1;
 
+        this.paisSeleccionado = paisId;
       } catch (error) {
         console.error('Error en la solicitud:', error);
       }

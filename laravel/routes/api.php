@@ -23,7 +23,7 @@ Route::post('/enviar-atac', [AtacController::class, 'enviarAtac']);
 
 //Rutas de paisos
 Route::get('/paises', [PaisController::class, 'obtenerPaises']);
-Route::get('/confirmar-ataque', [PaisController::class, 'confirmar-ataque']);
+Route::post('/confirmar-ataque', [PaisController::class, 'confirmarAtaque']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
