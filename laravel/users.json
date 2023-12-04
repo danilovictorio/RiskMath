@@ -1,0 +1,10 @@
+{
+    "users": [
+      { "id": 1, "username": "ShadowStriker" },
+      { "id": 2, "username": "MysticGamerX" },
+      { "id": 3, "username": "PhoenixWarrior" },
+      { "id": 4, "username": "StealthNinja21" },
+      { "id": 5, "username": "ElementalChampion" }
+    ]
+  }
+  

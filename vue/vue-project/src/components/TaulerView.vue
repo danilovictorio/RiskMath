@@ -1,6 +1,9 @@
 <template>
   <div class="container">
     <div class="mapa">
+      <ul @click="atacar(pais.nombre)">
+        <li v-for="pais in paises" :key="pais.id">
+          {{ pais.nombre }} - Propietario: {{ pais.ocupante || 'Vacío' }}
 
       <ul>
         <li v-for="pais in paises" :key="pais.id"  @click="enviarAtac(pais && pais.nombre, idUser)">
@@ -62,6 +65,7 @@ export default {
         console.error('Error al obtener datos de países:', error);
       }
     },
+
     resposta(questionId, option) {
 
       console.log(`Selected option: ${option} for question ID: ${questionId}`);
@@ -76,24 +80,15 @@ export default {
         respuestaUsuario: selectedOption
       };
 
-      fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestData),
-      })
-        .then(response => response.json())
-        .then(result => {
-          if (result.resultado === true) {
-            console.log('La respuesta es verdadera');
-          } else {
-            console.log('La respuesta es falsa');
-          }
-        })
-        .catch(error => {
-          console.error('Error validating response:', error);
-        });
+    async fetchQuestion(countryId) {
+      const userId = 4;
+      try {
+        const response = await fetch();
+        const data = await response.json();
+        this.question = data.question;
+      } catch (error) {
+        console.error('Error al obtener la pregunta:', error);
+      }
     },
 
     async enviarAtac(name, idUser) {
@@ -146,10 +141,12 @@ export default {
     this.respuesta = [];
   }
 };
+
 </script>
 <style scoped>
 .container {
   display: flex;
+  height: 100vh;
   height: 100vh;
 }
 

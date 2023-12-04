@@ -21,7 +21,7 @@ Route::post('/verificar-Respuesta', [PreguntaController::class, 'verificarRespue
 Route::post('/enviar-atac', [AtacController::class, 'enviarAtac']);
 
 //Rutas de paisos
-Route::get('/paises', [PaisController::class, 'obtenerPaises']);
+Route::get('/obtenerPaises', [PaisController::class, 'obtenerPaises']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
