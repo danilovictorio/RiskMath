@@ -1,35 +1,31 @@
 <template>
   <div class="container">
     <div class="mapa">
-      
-      <!-- Your existing code for the map -->
-      <ul @click="atacar(pais.nombre)">
-        <li v-for="pais in paises" :key="pais.id">
+
+      <ul>
+
+        <li v-for="pais in paises" :key="pais.id"  @click="enviarAtac(pais && pais.nombre, idUser)">
           {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
         </li>
       </ul>
-      
+
     </div>
-    <div v-if="currentQuestion !== null" class="pregunta-container">
+    <div v-if="mostrar !== null" class="pregunta-container">
       <div class="pregunta">
-        <h1>{{ preguntas[currentQuestion].pregunta }}</h1>
-        <ul>
-          <li>
-            <button @click="resposta(preguntas[currentQuestion].id, 'a')">a: {{ preguntas[currentQuestion].a }}</button>
-            <button @click="resposta(preguntas[currentQuestion].id, 'b')">b: {{ preguntas[currentQuestion].b }}</button>
-            <button @click="resposta(preguntas[currentQuestion].id, 'c')">c: {{ preguntas[currentQuestion].c }}</button>
-            <button @click="resposta(preguntas[currentQuestion].id, 'c')">d: {{ preguntas[currentQuestion].d }}</button>
-          </li>
-        </ul>
+        <h2>{{ pregunta ? pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
+        <p v-if="pregunta">Respuesta A: {{ pregunta.respuesta_a }}</p>
+        <p v-if="pregunta">Respuesta B: {{ pregunta.respuesta_b }}</p>
+        <p v-if="pregunta">Respuesta C: {{ pregunta.respuesta_c }}</p>
+        <p v-if="pregunta">Respuesta D: {{ pregunta.respuesta_d }}</p>
       </div>
-      <button @click="nextQuestion" v-if="currentQuestion < preguntas.length - 1">Next</button>
     </div>
+
   </div>
 </template>
 
 <script>
-import dataPaises from '../../../../laravel/mapa.json';
-import dataPreguntes from '../../../../laravel/preguntes.json';
+//import dataPaises from '../../../../laravel/mapa.json';
+//import dataPreguntes from '../../../../laravel/preguntes.json';
 
 export default {
   data() {
@@ -37,7 +33,10 @@ export default {
       paises: [],
       preguntas: [],
       respuesta: [],
-      currentQuestion: null
+      pregunta: {},
+      idUser: 1,
+      currentQuestion: null,
+      mostrar: null
     };
   },
   methods: {
@@ -53,9 +52,10 @@ export default {
       } catch (error) {
         console.error('Error al obtener preguntas:', error);
       }
-    },async obtenerDatosPaises() {
+    },
+    async obtenerDatosPaises() {
       try {
-        const response = await fetch('http://localhost:8000/api/paises'); 
+        const response = await fetch('http://localhost:8000/api/paises');
         const data = await response.json();
         this.paises = data.paises;
         console.log(data);
@@ -71,10 +71,10 @@ export default {
       this.validateResponse(questionId, option);
     },
     validateResponse(questionId, selectedOption) {
-      const apiUrl = 'http://localhost:8000/api/verificarRespuesta';
+      const apiUrl = 'http://localhost:8000/api/verificar-respuesta';
       const requestData = {
-        preguntaId = questionId,
-        respuestaUsuario = selectedOption
+        preguntaId: questionId,
+        respuestaUsuario: selectedOption
       };
 
       fetch(apiUrl, {
@@ -96,6 +96,43 @@ export default {
           console.error('Error validating response:', error);
         });
     },
+
+    async enviarAtac(name, idUser) {
+      console.log('hola');
+      try {
+        const response = await fetch('http://localhost:8000/api/enviar-atac', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: name,
+            idUser: idUser,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error en la solicitud: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Respuesta del servidor:', data);
+
+        this.pregunta = {
+          pregunta: data.pregunta.pregunta,
+          respuesta_a: data.pregunta.respuesta_a,
+          respuesta_b: data.pregunta.respuesta_b,
+          respuesta_c: data.pregunta.respuesta_c,
+          respuesta_d: data.pregunta.respuesta_d,
+        };
+
+        this.mostrar = 1;
+
+      } catch (error) {
+        console.error('Error en la solicitud:', error);
+      }
+    }
+    ,
     nextQuestion() {
       this.currentQuestion += 1;
     }
@@ -106,7 +143,7 @@ export default {
     this.currentQuestion = 0;
   },
   created() {
-    
+
     this.respuesta = [];
   }
 };
@@ -114,19 +151,17 @@ export default {
 <style scoped>
 .container {
   display: flex;
-  height: 100vh; 
+  height: 100vh;
 }
 
 .mapa {
   width: 50%;
- 
 }
 
 .pregunta-container {
   width: 50%;
   padding: 20px;
   box-sizing: border-box;
- 
 }
 
 .pregunta {
@@ -142,7 +177,5 @@ ul {
 
 li button {
   margin-bottom: 10px;
-
 }
 </style>
-
