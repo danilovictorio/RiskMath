@@ -3,7 +3,7 @@
     <div class="mapa">
 
       <ul>
-        <li v-for="pais in paises" :key="pais.id"  @click="enviarAtac(pais && pais.nombre, pais.id, idUser)">
+        <li v-for="pais in paises" :key="pais.id"  @click="enviarAtac(pais.id, idUser)">
           {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
         </li>
       </ul>
@@ -117,7 +117,7 @@ export default {
         console.error('Error en la solicitud:', error);
     }
     },
-    async enviarAtac(name,paisId, idUser) {
+    async enviarAtac(paisId, idUser) {
 
       try {
         const response = await fetch('http://localhost:8000/api/enviar-atac', {
@@ -126,7 +126,7 @@ export default {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            name: name,
+            pais: paisId,
             idUser: idUser,
           }),
         });
