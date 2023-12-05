@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PreguntaController;
 use App\Http\Controllers\PaisController;
 use App\Http\Controllers\AtacController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,6 +16,10 @@ use App\Http\Controllers\AtacController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+//Ruta de iniciar partida
+Route::post('/iniciar-partida', [UserController::class, 'addUser']);
+Route::post('/eliminar-usuario', [UserController::class, 'removeUser']);
+
 //Rutas de Preguntas con las respuestas
 Route::get('/mostrar-preguntas', [PreguntaController::class, 'mostrarPreguntas']);
 Route::post('/verificar-respuesta', [PreguntaController::class, 'verificarRespuesta']);
