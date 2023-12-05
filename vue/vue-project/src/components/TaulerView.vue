@@ -3,8 +3,13 @@
     <div class="mapa">
       <div @click="atacar(pais.nombre)">
       </div>
-        <div v-for="pais in paises" :key="pais.id">
-          {{ pais.nombre }} - Propietario: {{ pais.ocupante || 'Vacío' }}
+        <div class="paisos" v-for="pais in paises" :key="pais.id">
+          <div class="nom__pais">
+            {{ pais.nombre }}
+          </div>
+          <div class="propietari__pais">
+            Propietario: {{ pais.ocupante || 'Vacío' }}
+          </div>
         </div>
     </div>
 
@@ -164,8 +169,31 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
+}
+
+.paisos{
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-areas: "pais"
+  "."
+  "propietari";
+  border: 1px solid black;
+  border-radius: 50%;
+}
+
+.nom__pais{
+  grid-area: pais;
+  display: flex;
+  justify-content: center;
   
-  
+}
+
+.propietari__pais{
+  grid-area: propietari;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
 
