@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="mapa">
-      <img src="../assets/spainHigh.svg" alt="Spain Map" style="width: 70vw; height: 70vh; position: absolute; left: 0;">
+      <img src="../assets/spainHigh.svg" alt="Spain Map" style="width: 200%; height: 200%;" >
       <ul>
         <li v-for="pais in paises" :key="pais.id"  @click="enviarAtac(pais.id, idUser)">
           {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
@@ -179,6 +179,12 @@ export default {
 
 .mapa {
   width: 50%;
+}
+img{
+  width: 90vw; 
+  height: 90vh; 
+  position: absolute; 
+  left: 0;
 }
 
 .pregunta-container {
