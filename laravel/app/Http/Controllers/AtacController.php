@@ -38,4 +38,28 @@ class AtacController extends Controller
      
         return response()->json($data);
     }
+
+    public function cambiarEstadoAtaque(Request $request){
+    $idAtac = $request->input('idAtac');
+    $resultado = $request->input('resultado');
+
+    $atac = Atac::find($idAtac);
+
+    if ($atac) {
+        if ($resultado == 'true') {
+            $estat = 'ACERTADA';
+            $atac->estat = $estat;
+            $atac->save();
+        }else {
+        $estat = 'FALLADA';
+        $atac->estat =$estat;
+        $atac->save();
+        }
+        
+
+        return response()->json(['message' => 'Estado del ataque actualizado con éxito']);
+    } else {
+        return response()->json(['error' => 'Ataque no encontrado'], 404);
+    }
+    }
 }

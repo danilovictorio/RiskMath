@@ -3,7 +3,7 @@
     <div class="mapa">
 
       <ul>
-        <li v-for="pais in paises" :key="pais.id"  @click="enviarAtac(pais && pais.nombre, pais.id, idUser)">
+        <li v-for="pais in paises" :key="pais.id" @click="enviarAtac(pais && pais.nombre, pais.id, idUser)">
           {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
         </li>
       </ul>
@@ -13,9 +13,9 @@
       <div class="pregunta">
         <h2>{{ pregunta ? pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
         <p @click="validateResponse(pregunta.id, 'a')" v-if="pregunta">Respuesta A: {{ pregunta.respuesta_a }}</p>
-        <p  @click="validateResponse(pregunta.id, 'b')" v-if="pregunta">Respuesta B: {{ pregunta.respuesta_b }}</p>
-        <p  @click="validateResponse(pregunta.id, 'c')" v-if="pregunta">Respuesta C: {{ pregunta.respuesta_c }}</p>
-        <p  @click="validateResponse(pregunta.id, 'd')" v-if="pregunta">Respuesta D: {{ pregunta.respuesta_d }}</p>
+        <p @click="validateResponse(pregunta.id, 'b')" v-if="pregunta">Respuesta B: {{ pregunta.respuesta_b }}</p>
+        <p @click="validateResponse(pregunta.id, 'c')" v-if="pregunta">Respuesta C: {{ pregunta.respuesta_c }}</p>
+        <p @click="validateResponse(pregunta.id, 'd')" v-if="pregunta">Respuesta D: {{ pregunta.respuesta_d }}</p>
       </div>
     </div>
 
@@ -34,7 +34,8 @@ export default {
       respuesta: [],
       pregunta: {},
       idUser: 1,
-      paisSeleccionado : null,
+      ataqueId: null,
+      paisSeleccionado: null,
       currentQuestion: null,
       mostrar: null
     };
@@ -64,13 +65,13 @@ export default {
       }
     },
     validateResponse(questionId, selectedOption) {
-      console.log('Pregunta ID:', questionId); 
+      console.log('Pregunta ID:', questionId);
       const apiUrl = 'http://localhost:8000/api/verificar-respuesta';
       const requestData = {
         preguntaId: questionId,
         respuestaUsuario: selectedOption
       };
-
+      this.ataqueId = obtenerAtaqueId();
       fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -82,42 +83,68 @@ export default {
         .then(result => {
           if (result.resultado === true) {
             console.log('La respuesta es verdadera');
+            
+            this.cambiarEstadoAtaque(result.resultado, this.ataqueId);
             this.confirmarAtaque(this.idUser, this.paisSeleccionado);
           } else {
             console.log('La respuesta es falsa');
+            this.cambiarEstadoAtaque(result.resultado, this.ataqueId);
           }
         })
         .catch(error => {
           console.error('Error validating response:', error);
         });
     },
-    async confirmarAtaque(idUser, paisSeleccionado){
-      
+    async cambiarEstadoAtaque(resultado, ataqueId) {
+      console.log('Resultado: ', resultado, 'Id ataque:'+ataqueId);
+      const apiUrl = 'ataqueId';
+      const requestData = {
+        resultado: resultado,
+        ataqueId: ataqueId
+      };
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestData),
+        });
+
+        const result = await response.json();
+        console.log('Estado del ataque cambiado:', result);
+      } catch (error) {
+        console.error('Error cambiando estado del ataque:', error);
+      }
+    },
+    async confirmarAtaque(idUser, paisSeleccionado) {
+
       try {
         const response = await fetch('http://localhost:8000/api/confirmar-ataque', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                idUser: idUser, // Asegúrate de tener this.idUser definido en tu componente Vue
-                paisSeleccionado: paisSeleccionado,   // Asegúrate de tener this.pais definido en tu componente Vue
-            }),
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            idUser: idUser, // Asegúrate de tener this.idUser definido en tu componente Vue
+            paisSeleccionado: paisSeleccionado,   // Asegúrate de tener this.pais definido en tu componente Vue
+          }),
         });
 
         if (!response.ok) {
-            throw new Error(`Error en la solicitud: ${response.status}`);
+          throw new Error(`Error en la solicitud: ${response.status}`);
         }
 
         const result = await response.json();
         console.log(result.message);
-        console.log('Usuario: '+ idUser, 'Conquista Pais: '+paisSeleccionado)
+        console.log('Usuario: ' + idUser, 'Conquista Pais: ' + paisSeleccionado);
 
-    } catch (error) {
+      } catch (error) {
         console.error('Error en la solicitud:', error);
-    }
+      }
     },
-    async enviarAtac(name,paisId, idUser) {
+    async enviarAtac(name, paisId, idUser) {
 
       try {
         const response = await fetch('http://localhost:8000/api/enviar-atac', {
@@ -137,6 +164,7 @@ export default {
 
         const data = await response.json();
         console.log('Respuesta del servidor:', data);
+        const ataqueId = data.ataqueId;
 
         this.pregunta = {
           id: data.pregunta.id,
@@ -148,8 +176,9 @@ export default {
         };
 
         this.mostrar = 1;
-
+        this.ataqueId = ataqueId;
         this.paisSeleccionado = paisId;
+        
       } catch (error) {
         console.error('Error en la solicitud:', error);
       }

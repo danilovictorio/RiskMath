@@ -20,7 +20,6 @@ export default {
       // Puedes acceder al nombre del usuario con this.nombreUsuario.
       console.log("Iniciando partida para", this.nombreUsuario);
 
-      // Después de realizar las acciones necesarias, puedes redirigir a la siguiente vista.
       this.$router.push({ name: "TaulerView" });
     },
   },
