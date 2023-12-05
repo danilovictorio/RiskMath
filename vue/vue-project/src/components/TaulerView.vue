@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="mapa">
-
+      <img src="../../../laravel/resources/img/spainHigh.svg">
       <ul>
         <li v-for="pais in paises" :key="pais.id"  @click="enviarAtac(pais.id, idUser)">
           {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
@@ -25,6 +25,7 @@
 <script>
 //import dataPaises from '../../../../laravel/mapa.json';
 //import dataPreguntes from '../../../../laravel/preguntes.json';
+import mapa from '../../../../laravel/spanisHigh.svg';
 
 export default {
   data() {
@@ -37,6 +38,7 @@ export default {
       paisSeleccionado : null,
       currentQuestion: null,
       mostrar: null
+      mapa:,
     };
   },
   methods: {
@@ -163,6 +165,7 @@ export default {
     await this.obtenerPreguntas();
     this.obtenerDatosPaises();
     this.currentQuestion = 0;
+    this.mapa = mapa:
   },
   created() {
 
