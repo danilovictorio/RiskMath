@@ -7,6 +7,8 @@
 </template>
 
 <script>
+import socket from '@/path/to/sockets'; 
+
 export default {
   data() {
     return {
@@ -25,7 +27,6 @@ export default {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
-        
         },
         body: JSON.stringify(datos) 
       })
@@ -36,7 +37,11 @@ export default {
         .catch(error => {
           console.error('Error en la solicitud:', error);
         });
+
       console.log("Iniciando partida para", this.nombreUsuario);
+
+   
+      socket.emit('usuario_conectado', { nombreUsuario: this.nombreUsuario });
 
       this.$router.push({ name: "TaulerView" });
     },

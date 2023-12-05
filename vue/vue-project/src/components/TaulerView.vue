@@ -25,6 +25,7 @@
 <script>
 //import dataPaises from '../../../../laravel/mapa.json';
 //import dataPreguntes from '../../../../laravel/preguntes.json';
+//import '../../../../laravel/resources/js/bootstrap.js';
 
 export default {
   data() {
@@ -160,15 +161,30 @@ export default {
     }
   },
   async mounted() {
+    
     await this.obtenerPreguntas();
     this.obtenerDatosPaises();
     this.currentQuestion = 0;
+
+    
+    window.Echo.channel('usuarios')
+      .listen('UsuarioConectadoEvent', (event) => {
+        console.log('Usuario conectado:', event.usuario);
+    
+      });
+
+    window.Echo.channel('usuarios')
+      .listen('UsuarioDesconectadoEvent', (event) => {
+        console.log('Usuario desconectado:', event.usuario);
+     
+      });
   },
   created() {
 
     this.respuesta = [];
   }
 };
+
 </script>
 <style scoped>
 .container {
