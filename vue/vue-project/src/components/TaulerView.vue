@@ -71,7 +71,7 @@ export default {
         preguntaId: questionId,
         respuestaUsuario: selectedOption
       };
-      this.ataqueId = obtenerAtaqueId();
+      
       fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -84,23 +84,21 @@ export default {
           if (result.resultado === true) {
             console.log('La respuesta es verdadera');
             
-            this.cambiarEstadoAtaque(result.resultado, this.ataqueId);
+            this.cambiarEstadoAtaque(result.resultado);
             this.confirmarAtaque(this.idUser, this.paisSeleccionado);
           } else {
             console.log('La respuesta es falsa');
-            this.cambiarEstadoAtaque(result.resultado, this.ataqueId);
+            this.cambiarEstadoAtaque(result.resultado);
           }
         })
         .catch(error => {
           console.error('Error validating response:', error);
         });
     },
-    async cambiarEstadoAtaque(resultado, ataqueId) {
-      console.log('Resultado: ', resultado, 'Id ataque:'+ataqueId);
-      const apiUrl = 'ataqueId';
+    async cambiarEstadoAtaque(resultado) {
+      const apiUrl = 'http://localhost:8000/api/cambiar-estado-ataque';
       const requestData = {
         resultado: resultado,
-        ataqueId: ataqueId
       };
 
       try {
@@ -127,8 +125,8 @@ export default {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            idUser: idUser, // Asegúrate de tener this.idUser definido en tu componente Vue
-            paisSeleccionado: paisSeleccionado,   // Asegúrate de tener this.pais definido en tu componente Vue
+            idUser: idUser,
+            paisSeleccionado: paisSeleccionado,   
           }),
         });
 

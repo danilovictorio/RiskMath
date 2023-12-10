@@ -1,6 +1,7 @@
 <?php 
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use App\Models\Atac;
 use App\Models\Pregunta;
@@ -24,6 +25,8 @@ class AtacController extends Controller
         $atac->estat = $estat;
         $atac->save();
 
+        Session::put('ataque', $atac);
+        Session::put('ataqueId', $atac->id);
        
         $data = [
             'pregunta' => [
@@ -40,26 +43,29 @@ class AtacController extends Controller
     }
 
     public function cambiarEstadoAtaque(Request $request){
-    $idAtac = $request->input('idAtac');
+    $ataqueId = Session::get('ataqueId');
     $resultado = $request->input('resultado');
 
-    $atac = Atac::find($idAtac);
-
-    if ($atac) {
-        if ($resultado == 'true') {
-            $estat = 'ACERTADA';
-            $atac->estat = $estat;
-            $atac->save();
-        }else {
-        $estat = 'FALLADA';
-        $atac->estat =$estat;
-        $atac->save();
-        }
-        
-
-        return response()->json(['message' => 'Estado del ataque actualizado con éxito']);
+    // Obtén el ataque almacenado en la sesión
+    $ataque = Atac::find($ataqueId);
+    
+    // Verifica que el ataque existe y pertenece al usuario actual
+    if ($ataque) {
+        // Actualiza el estado del ataque
+        $ataque->estat = $resultado;
+        $ataque->save();
+    
+        $data = [
+            'mensaje' => 'Estado del ataque cambiado exitosamente',
+        ];
+    
+        return response()->json($data);
     } else {
-        return response()->json(['error' => 'Ataque no encontrado'], 404);
-    }
-    }
+        $data = [
+            'mensaje' => 'Error: El ataque no existe o no pertenece al usuario actual',
+        ];
+    
+        return response()->json($data, 400); // Código de respuesta 400 para indicar un error
+   }
+}
 }
