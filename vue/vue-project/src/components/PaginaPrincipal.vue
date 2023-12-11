@@ -41,6 +41,8 @@ export default {
   width: 100vw;
   font-family: Arial, sans-serif;
   background-image: url('../assets/artwork.png');
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 h1{
@@ -74,7 +76,7 @@ button {
   background-color: white;
   border: none;
   cursor: pointer;
-  transition: box-shadow 0.3s ease;
+  transition: 0.5s ease;
 }
 
 button:hover {
