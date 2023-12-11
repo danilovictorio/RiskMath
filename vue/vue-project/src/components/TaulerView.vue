@@ -1,24 +1,32 @@
 <template>
   <div class="container">
     <div class="mapa">
-      <img src="../assets/spainHigh.svg" alt="Spain Map" style="width: 70vw; height: 70vh; position: absolute; left: 0;">
-      <ul>
-        <li v-for="pais in paises" :key="pais.id"  @click="enviarAtac(pais.id, idUser)">
-          {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
-        </li>
-      </ul>
-
-    </div>
-    <div v-if="mostrar !== null" class="pregunta-container">
-      <div class="pregunta">
-        <h2>{{ pregunta ? pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
-        <p @click="validateResponse(pregunta.id, 'a')" v-if="pregunta">Respuesta A: {{ pregunta.respuesta_a }}</p>
-        <p  @click="validateResponse(pregunta.id, 'b')" v-if="pregunta">Respuesta B: {{ pregunta.respuesta_b }}</p>
-        <p  @click="validateResponse(pregunta.id, 'c')" v-if="pregunta">Respuesta C: {{ pregunta.respuesta_c }}</p>
-        <p  @click="validateResponse(pregunta.id, 'd')" v-if="pregunta">Respuesta D: {{ pregunta.respuesta_d }}</p>
+      <img src="../assets/spainHigh.svg" alt="Spain Map">
+      <div class="paisos" v-for="pais in paises" :key="pais.id" @click="enviarAtac(pais.id, idUser)">
+        <div class="nom__pais">
+          {{ pais.nombre }}
+        </div>
+        <div class="propietari__pais">
+          Propietario: {{ pais.ocupante || 'Vacío' }}
+        </div>
       </div>
     </div>
 
+    <div v-if="currentQuestion !== null" class="preguntaRespostes__container">
+      <div class="pregunta">
+        <h2>{{ pregunta ? pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
+      </div>
+      <div class="respostes">
+        <button class="button__respostes" @click="validateResponse(pregunta.id, 'a')" v-if="pregunta">Respuesta A: {{
+          pregunta.respuesta_a }}</button>
+        <button class="button__respostes" @click="validateResponse(pregunta.id, 'b')" v-if="pregunta">Respuesta B: {{
+          pregunta.respuesta_b }}</button>
+        <button class="button__respostes" @click="validateResponse(pregunta.id, 'c')" v-if="pregunta">Respuesta C: {{
+          pregunta.respuesta_c }}</button>
+        <button class="button__respostes" @click="validateResponse(pregunta.id, 'd')" v-if="pregunta">Respuesta D: {{
+          pregunta.respuesta_d }}</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -34,7 +42,7 @@ export default {
       respuesta: [],
       pregunta: {},
       idUser: 1,
-      paisSeleccionado : null,
+      paisSeleccionado: null,
       currentQuestion: null,
       mostrar: null,
       mapa: ''
@@ -65,7 +73,7 @@ export default {
       }
     },
     validateResponse(questionId, selectedOption) {
-      console.log('Pregunta ID:', questionId); 
+      console.log('Pregunta ID:', questionId);
       const apiUrl = 'http://localhost:8000/api/verificar-respuesta';
       const requestData = {
         preguntaId: questionId,
@@ -92,31 +100,31 @@ export default {
           console.error('Error validating response:', error);
         });
     },
-    async confirmarAtaque(idUser, paisSeleccionado){
-      
+    async confirmarAtaque(idUser, paisSeleccionado) {
+
       try {
         const response = await fetch('http://localhost:8000/api/confirmar-ataque', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                idUser: idUser, // Asegúrate de tener this.idUser definido en tu componente Vue
-                paisSeleccionado: paisSeleccionado,   // Asegúrate de tener this.pais definido en tu componente Vue
-            }),
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            idUser: idUser, // Asegúrate de tener this.idUser definido en tu componente Vue
+            paisSeleccionado: paisSeleccionado,   // Asegúrate de tener this.pais definido en tu componente Vue
+          }),
         });
 
         if (!response.ok) {
-            throw new Error(`Error en la solicitud: ${response.status}`);
+          throw new Error(`Error en la solicitud: ${response.status}`);
         }
 
         const result = await response.json();
         console.log(result.message);
-        console.log('Usuario: '+ idUser, 'Conquista Pais: '+paisSeleccionado)
+        console.log('Usuario: ' + idUser, 'Conquista Pais: ' + paisSeleccionado)
 
-    } catch (error) {
+      } catch (error) {
         console.error('Error en la solicitud:', error);
-    }
+      }
     },
     async enviarAtac(paisId, idUser) {
 
@@ -173,32 +181,60 @@ export default {
 </script>
 <style scoped>
 .container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "mapa preguntes-respostes";
   height: 100vh;
+  width: 100vw;
 }
 
-.mapa {
-  width: 50%;
-}
-
-.pregunta-container {
-  width: 50%;
+.preguntaRespostes__container {
   padding: 20px;
-  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .pregunta {
   border: 1px solid #ccc;
   padding: 20px;
-  margin-bottom: 20px;
+  grid-area: preguntes-respostes;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
+.respostes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 20px;
+  margin-top: 10px;
 }
 
-li button {
-  margin-bottom: 10px;
+.button__respostes {
+  border-radius: 20px;
+  background-color:tan;
+  padding: 5px;
+}
+
+.mapa {
+  grid-area: mapa;
+  align-items: center;
+}
+/* 
+.paisos{
+
+}
+
+.nom__pais{
+
+}
+
+.propietari__pais{
+
+} */
+
+img{
+  width: 600px;
+  height: 300px;
 }
 </style>
