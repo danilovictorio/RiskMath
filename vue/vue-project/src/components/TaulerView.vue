@@ -25,8 +25,9 @@
 <script>
 //import dataPaises from '../../../../laravel/mapa.json';
 //import dataPreguntes from '../../../../laravel/preguntes.json';
-//import '../../../../laravel/resources/js/bootstrap.js';
-
+import '../../../../laravel/resources/js/bootstrap.js';
+import { useUserStore } from '../../../../vue/vue-project/src/stores/useUserStore.js';
+// userStore.addUser({ /* user data */ });
 export default {
   data() {
     return {

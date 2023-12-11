@@ -17,8 +17,9 @@ use App\Http\Controllers\UserController;
 |
 */
 //Ruta de iniciar partida
-Route::post('/iniciar-partida', [UserController::class, 'addUser']);
+Route::post('/agregar-usuario', [UserController::class, 'addUser']);
 Route::post('/eliminar-usuario', [UserController::class, 'removeUser']);
+Route::post('/actualizar-usuario', [UserController::class, 'updateUser']);
 
 //Rutas de Preguntas con las respuestas
 Route::get('/mostrar-preguntas', [PreguntaController::class, 'mostrarPreguntas']);
