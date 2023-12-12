@@ -1,77 +1,46 @@
-//PaginaPrincipal.vue
 <template>
   <div>
     <h1>SOY LA PAGINA PRINCIPAL</h1>
+    <div v-if="!nombreEscrito">
     <button @click="iniciarPartida">Iniciar Partida</button>
     <input v-model="nombreUsuario" placeholder="Nombre de usuario" />
+  </div>
+    <ul>
+      <li v-for="usuario in usuariosJuego" :key="usuario.id">{{ usuario.nombreUsuario }}</li>
+    </ul>
   </div>
 </template>
 
 <script>
-import {useAppStore} from '@/stores/app.js';
-import {socket} from '@/utils/socket.js';
+import { useAppStore } from '@/stores/app.js';
+import { socket } from '@/utils/socket.js';
 
 export default {
   data() {
     return {
       nombreUsuario: "",
+      usuariosJuego: [], 
+      nombreEscrito: false
     };
   },
   methods: {
     iniciarPartida() {
-   
-      //METO EL USUARIO EN PINIA
       const appStore = useAppStore();
       appStore.setUsuarioActual(this.nombreUsuario);
 
-      //MANDO UNA PETICION AL SERVIDOR DE SOCKETS
       socket.emit('peticion_jugar', { nombreUsuario: this.nombreUsuario });
-
-      /*
-      try {
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(datos),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
-        }
-
-        const result = await response.json();
-        console.log('Respuesta del servidor:', result);
-
-        // Emitir evento al servidor para informar sobre el usuario conectado
-        socket.emit('usuario_conectado', { nombreUsuario: this.nombreUsuario });
-
-        // Esperar hasta que haya al menos dos usuarios conectados
-        await this.esperarUsuariosConectados(2);
-
-        // Redirigir a la vista 
-        this.$router.push({ name: "TaulerView" });
-      } catch (error) {
-        console.error('Error en la solicitud:', error);
-      }*/
+      this.nombreEscrito=true;
+     
     },
-    esperarUsuariosConectados(cantidad) {
-      return new Promise((resolve) => {
-        // Escuchar eventos de usuarios conectados y desconectados
-        const userStore = useUserStore();
-        const unsubscribe = userStore.$subscribe((mutation) => {
-          if (mutation.type === 'addUser' || mutation.type === 'removeUser') {
-            const usuariosConectados = userStore.users.length;
-            if (usuariosConectados >= cantidad) {
-              // Detener la escucha y resolver la promesa
-              unsubscribe();
-              resolve();
-            }
-          }
-        });
-      });
-    },
+    
+  },
+  mounted() {  
+    socket.on('actualizacionUsuario', (usuarios) => {
+      this.usuariosJuego = usuarios;
+      if (this.usuariosJuego.length>=2) {
+         this.$router.push({ name: "TaulerView" });
+      }
+    });
   },
 };
 </script>

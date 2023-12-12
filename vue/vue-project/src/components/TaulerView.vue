@@ -25,7 +25,7 @@
 
 <script>
 
-import {useUserStore} from '@/stores/useUserStore.js';
+
 //import {socket} from '@/utils/socket.js';
 
 export default {
@@ -162,7 +162,7 @@ export default {
     }
   },
   async mounted() {
-    const userStore = useUserStore();
+   
     await this.obtenerPreguntas();
     this.obtenerDatosPaises();
     this.currentQuestion = 0;
