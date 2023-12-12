@@ -246,7 +246,7 @@ svg {
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 3fr;
   grid-template-areas: "pregunta pregunta "
-                       " svg respostes";
+                       "svg respostes";
   height: 95vh;
   width: 95vw;
 }
@@ -264,7 +264,7 @@ svg{
   grid-area: svg;
   width: 350px;
   height: 300px;
-  bottom: 5    0px;
+  bottom: 50px;
   left: 30px;
 }
 
@@ -280,7 +280,7 @@ svg{
 
 .button_respostes{
   border-radius: 20px;
-  background-color:orange;
+  background-color: lightblue;
 }
 
 .button-resposta1{
