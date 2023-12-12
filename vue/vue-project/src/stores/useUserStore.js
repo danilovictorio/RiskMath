@@ -1,6 +1,7 @@
-
+//useUserStore.js
 import { defineStore } from 'pinia';
-
+//import { io } from "socket.io-client";
+//import {socket} from "@/utils/socket.js";
 export const useUserStore = defineStore('user', {
     state: () => ({
         users: [],

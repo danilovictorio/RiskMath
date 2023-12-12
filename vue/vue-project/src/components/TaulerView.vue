@@ -1,3 +1,4 @@
+//TaulerView.vue
 <template>
   <div class="container">
     <div class="mapa">
@@ -23,11 +24,10 @@
 </template>
 
 <script>
-//import dataPaises from '../../../../laravel/mapa.json';
-//import dataPreguntes from '../../../../laravel/preguntes.json';
-import '../../../../laravel/resources/js/bootstrap.js';
-import { useUserStore } from '../../../../vue/vue-project/src/stores/useUserStore.js';
-// userStore.addUser({ /* user data */ });
+
+import {useUserStore} from '@/stores/useUserStore.js';
+//import {socket} from '@/utils/socket.js';
+
 export default {
   data() {
     return {
@@ -162,22 +162,17 @@ export default {
     }
   },
   async mounted() {
-    
+    const userStore = useUserStore();
     await this.obtenerPreguntas();
     this.obtenerDatosPaises();
     this.currentQuestion = 0;
-
-    
-    window.Echo.channel('usuarios')
-      .listen('UsuarioConectadoEvent', (event) => {
-        console.log('Usuario conectado:', event.usuario);
-    
+    socket.on('UsuarioConectadoEvent', (event) => {
+        console.log('Usuario conectado en TaulerView:', event.usuario);
       });
 
-    window.Echo.channel('usuarios')
-      .listen('UsuarioDesconectadoEvent', (event) => {
-        console.log('Usuario desconectado:', event.usuario);
      
+      socket.on('UsuarioDesconectadoEvent', (event) => {
+        console.log('Usuario desconectado en TaulerView:', event.usuario);
       });
   },
   created() {

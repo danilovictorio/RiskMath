@@ -1,3 +1,4 @@
+//PaginaPrincipal.vue
 <template>
   <div>
     <h1>SOY LA PAGINA PRINCIPAL</h1>
@@ -7,8 +8,8 @@
 </template>
 
 <script>
-import { useUserStore } from '../../../../vue/vue-project/src/stores/useUserStore.js';
-import { socket } from '../../../../vue/vue-project/'; 
+import {useAppStore} from '@/stores/app.js';
+import {socket} from '@/utils/socket.js';
 
 export default {
   data() {
@@ -17,18 +18,16 @@ export default {
     };
   },
   methods: {
-    async iniciarPartida() {
-      // Guardar el usuario en el store de Pinia
-      const userStore = useUserStore();
-      await userStore.addUser({ nombre: this.nombreUsuario });
+    iniciarPartida() {
+   
+      //METO EL USUARIO EN PINIA
+      const appStore = useAppStore();
+      appStore.setUsuarioActual(this.nombreUsuario);
 
-      const apiUrl = 'http://localhost:8000/api/iniciar-partida';
+      //MANDO UNA PETICION AL SERVIDOR DE SOCKETS
+      socket.emit('peticion_jugar', { nombreUsuario: this.nombreUsuario });
 
-      const datos = {
-        nombreUsuario: this.nombreUsuario,
-      };
-
-      // Realizar la solicitud al servidor
+      /*
       try {
         const response = await fetch(apiUrl, {
           method: 'POST',
@@ -51,11 +50,11 @@ export default {
         // Esperar hasta que haya al menos dos usuarios conectados
         await this.esperarUsuariosConectados(2);
 
-        // Redirigir a la vista de Sala de Espera
-        this.$router.push({ name: "SalaEspera" });
+        // Redirigir a la vista 
+        this.$router.push({ name: "TaulerView" });
       } catch (error) {
         console.error('Error en la solicitud:', error);
-      }
+      }*/
     },
     esperarUsuariosConectados(cantidad) {
       return new Promise((resolve) => {
