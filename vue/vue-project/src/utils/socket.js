@@ -1,18 +1,24 @@
 // Importar el cliente Socket.io
 import { io } from "socket.io-client";
 
-// URL del servidor de Socket.io
+
 const URL = "http://localhost:3001"; 
 
-// Crear el objeto socket
+
 export const socket = io(URL);
 
-// Escuchar el evento de desconexión
+socket.esMiTurno = false;
+
 socket.on('disconnect', () => {
   console.log('Se ha desconectado del servidor');
 });
 
-// Escuchar otros eventos según sea necesario
+socket.on('cambiarTurno', ({ esMiTurno }) => {
+  socket.esMiTurno = esMiTurno;
+  console.log('Cambio de turno. ¿Es mi turno?', esMiTurno);
+});
+
+
 socket.on('peticion_recibida', (event) => {
   console.log('Nos han aceptado la petición:', event);
 });
