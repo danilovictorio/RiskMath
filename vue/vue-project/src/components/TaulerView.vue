@@ -235,11 +235,6 @@ export default {
   stroke-width: 1;
 }
 
-svg {
-  position: absolute;
-  bottom: 50px;
-  left: 50px;
-}
 
 .container {
   display: grid;
@@ -262,10 +257,11 @@ svg {
 
 svg{
   grid-area: svg;
+  position: absolute;
   width: 350px;
   height: 300px;
-  bottom: 50px;
-  left: 30px;
+  bottom: 70px;
+  left: 80px;
 }
 
 .respostes{
