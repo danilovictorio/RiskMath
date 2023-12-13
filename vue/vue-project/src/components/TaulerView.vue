@@ -154,6 +154,7 @@ export default {
           body: JSON.stringify({
             pais: paisId,
             idUser: idUser,
+            name : name
           }),
         });
 
