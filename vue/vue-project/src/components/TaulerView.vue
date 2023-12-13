@@ -143,7 +143,7 @@ export default {
         console.error('Error en la solicitud:', error);
       }
     },
-    async enviarAtac(name, paisId, idUser) {
+    async enviarAtac(name,paisId, idUser) {
 
       try {
         const response = await fetch('http://localhost:8000/api/enviar-atac', {
@@ -152,7 +152,7 @@ export default {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            name: name,
+            pais: paisId,
             idUser: idUser,
           }),
         });
