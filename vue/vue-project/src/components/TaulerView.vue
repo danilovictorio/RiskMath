@@ -178,8 +178,7 @@ export default {
     handleRespuestaJugador(preguntaId, respuesta) {
       if (!this.esMiTurno) {
         return;
-      }
-
+      } 
       const esRespuestaCorrecta = verificateResponse(preguntaId, respuesta);
       if (esRespuestaCorrecta) {
  
