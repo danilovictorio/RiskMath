@@ -1,3 +1,12 @@
+<!-- RUTAS PARA FETCH A LARAVEL
+  En LOCAL : http://localhost:8000/
+  En PREPRODUCCIÓN :http://preprod.tr2g724.daw.inspedralbes.cat/tr2-MultipliCAT-G7/laravel
+  En PRODUCCIÓN : http://tr2g724.daw.inspedralbes.cat/tr2-MultipliCAT-G7/laravel
+
+  sustituir valor en variable global:  ruta
+ -->
+
+
 <template>
   <div class="container">
     <div class="mapa">
