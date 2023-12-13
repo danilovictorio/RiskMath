@@ -1,5 +1,5 @@
 <!-- RUTAS PARA FETCH A LARAVEL
-  En LOCAL : http://localhost:8000/
+  En LOCAL : http://localhost:8001
   En PREPRODUCCIÓN : http://preprod.tr2g724.daw.inspedralbes.cat/tr2-MultipliCAT-G7/laravel
   En PRODUCCIÓN : http://tr2g724.daw.inspedralbes.cat/tr2-MultipliCAT-G7/laravel
 
