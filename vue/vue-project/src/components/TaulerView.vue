@@ -187,21 +187,6 @@ export default {
   async mounted() {
     await this.obtenerPreguntas();
     this.obtenerDatosPaises();
-
-    socket.on('mostrarPregunta', (data) => {
-      this.pregunta = data.pregunta;
-      this.mostrarPregunta = true;
-    });
-
-    socket.on('ocultarPregunta', () => {
-      this.mostrarPregunta = false;
-    });
-
-    socket.on('cambiarTurno', ({ esMiTurno }) => {
-      this.esMiTurno = esMiTurno;
-      console.log('Cambio de turno. ¿Es mi turno?', esMiTurno);
-    });
-
     
   },
 };

@@ -7,15 +7,10 @@ const URL = "http://localhost:3001";
 
 export const socket = io(URL);
 
-socket.esMiTurno = false;
 
-socket.on('disconnect', () => {
-  console.log('Se ha desconectado del servidor');
-});
+socket.on('cambiarTurno', ({ turno_de }) => {
 
-socket.on('cambiarTurno', ({ esMiTurno }) => {
-  socket.esMiTurno = esMiTurno;
-  console.log('Cambio de turno. ¿Es mi turno?', esMiTurno);
+  console.log('Cambio de turno. ¿Es mi turno?', turno_de);
 });
 
 

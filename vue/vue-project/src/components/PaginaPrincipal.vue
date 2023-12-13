@@ -26,9 +26,9 @@ export default {
   methods: {
     iniciarPartida() {
       const appStore = useAppStore();
-      appStore.setUsuarioActual(this.nombreUsuario);
+      appStore.setNombre(this.nombreUsuario);
 
-      socket.emit('peticion_jugar', { nombreUsuario: this.nombreUsuario });
+      socket.emit('peticion_jugar', { nombreUsuario: appStore.usuario.nombre});
       this.nombreEscrito=true;
      
     },
