@@ -47,13 +47,13 @@ export default {
       paisSeleccionado: null,
       currentQuestion: null,
       mostrar: null,
-      ruta:''
+      ruta:'http://preprod.tr2g724.daw.inspedralbes.cat/tr2-MultipliCAT-G7/laravel'
     };
   },
   methods: {
     async obtenerPreguntas() {
       try {
-        const response = await fetch('http://localhost:8000/api/mostrar-preguntas');
+        const response = await fetch(`${this.ruta}/api/mostrar-preguntas`);
         const data = await response.json();
 
         this.preguntas = data.preguntas;
@@ -66,7 +66,7 @@ export default {
     },
     async obtenerDatosPaises() {
       try {
-        const response = await fetch('http://localhost:8000/api/paises');
+        const response = await fetch(`${this.ruta}/api/paises`);
         const data = await response.json();
         this.paises = data.paises;
         console.log(data);
@@ -76,7 +76,7 @@ export default {
     },
     validateResponse(questionId, selectedOption) {
       console.log('Pregunta ID:', questionId);
-      const apiUrl = 'http://localhost:8000/api/verificar-respuesta';
+      const apiUrl = `${this.ruta}/api/verificar-respuesta`;
       const requestData = {
         preguntaId: questionId,
         respuestaUsuario: selectedOption
@@ -106,7 +106,7 @@ export default {
         });
     },
     async cambiarEstadoAtaque(resultado, ataqueId) {
-      const apiUrl = 'http://localhost:8000/api/cambiar-estado-ataque';
+      const apiUrl = `${this.ruta}/api/cambiar-estado-ataque`;
       const requestData = {
         resultado: resultado,
         ataqueId: ataqueId,
@@ -130,7 +130,7 @@ export default {
     async confirmarAtaque(idUser, paisSeleccionado) {
 
       try {
-        const response = await fetch('http://localhost:8000/api/confirmar-ataque', {
+        const response = await fetch(`${this.ruta}/api/confirmar-ataque`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -156,7 +156,7 @@ export default {
     async enviarAtac(name,paisId, idUser) {
 
       try {
-        const response = await fetch('http://localhost:8000/api/enviar-atac', {
+        const response = await fetch(`${this.ruta}/api/enviar-atac`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
