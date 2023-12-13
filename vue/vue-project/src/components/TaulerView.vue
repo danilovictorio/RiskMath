@@ -84,21 +84,22 @@ export default {
           if (result.resultado === true) {
             console.log('La respuesta es verdadera');
             
-            this.cambiarEstadoAtaque(result.resultado);
+            this.cambiarEstadoAtaque(result.resultado, this.ataqueId);
             this.confirmarAtaque(this.idUser, this.paisSeleccionado);
           } else {
             console.log('La respuesta es falsa');
-            this.cambiarEstadoAtaque(result.resultado);
+            this.cambiarEstadoAtaque(result.resultado, this.ataqueId);
           }
         })
         .catch(error => {
           console.error('Error validating response:', error);
         });
     },
-    async cambiarEstadoAtaque(resultado) {
+    async cambiarEstadoAtaque(resultado, ataqueId) {
       const apiUrl = 'http://localhost:8000/api/cambiar-estado-ataque';
       const requestData = {
         resultado: resultado,
+        ataqueId: ataqueId,
       };
 
       try {
@@ -161,9 +162,8 @@ export default {
         }
 
         const data = await response.json();
-        console.log('Respuesta del servidor:', data);
-        const ataqueId = data.ataqueId;
-
+        console.log('Respuesta del servidor:', data.idAtac);
+        this.ataqueId = data.idAtac;
         this.pregunta = {
           id: data.pregunta.id,
           pregunta: data.pregunta.pregunta,
@@ -174,9 +174,8 @@ export default {
         };
 
         this.mostrar = 1;
-        this.ataqueId = ataqueId;
         this.paisSeleccionado = paisId;
-        
+
       } catch (error) {
         console.error('Error en la solicitud:', error);
       }

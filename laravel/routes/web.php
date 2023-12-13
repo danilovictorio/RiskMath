@@ -21,3 +21,8 @@ Route::get('/', function () {
 Route::get('/game', function () {
     return view('gameview');
 });
+
+View::addExtension('html', 'php');
+Route::get('/', function () {
+    return View::make('index');
+});
