@@ -1,3 +1,4 @@
+
 Tota la informació del vostre projecte ha de ser accessible a partir d'aquí
 
 Teniu la carpeta /doc per deixar-hi tota la documentació que genereu, en format markdown
@@ -22,3 +23,4 @@ URL del taiga.io -> https://tree.taiga.io/project/a19pabmatpav-transversal-2-mul
 URL de preproducció -> --
 
 URL de producció (amb un domini registrat) -> --
+
