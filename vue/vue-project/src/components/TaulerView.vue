@@ -1,6 +1,6 @@
 <!-- RUTAS PARA FETCH A LARAVEL
   En LOCAL : http://localhost:8000/
-  En PREPRODUCCIÓN :http://preprod.tr2g724.daw.inspedralbes.cat/tr2-MultipliCAT-G7/laravel
+  En PREPRODUCCIÓN : http://preprod.tr2g724.daw.inspedralbes.cat/tr2-MultipliCAT-G7/laravel
   En PRODUCCIÓN : http://tr2g724.daw.inspedralbes.cat/tr2-MultipliCAT-G7/laravel
 
   sustituir valor en variable global:  ruta
@@ -46,7 +46,8 @@ export default {
       ataqueId: null,
       paisSeleccionado: null,
       currentQuestion: null,
-      mostrar: null
+      mostrar: null,
+      ruta:''
     };
   },
   methods: {
