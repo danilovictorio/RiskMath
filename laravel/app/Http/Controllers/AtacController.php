@@ -55,9 +55,9 @@ class AtacController extends Controller
         if ($ataque) {
             // Actualiza el estado del ataque
             if ($resultado){
-                $ataque->estat = "P_ACERTADA";
+                $ataque->estat = "ACERTADA";
             }else{
-                $ataque->estat = "P_FALLADA";}
+                $ataque->estat = "FALLADA";}
             
             $ataque->save();
     
