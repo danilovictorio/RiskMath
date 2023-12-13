@@ -2,7 +2,7 @@
   <div class="container">
     <div class="mapa">
       <ul>
-        <li v-for="pais in paises" :key="pais.id" @click="enviarAtac(pais && pais.nombre, pais.id, idUser)">
+        <li v-for="pais in paises" :key="pais.id" @click="enviarAtac(pais.nombre, pais.id, idUser)">
           {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
         </li>
       </ul>
@@ -10,14 +10,10 @@
     <div v-if="mostrarPregunta && esMiTurno" class="pregunta-container">
       <div class="pregunta">
         <h2>{{ pregunta ? pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
-        <p @click="validateResponse(pregunta.id, 'a')" v-if="pregunta && Object.keys(pregunta).length">Respuesta A: {{
-          pregunta.respuesta_a }}</p>
-        <p @click="validateResponse(pregunta.id, 'b')" v-if="pregunta && Object.keys(pregunta).length">Respuesta B: {{
-          pregunta.respuesta_b }}</p>
-        <p @click="validateResponse(pregunta.id, 'c')" v-if="pregunta && Object.keys(pregunta).length">Respuesta C: {{
-          pregunta.respuesta_c }}</p>
-        <p @click="validateResponse(pregunta.id, 'd')" v-if="pregunta && Object.keys(pregunta).length">Respuesta D: {{
-          pregunta.respuesta_d }}</p>
+        <p @click="validateResponse(pregunta.id, 'a')" v-if="pregunta && Object.keys(pregunta).length">Respuesta A: {{ pregunta.respuesta_a }}</p>
+        <p @click="validateResponse(pregunta.id, 'b')" v-if="pregunta && Object.keys(pregunta).length">Respuesta B: {{ pregunta.respuesta_b }}</p>
+        <p @click="validateResponse(pregunta.id, 'c')" v-if="pregunta && Object.keys(pregunta).length">Respuesta C: {{ pregunta.respuesta_c }}</p>
+        <p @click="validateResponse(pregunta.id, 'd')" v-if="pregunta && Object.keys(pregunta).length">Respuesta D: {{ pregunta.respuesta_d }}</p>
       </div>
     </div>
   </div>
@@ -32,7 +28,7 @@ export default {
       paises: [],
       preguntas: [],
       pregunta: {},
-      idUser: 1,
+      idUser: 1, 
       paisSeleccionado: null,
       mostrarPregunta: false,
       esMiTurno: false,
@@ -94,15 +90,17 @@ export default {
             if (result.resultado === true) {
               console.log('La respuesta es verdadera');
               this.confirmarAtaque(this.idUser, this.paisSeleccionado);
+              this.handleRespuestaJugador(questionId, selectedOption,result.resultado);
             } else {
               console.log('La respuesta es falsa');
+              this.handleRespuestaJugador(questionId, selectedOption,result.resultado);
             }
           })
           .catch(error => {
             console.error('Error validating response:', error);
           });
 
-        this.handleRespuestaJugador(questionId, selectedOption);
+      
       }
     },
 
@@ -175,18 +173,12 @@ export default {
       }
     },
 
-    handleRespuestaJugador(preguntaId, respuesta) {
+    handleRespuestaJugador(correcto) {
       if (!this.esMiTurno) {
         return;
       } 
-      const esRespuestaCorrecta = verificateResponse(preguntaId, respuesta);
-      if (esRespuestaCorrecta) {
- 
-        const paisConquistado = confirmarAtaque(this.idUser, this.paisSeleccionado);
-
+      if (correcto) {
         socket.emit('ocultarPregunta');
-        socket.emit('actualizarEstadoJuego', { paisConquistado });
-
         this.esMiTurno = false;
         socket.emit('cambiarTurno', { esMiTurno: this.esMiTurno });
       }
@@ -197,13 +189,11 @@ export default {
     this.obtenerDatosPaises();
 
     socket.on('mostrarPregunta', (data) => {
-
       this.pregunta = data.pregunta;
       this.mostrarPregunta = true;
     });
 
     socket.on('ocultarPregunta', () => {
-
       this.mostrarPregunta = false;
     });
 
@@ -212,6 +202,7 @@ export default {
       console.log('Cambio de turno. ¿Es mi turno?', esMiTurno);
     });
 
+    
   },
 };
 </script>

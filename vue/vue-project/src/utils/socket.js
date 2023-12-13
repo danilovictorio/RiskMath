@@ -13,7 +13,13 @@ socket.on('disconnect', () => {
   console.log('Se ha desconectado del servidor');
 });
 
-socket.on('peticion_recibida', (event) => {
+socket.on('cambiarTurno', ({ esMiTurno }) => {
+  socket.esMiTurno = esMiTurno;
+  console.log('Cambio de turno. ¿Es mi turno?', esMiTurno);
+});
+
+
+socket.on('peticion_jugar', (event) => {
   console.log('Nos han aceptado la petición:', event);
 });
 
