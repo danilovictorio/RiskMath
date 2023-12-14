@@ -14,6 +14,7 @@
 <script>
 import { useAppStore } from '@/stores/app.js';
 import { socket } from '@/utils/socket.js';
+import { useAppStore } from '../stores/app';
 
 export default {
   data() {
@@ -27,8 +28,6 @@ export default {
   methods: {
     iniciarPartida() {
       const appStore = useAppStore();
-      appStore.setNombre(this.nombreUsuario);
-
       socket.emit('peticion_jugar', { nombreUsuario: appStore.usuario.nombre});
       this.nombreEscrito=true;
      

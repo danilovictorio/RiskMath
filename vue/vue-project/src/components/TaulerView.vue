@@ -26,6 +26,7 @@
 <script>
 import { socket } from '@/utils/socket.js';
 import { useAppStore } from '../stores/app';
+import { socket, nombreUsuario} from '@/utils/socket.js';
 
 export default {
   data() {
@@ -33,13 +34,14 @@ export default {
       paises: [],
       preguntas: [],
       pregunta: {},
-      idUser: 1,
+      idUser: socket.id,
       paisSeleccionado: null,
       mostrarPregunta: false,
       usuario: nombreUsuario,
       app: useAppStore(),
       esMiTurno: nombreUsuario,
       esActivo:true,
+      estado:''
     };
   },
   methods: {
@@ -80,7 +82,7 @@ export default {
 
       if (this.nombreUsuario==this.app.usuario.nombre) {    
         
-      this.app.setEstado = "Acabado";
+      this.estado = "Acabado";
       console.log('Pregunta ID:', questionId);
       const apiUrl = 'http://localhost:8000/api/verificar-respuesta';
       const requestData = {
@@ -99,16 +101,13 @@ export default {
         .then(result => {
           if (result.resultado === true) {
             console.log('La respuesta es verdadera');
-            this.confirmarAtaque(this.idUser, this.paisSeleccionado);
-            this.esMiTurno = false;
-
+            socket.emit('actualizar_mapa');
           } else {
             console.log('La respuesta es falsa');
-            this.respuestaJugador(false);
           }
           socket.emit('respuestaJugador', { userId: this.idUser });
           this.app.setEstado = "Respondiendo";
-          this.esMiTurno = false;
+
         })
         .catch(error => {
           console.error('Error validating response:', error);
@@ -156,7 +155,8 @@ export default {
     async enviarAtac(name, paisId, idUser) {
       if (this.usuario == this.app.usuario.nombre) {
 
-        this.app.setEstado = "Atacando";
+        this.estado='Atacando'
+        socket.emit('actualizar_estado', {estado:this.estado});
         try {
           const response = await fetch('http://localhost:8000/api/enviar-atac', {
             method: 'POST',
@@ -187,7 +187,8 @@ export default {
 
           this.mostrar = 1;
           this.paisSeleccionado = paisId;
-          this.app.setEstado = "Respondiendo";
+          this.estado= "Respondiendo";
+          socket.emit('actualizar_estado', {estado:this.estado});
         } catch (error) {
           console.error('Error en la solicitud:', error);
         }
@@ -202,9 +203,8 @@ export default {
     this.obtenerDatosPaises();
     const app = useAppStore();
     this.usuario = app.usuario.nombre;
-
-
-
+    this.esMiTurno = app.usuario.nombre === this.usuario;
+    this.esActivo = app.usuario.nombre === this.usuario;
   },
 };
 </script>

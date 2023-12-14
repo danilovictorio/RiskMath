@@ -5,7 +5,8 @@ export const useAppStore = defineStore('app', {
   state: () => ({
     usuario: {
       nombre:'',
-      estado:''    
+      estado:'',
+      color: ''
     },
     usuarioJuego:{
       users:[]
@@ -18,20 +19,11 @@ export const useAppStore = defineStore('app', {
     setEstado(nuevoEstado){
       this.usuario.estado=nuevoEstado;
     },
+    setColor(color){
+      this.usuario.color=color;
+    },
     getNombre(){
       return this.usuario.nombre;
     }
-    // setVotos(votos){
-    //   this.infoVotos.votos=votos;
-    // },
-    // getVotos(){
-    //   return this.infoVotos.votos;
-    // },
-    // isLoggedIn(){
-    //   return this.loginInfo.loggedIn;
-    // },
-    // getLoginInfo(){
-    //   return this.loginInfo;
-    // }
   },
 })
