@@ -52,10 +52,11 @@ h1{
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(5px);
-  
+  backdrop-filter: blur(10px);
   border-radius: 10px;
-  height: 30vh;
+  margin-top: 20%;
+  margin-right: 25%;
+  height: 20vh;
   width: 20vw;
   padding: 5px;
   border: 2px solid #52C8FA;
@@ -64,17 +65,26 @@ h1{
 input {
   padding: 10px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 2px solid #000;
   margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+  background-color: transparent;
 }
+
+input::placeholder {
+  font-weight: bold;
+  color: #000;
+}
+
 
 button {
   padding: 10px 20px;
   border-radius: 10px;
-  background-color: white;
   border: none;
   cursor: pointer;
   transition: 0.5s ease;
+  background-color: transparent;
+  font-weight: bold;
 }
 
 button:hover {
