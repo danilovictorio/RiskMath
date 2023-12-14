@@ -4,7 +4,8 @@ import { defineStore } from 'pinia'
 export const useAppStore = defineStore('app', {
   state: () => ({
     usuario: {
-      nombre:''      
+      nombre:'',
+      estado:''    
     },
     usuarioJuego:{
       users:[]
@@ -12,9 +13,11 @@ export const useAppStore = defineStore('app', {
   }),
   actions: {
     setNombre( nombre ) {
-      this.usuario.nombre=nombre;
-            
+      this.usuario.nombre=nombre;       
     },
+    setEstado(nuevoEstado){
+      this.usuario.estado=nuevoEstado;
+    }
     // setVotos(votos){
     //   this.infoVotos.votos=votos;
     // },

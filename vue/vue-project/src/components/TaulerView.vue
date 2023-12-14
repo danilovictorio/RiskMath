@@ -10,10 +10,14 @@
     <div v-if="mostrarPregunta && esMiTurno" class="pregunta-container">
       <div class="pregunta">
         <h2>{{ pregunta ? pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
-        <p @click="validateResponse(pregunta.id, 'a')" v-if="pregunta && Object.keys(pregunta).length">Respuesta A: {{ pregunta.respuesta_a }}</p>
-        <p @click="validateResponse(pregunta.id, 'b')" v-if="pregunta && Object.keys(pregunta).length">Respuesta B: {{ pregunta.respuesta_b }}</p>
-        <p @click="validateResponse(pregunta.id, 'c')" v-if="pregunta && Object.keys(pregunta).length">Respuesta C: {{ pregunta.respuesta_c }}</p>
-        <p @click="validateResponse(pregunta.id, 'd')" v-if="pregunta && Object.keys(pregunta).length">Respuesta D: {{ pregunta.respuesta_d }}</p>
+        <p @click="validateResponse(pregunta.id, 'a')" v-if="pregunta && Object.keys(pregunta).length">Respuesta A: {{
+          pregunta.respuesta_a }}</p>
+        <p @click="validateResponse(pregunta.id, 'b')" v-if="pregunta && Object.keys(pregunta).length">Respuesta B: {{
+          pregunta.respuesta_b }}</p>
+        <p @click="validateResponse(pregunta.id, 'c')" v-if="pregunta && Object.keys(pregunta).length">Respuesta C: {{
+          pregunta.respuesta_c }}</p>
+        <p @click="validateResponse(pregunta.id, 'd')" v-if="pregunta && Object.keys(pregunta).length">Respuesta D: {{
+          pregunta.respuesta_d }}</p>
       </div>
     </div>
   </div>
@@ -21,6 +25,7 @@
 
 <script>
 import { socket } from '@/utils/socket.js';
+import { useAppStore } from '../stores/app';
 
 export default {
   data() {
@@ -28,10 +33,13 @@ export default {
       paises: [],
       preguntas: [],
       pregunta: {},
-      idUser: 1, 
+      idUser: 1,
       paisSeleccionado: null,
       mostrarPregunta: false,
       esMiTurno: false,
+      usuario: '',
+      app: useAppStore(),
+      
     };
   },
   methods: {
@@ -68,6 +76,7 @@ export default {
 
     //funció que valida si la resposta d'un usuari es la correcta 
     validateResponse(questionId, selectedOption) {
+      this.app.setEstado="Acabado";
       if (!this.esMiTurno) {
         return;
       } else {
@@ -90,17 +99,19 @@ export default {
             if (result.resultado === true) {
               console.log('La respuesta es verdadera');
               this.confirmarAtaque(this.idUser, this.paisSeleccionado);
-              this.handleRespuestaJugador(questionId, selectedOption,result.resultado);
+              this.esMiTurno = false;
+              
             } else {
               console.log('La respuesta es falsa');
-              this.handleRespuestaJugador(questionId, selectedOption,result.resultado);
+              this.respuestaJugador(false);
             }
+            socket.emit('respuestaJugador', { userId: this.idUser });
+            this.app.setEstado="Respondiendo";
+            this.esMiTurno = false;
           })
           .catch(error => {
             console.error('Error validating response:', error);
           });
-
-      
       }
     },
 
@@ -136,7 +147,7 @@ export default {
 
     //funció enviar atac a server
     async enviarAtac(name, paisId, idUser) {
-
+      this.app.setEstado="Atacando";
       try {
         const response = await fetch('http://localhost:8000/api/enviar-atac', {
           method: 'POST',
@@ -167,27 +178,20 @@ export default {
 
         this.mostrar = 1;
         this.paisSeleccionado = paisId;
-
+        this.app.setEstado="Respondiendo";
       } catch (error) {
         console.error('Error en la solicitud:', error);
-      }
-    },
-
-    handleRespuestaJugador(correcto) {
-      if (!this.esMiTurno) {
-        return;
-      } 
-      if (correcto) {
-        socket.emit('ocultarPregunta');
-        this.esMiTurno = false;
-        socket.emit('cambiarTurno', { esMiTurno: this.esMiTurno });
       }
     },
   },
   async mounted() {
     await this.obtenerPreguntas();
     this.obtenerDatosPaises();
-    
+    const app = useAppStore();
+    this.usuario = app.usuario.nombre;
+
+
+
   },
 };
 </script>
@@ -221,4 +225,5 @@ ul {
 
 li button {
   margin-bottom: 10px;
-}</style>
+}
+</style>
