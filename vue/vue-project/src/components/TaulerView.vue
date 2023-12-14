@@ -41,7 +41,8 @@ export default {
       app: useAppStore(),
       esMiTurno: nombreUsuario,
       esActivo:true,
-      estado:''
+      estado:'',
+      colorMapa:''
     };
   },
   methods: {
@@ -102,6 +103,7 @@ export default {
           if (result.resultado === true) {
             console.log('La respuesta es verdadera');
             socket.emit('actualizar_mapa');
+            this.colorMapa=this.app.getColorMapa();
           } else {
             console.log('La respuesta es falsa');
           }

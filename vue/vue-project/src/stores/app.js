@@ -16,14 +16,20 @@ export const useAppStore = defineStore('app', {
     setNombre( nombre ) {
       this.usuario.nombre=nombre;       
     },
+    getNombre(){
+      return this.usuario.nombre;
+    },
     setEstado(nuevoEstado){
       this.usuario.estado=nuevoEstado;
+    },
+    getEstado(){
+      return this.usuario.estado;
     },
     setColor(color){
       this.usuario.color=color;
     },
-    getNombre(){
-      return this.usuario.nombre;
+    getColorMapa(){
+      return this.usuario.color;
     }
   },
 })
