@@ -38,6 +38,7 @@ export default {
     socket.on('actualizacionUsuario', (usuarios) => {
       this.usuariosJuego = usuarios;
       if (this.usuariosJuego.length>=2) {
+        console.log('Han actualizado los usuarios', users);
          this.$router.push({ name: "TaulerView" });
       }
     });
