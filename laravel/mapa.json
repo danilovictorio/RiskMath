@@ -1,30 +1,79 @@
 {
-    "paises": [
-      {
-        "id": 1,
-        "nombre": "pais1",
-        "ocupante": ""
-      },
-      {
-        "id": 2,
-        "nombre": "pais2",
-        "ocupante": ""
-      },
-      {
-        "id": 3,
-        "nombre": "pais3",
-        "ocupante": ""
-      },
-      {
-        "id": 4,
-        "nombre": "pais4",
-        "ocupante": ""
-      },
-      {
-        "id": 5,
-        "nombre": "pais5",
-        "ocupante": ""
-      }
-    ]
-  }
-  
+  "paises": [
+    {
+      "id": "ES-AN",
+      "nombre": "Andalusia",
+      "ocupante": ""
+    },
+    {
+      "id": "ES-AR",
+      "nombre": "Arago",
+      "ocupante": ""
+    },
+    {
+      "id": "ES-AS",
+      "nombre": "Asturies",
+      "ocupante": ""
+    },
+    {
+      "id": "ES-CB",
+      "nombre": "Cantabria",
+      "ocupante": ""
+    },
+    {
+      "id": "ES-CL",
+      "nombre": "Castella i Lleo",
+      "ocupante": ""
+    },
+    {
+      "id": "ES-CM",
+      "nombre": "Castella-la Manxa",
+      "ocupante": ""
+    },
+    {
+      "id": "ES-CT",
+      "nombre": "Catalunya",
+      "ocupante": ""
+    },
+    {
+      "id": "ES-EX",
+      "nombre": "Extremadura",
+      "ocupante": ""
+    },
+    {
+      "id": "ES-GA",
+      "nombre": "Galicia",
+      "ocupante": ""
+    },
+    {
+      "id": "ES-RI",
+      "nombre": "La Rioja",
+      "ocupante": ""
+    },
+    {
+      "id": "ES-MD",
+      "nombre": "Madrid",
+      "ocupante": ""
+    },
+    {
+      "id": "ES-MC",
+      "nombre": "Murcia",
+      "ocupante": ""
+    },
+    {
+      "id": "ES-NC",
+      "nombre": "Navarra",
+      "ocupante": ""
+    },
+    {
+      "id": "ES-PV",
+      "nombre": "Pais Basc",
+      "ocupante": ""
+    },
+    {
+      "id": "ES-VC",
+      "nombre": "Valencia",
+      "ocupante": ""
+    }
+  ]
+}
