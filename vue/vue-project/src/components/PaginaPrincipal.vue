@@ -3,7 +3,7 @@
     <div class="content">
       <h1>¡Inicia sesion!</h1>
       <input v-model="nombreUsuario" placeholder="Nombre de usuario" />
-      <button @click="iniciarPartida">Iniciar Partida</button>
+      <button @click="iniciarPartida">¡Iniciar Partida!</button>
     </div>
   </div>
 </template>
