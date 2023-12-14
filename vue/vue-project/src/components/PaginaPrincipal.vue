@@ -31,18 +31,16 @@ export default {
 </script>
 
 <style lang="css" scoped>
-
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
+  justify-content: left;
+  height: 100rem;
+  width: 100rem;
+  padding: 0;
+  margin-left: 0;
   font-family: Arial, sans-serif;
-  background-image: url('../assets/artwork.png');
-  background-repeat: no-repeat;
-  background-size: cover;
 }
 
 h1{
