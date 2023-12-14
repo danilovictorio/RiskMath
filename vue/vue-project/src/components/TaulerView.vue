@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="mapa">
+    <div :class="{ 'mapa': esActivo, 'disabled': !esActivo }">
       <ul>
         <li v-for="pais in paises" :key="pais.id" @click="enviarAtac(pais.nombre, pais.id, idUser)">
           {{ pais.nombre }} - Ocupante: {{ pais.ocupante || 'Vacío' }}
@@ -36,10 +36,10 @@ export default {
       idUser: 1,
       paisSeleccionado: null,
       mostrarPregunta: false,
-      esMiTurno: false,
-      usuario: '',
+      usuario: nombreUsuario,
       app: useAppStore(),
-      
+      esMiTurno: nombreUsuario,
+      esActivo:true,
     };
   },
   methods: {
@@ -55,6 +55,7 @@ export default {
         this.respuesta = data.preguntas[0].opciones;
 
         console.log(data.preguntas);
+
       } catch (error) {
         console.error('Error al obtener preguntas:', error);
       }
@@ -76,111 +77,123 @@ export default {
 
     //funció que valida si la resposta d'un usuari es la correcta 
     validateResponse(questionId, selectedOption) {
-      this.app.setEstado="Acabado";
-      if (!this.esMiTurno) {
-        return;
-      } else {
-        console.log('Pregunta ID:', questionId);
-        const apiUrl = 'http://localhost:8000/api/verificar-respuesta';
-        const requestData = {
-          preguntaId: questionId,
-          respuestaUsuario: selectedOption,
-        };
 
-        fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestData),
-        })
-          .then(response => response.json())
-          .then(result => {
-            if (result.resultado === true) {
-              console.log('La respuesta es verdadera');
-              this.confirmarAtaque(this.idUser, this.paisSeleccionado);
-              this.esMiTurno = false;
-              
-            } else {
-              console.log('La respuesta es falsa');
-              this.respuestaJugador(false);
-            }
-            socket.emit('respuestaJugador', { userId: this.idUser });
-            this.app.setEstado="Respondiendo";
+      if (this.nombreUsuario==this.app.usuario.nombre) {    
+        
+      this.app.setEstado = "Acabado";
+      console.log('Pregunta ID:', questionId);
+      const apiUrl = 'http://localhost:8000/api/verificar-respuesta';
+      const requestData = {
+        preguntaId: questionId,
+        respuestaUsuario: selectedOption,
+      };
+
+      fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData),
+      })
+        .then(response => response.json())
+        .then(result => {
+          if (result.resultado === true) {
+            console.log('La respuesta es verdadera');
+            this.confirmarAtaque(this.idUser, this.paisSeleccionado);
             this.esMiTurno = false;
-          })
-          .catch(error => {
-            console.error('Error validating response:', error);
-          });
-      }
-    },
+
+          } else {
+            console.log('La respuesta es falsa');
+            this.respuestaJugador(false);
+          }
+          socket.emit('respuestaJugador', { userId: this.idUser });
+          this.app.setEstado = "Respondiendo";
+          this.esMiTurno = false;
+        })
+        .catch(error => {
+          console.error('Error validating response:', error);
+        });
+      }else{
+        this.esActivo=false;
+        return;
+      }},
 
 
     //funció per confirmar atac
     async confirmarAtaque(idUser, paisSeleccionado) {
+      if (this.usuario == this.app.usuario.nombre) {
+        try {
+          const response = await fetch('http://localhost:8000/api/confirmar-ataque', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              idUser: idUser,
+              paisSeleccionado: paisSeleccionado,
+            }),
+          });
 
-      try {
-        const response = await fetch('http://localhost:8000/api/confirmar-ataque', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            idUser: idUser,
-            paisSeleccionado: paisSeleccionado,
-          }),
-        });
+          if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.status}`);
+          }
 
-        if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
+          const result = await response.json();
+          console.log(result.message);
+          console.log('Usuario: ' + idUser, 'Conquista Pais: ' + paisSeleccionado)
+
+        } catch (error) {
+          console.error('Error en la solicitud:', error);
         }
-
-        const result = await response.json();
-        console.log(result.message);
-        console.log('Usuario: ' + idUser, 'Conquista Pais: ' + paisSeleccionado)
-
-      } catch (error) {
-        console.error('Error en la solicitud:', error);
+      } else { 
+        this.esActivo=false;
+        return; 
       }
     },
 
 
     //funció enviar atac a server
     async enviarAtac(name, paisId, idUser) {
-      this.app.setEstado="Atacando";
-      try {
-        const response = await fetch('http://localhost:8000/api/enviar-atac', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name: name,
-            idUser: idUser,
-          }),
-        });
+      if (this.usuario == this.app.usuario.nombre) {
 
-        if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
+        this.app.setEstado = "Atacando";
+        try {
+          const response = await fetch('http://localhost:8000/api/enviar-atac', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              name: name,
+              idUser: idUser,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.status}`);
+          }
+
+          const data = await response.json();
+          console.log('Respuesta del servidor:', data);
+
+          this.pregunta = {
+            id: data.pregunta.id,
+            pregunta: data.pregunta.pregunta,
+            respuesta_a: data.pregunta.respuesta_a,
+            respuesta_b: data.pregunta.respuesta_b,
+            respuesta_c: data.pregunta.respuesta_c,
+            respuesta_d: data.pregunta.respuesta_d,
+          };
+
+          this.mostrar = 1;
+          this.paisSeleccionado = paisId;
+          this.app.setEstado = "Respondiendo";
+        } catch (error) {
+          console.error('Error en la solicitud:', error);
         }
-
-        const data = await response.json();
-        console.log('Respuesta del servidor:', data);
-
-        this.pregunta = {
-          id: data.pregunta.id,
-          pregunta: data.pregunta.pregunta,
-          respuesta_a: data.pregunta.respuesta_a,
-          respuesta_b: data.pregunta.respuesta_b,
-          respuesta_c: data.pregunta.respuesta_c,
-          respuesta_d: data.pregunta.respuesta_d,
-        };
-
-        this.mostrar = 1;
-        this.paisSeleccionado = paisId;
-        this.app.setEstado="Respondiendo";
-      } catch (error) {
-        console.error('Error en la solicitud:', error);
+      } else {
+        this.esActivo=false;
+        return;
       }
     },
   },
@@ -204,6 +217,10 @@ export default {
 
 .mapa {
   width: 50%;
+}
+.disabled{
+  pointer-events: none; 
+  opacity: 0.5
 }
 
 .pregunta-container {

@@ -17,6 +17,9 @@ export const useAppStore = defineStore('app', {
     },
     setEstado(nuevoEstado){
       this.usuario.estado=nuevoEstado;
+    },
+    getNombre(){
+      return this.usuario.nombre;
     }
     // setVotos(votos){
     //   this.infoVotos.votos=votos;

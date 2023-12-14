@@ -10,6 +10,7 @@ export const socket = io(URL);
 
 socket.on('cambiarTurno', ({ turno_de }) => {
   app.setNombre(turno_de);
+  nombreUsuario=turno_de;
   console.log('Cambio de turno. ¿Es mi turno?', turno_de);
 });
 

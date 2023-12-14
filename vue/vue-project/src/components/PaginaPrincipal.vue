@@ -20,7 +20,8 @@ export default {
     return {
       nombreUsuario: "",
       usuariosJuego: [], 
-      nombreEscrito: false
+      nombreEscrito: false,
+      user:nombreUsuario
     };
   },
   methods: {
