@@ -16,11 +16,9 @@ socket.on('peticion_jugar', (event) => {
   console.log('Nos han aceptado la petición:', event);
 });
 
-
 socket.on('actualizacionEstado', (estado) => {
   console.log('Han actualizado el estado', estado);
 });
 socket.on('colorMapa', (color)=>{
-  app.setColor(color);
   console.log('color cambiado:',color);
 })
