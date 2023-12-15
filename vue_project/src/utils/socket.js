@@ -2,13 +2,14 @@
 import { io } from "socket.io-client";
 import { useAppStore } from '../stores/app';
 
-const URL = "http://localhost:3001"; 
-const app= useAppStore();
+const URL = "http://localhost:8000"; 
+
 
 export const socket = io(URL);
 
 
 socket.on('cambiarTurno', ({ turno_de }) => {
+  const app= useAppStore();
   app.setNombre(turno_de);
   nombreUsuario=turno_de;
   console.log('Cambio de turno. ¿Es mi turno?', turno_de);
