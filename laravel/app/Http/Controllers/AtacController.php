@@ -76,4 +76,38 @@ class AtacController extends Controller
             return response()->json($data, 400);
         }
     }
+
+    public function confirmarAtac($idUserC,$idPaisC){
+        // Configuración de la conexión a la base de datos
+    $dsn = 'mysql:host=localhost;dbname=laravel';
+    $usuario = 'root';
+    $contrasena = '';
+
+    try {
+        // Conexión a la base de datos usando PDO
+        $conexion = new PDO($dsn, $usuario, $contrasena);
+        $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // Sentencia SQL para actualizar datos en una tabla
+        $sql = "UPDATE pais SET ocupante = '$idUserC' WHERE id = $idPaisC";
+
+        // Preparar la consulta
+        $consulta = $conexion->prepare($sql);
+
+        // Bind de los parámetros
+        $consulta->bindParam(':nuevoValor', $nuevoValor, PDO::PARAM_STR);
+        $consulta->bindParam(':id', $id, PDO::PARAM_INT);
+
+        // Ejecutar la consulta
+        $consulta->execute();
+
+        // Cerrar la conexión
+        $conexion = null;
+
+        return "Datos actualizados correctamente";
+    } catch(PDOException $e) {
+        return "Error al modificar los datos: " . $e->getMessage();
+    }
+}
+
 }

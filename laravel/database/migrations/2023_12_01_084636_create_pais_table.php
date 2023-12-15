@@ -17,7 +17,6 @@ return new class extends Migration
         $table->string('id')->primary();
         $table->string('nombre');
         $table->string('ocupante')->nullable();
-        $table->timestamps();
         });
     }
 
