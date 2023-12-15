@@ -310,7 +310,9 @@ export default {
 }
 
 .land {
-  border: 1px solid black;
+  stroke: black;
+  stroke-opacity: 1;
+  stroke-width: 1;
 }
 
 .mapa {
