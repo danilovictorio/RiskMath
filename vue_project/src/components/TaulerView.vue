@@ -132,9 +132,9 @@ export default {
       idUser: 1,
       paisSeleccionado: null,
       mostrarPregunta: false,
-      usuario: nombreUsuario,
+      usuario: this.nombreUsuario,
       app: useAppStore(),
-      esMiTurno: nombreUsuario,
+      esMiTurno: this.nombreUsuario,
       esActivo: true,
     };
   },
