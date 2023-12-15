@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-// import { useAppStore } from '../stores/app';
+ import { useAppStore } from '../stores/app';
 const app = express();
 app.use(cors());
 
@@ -60,6 +60,6 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(8000, () => {
+server.listen(3001, () => {
   console.log('Server running at http://localhost:8000');
 });

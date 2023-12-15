@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "amcharts3": "^3.21.15",
     "pinia": "^2.1.7",
     "socket-client": "^1.0.0",
     "socket.io": "^4.7.2",
