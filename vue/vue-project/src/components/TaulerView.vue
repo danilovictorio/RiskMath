@@ -202,9 +202,6 @@ export default {
     this.obtenerDatosPaises();
     const app = useAppStore();
     this.usuario = app.usuario.nombre;
-
-
-
   },
 };
 </script>
