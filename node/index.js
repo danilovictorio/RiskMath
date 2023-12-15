@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
- import { useAppStore } from '../stores/app';
+
 const app = express();
 app.use(cors());
 
@@ -24,6 +24,8 @@ io.on('connection', (socket) => {
   socket.on('peticion_jugar', (datos) => {
     usuariosJuego.push({ id: socket.id, nombreUsuario: datos.nombreUsuario,estado:""});
     console.log('quiere jugar',datos.nombreUsuario);
+    
+    socket.emit("peticion_jugar_aceptada",datos);
     io.emit('actualizacionUsuario', usuariosJuego);
     
     if (usuariosJuego.length === 2) {
@@ -61,5 +63,5 @@ io.on('connection', (socket) => {
 });
 
 server.listen(3001, () => {
-  console.log('Server running at http://localhost:8000');
+  console.log('Server running at http://localhost:3001');
 });

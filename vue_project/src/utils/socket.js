@@ -15,12 +15,17 @@ socket.on('cambiarTurno', ({ turno_de }) => {
   console.log('Cambio de turno. ¿Es mi turno?', turno_de);
 });
 
-socket.on('peticion_jugar', (event) => {
-  console.log('Nos han aceptado la petición:', event);
+socket.on('peticion_jugar_aceptada', (datos) => {
+  const appStore = useAppStore();
+  appStore.setNombre(datos);
+  console.log('Nos han aceptado la petición:', datos);
+
 });
 
 socket.on('actualizacionUsuario', (datos) => {
   console.log('Han actualizado los usuarios', datos);
+  const appStore = useAppStore();
+  appStore.setUsuariosJuego(datos);
 });
 socket.on('actualizacionEstado', (datos) => {
   console.log('Han actualizado el estado', datos);

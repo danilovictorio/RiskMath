@@ -6,13 +6,17 @@ export const useAppStore = defineStore('app', {
       nombre:'',
       estado:''    
     },
-    usuarioJuego:{
+    //ARRAY DE USUARIOS
+    usuariosJuego:{
       users:[]
     }
   }),
   actions: {
     setNombre( nombre ) {
       this.usuario.nombre=nombre;       
+    },
+    setUsuariosJuego( usuarios ) {
+      this.usuariosJuego.users=usuarios;       
     },
     setEstado(nuevoEstado){
       this.usuario.estado=nuevoEstado;
