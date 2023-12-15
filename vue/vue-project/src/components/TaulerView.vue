@@ -157,8 +157,8 @@ export default {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            idUser: idUser, // Asegúrate de tener this.idUser definido en tu componente Vue
-            paisSeleccionado: paisSeleccionado,   // Asegúrate de tener this.pais definido en tu componente Vue
+            idUser: idUser, 
+            paisSeleccionado: paisSeleccionado,   
           }),
         });
 
