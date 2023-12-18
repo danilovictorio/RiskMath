@@ -172,10 +172,10 @@ export default {
 
     //funció que valida si la resposta d'un usuari es la correcta 
     validateResponse(questionId, selectedOption) {
-
-      if (this.nombreUsuario == this.app.usuario.nombre) {
-
-        this.app.setEstado = "Acabado";
+      alert("respuesta2")
+      /*if (this.nombreUsuario == this.app.usuario.nombre) {*/
+        alert("respuesta")
+        this.app.setEstado("Acabado");
         console.log('Pregunta ID:', questionId);
         const apiUrl = 'http://localhost:8000/api/verificar-respuesta';
         const requestData = {
@@ -199,25 +199,25 @@ export default {
 
             } else {
               console.log('La respuesta es falsa');
-              this.respuestaJugador(false);
+              //this.respuestaJugador(false);
             }
             socket.emit('respuestaJugador', { userId: this.idUser });
-            this.app.setEstado = "Respondiendo";
+            this.app.setEstado("Respondiendo");
             this.esMiTurno = false;
           })
           .catch(error => {
             console.error('Error validating response:', error);
           });
-      } else {
+      /*} else {
         this.esActivo = false;
-        return;
-      }
+        return;*
+      }*/
     },
 
 
     //funció per confirmar atac
     async confirmarAtaque(idUser, paisSeleccionado) {
-      if (this.usuario == this.app.usuario.nombre) {
+      //if (this.usuario == this.app.usuario.nombre) {
         try {
           const response = await fetch('http://localhost:8000/api/confirmar-ataque', {
             method: 'POST',
@@ -241,18 +241,19 @@ export default {
         } catch (error) {
           console.error('Error en la solicitud:', error);
         }
-      } else {
+      /* } else {
         this.esActivo = false;
         return;
-      }
+      }*/
     },
 
 
     //funció enviar atac a server
     async enviarAtac(name, paisId, idUser) {
-      if (this.usuario == this.app.usuario.nombre) {
-
-        this.app.setEstado = "Atacando";
+      alert("hola1")
+     //if (this.usuario == this.app.usuario.nombre) {
+        alert("hola")
+        this.app.setEstado("Atacando");
         try {
           const response = await fetch('http://localhost:8000/api/enviar-atac', {
             method: 'POST',
@@ -283,15 +284,15 @@ export default {
 
           this.mostrar = 1;
           this.paisSeleccionado = paisId;
-          this.app.setEstado = "Respondiendo";
+          this.app.setEstado("Respondiendo");
           this.mostrarPregunta=true;
         } catch (error) {
           console.error('Error en la solicitud:', error);
         }
-      } else {
-        this.esActivo = false;
-        return;
-      }
+     //} else {
+       // this.esActivo = false;
+        //return;
+      //}
     },
   },
   async mounted() {
