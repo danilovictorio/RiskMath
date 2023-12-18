@@ -5,7 +5,7 @@
         <h2>{{ pregunta ? pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
       </div>
     </div>
-
+    
     <div class="respostes" v-if="mostrarPregunta">
       <button class="button_respostes button-resposta1" @click="validateResponse(pregunta.id, 'a')" v-if="pregunta">
         Respuesta A: {{ pregunta.respuesta_a }}

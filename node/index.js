@@ -49,13 +49,13 @@ io.on('connection', (socket) => {
     }
   });
   socket.on('respuestaJugador', ({ userId }) => {
-    const app = useAppStore();
+    
     if (userId==usuariosJuego[0]) {
       userId=usuariosJuego[1]
     }else{
       userId=usuariosJuego[0]
     }
-    app.setNombre(userId);
+    
     io.emit('cambiarTurno', { turno_de: userId }); 
 
  

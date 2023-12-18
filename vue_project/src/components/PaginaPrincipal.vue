@@ -21,12 +21,14 @@ export default {
       nombreUsuario: "",
       usuariosJuego: [], 
       nombreEscrito: false,
+      app: useAppStore(),
       user: "",
     };
   },
   methods: {
     iniciarPartida() {
      // const appStore = useAppStore();
+      this.app.setNombre(this.nombreUsuario);
       socket.emit('peticion_jugar',  { nombreUsuario: this.nombreUsuario });
       this.nombreEscrito = true;
     },
