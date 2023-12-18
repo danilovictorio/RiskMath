@@ -22,18 +22,22 @@ io.on('connection', (socket) => {
   socket.esMiTurno = false;
 
   socket.on('peticion_jugar', (datos) => {
-    usuariosJuego.push({ id: socket.id, nombreUsuario: datos.nombreUsuario,estado:""});
+    usuariosJuego.push({ id: socket.id, nombreUsuario: datos.nombreUsuario,estado:"",color:""});
     console.log('quiere jugar',datos.nombreUsuario);
     
     socket.emit("peticion_jugar_aceptada",datos);
     io.emit('actualizacionUsuario', usuariosJuego);
     
     if (usuariosJuego.length === 2) {
+      usuariosJuego[0].color="green";
+      usuariosJuego[1].color="blue";
+      socket.emit('actualizarColor', usuariosJuego[0].color,usuariosJuego[1].color);
       const primerTurno = Math.floor(Math.random() * usuariosJuego.length);
       const jugadorInicial = usuariosJuego[primerTurno];      
       io.emit('cambiarTurno', { turno_de: jugadorInicial.nombreUsuario });
     }
   });
+
 
   socket.on('disconnect', () => {
     console.log("Se ha desconectado alguien!! con id " + socket.id);
@@ -50,12 +54,13 @@ io.on('connection', (socket) => {
   });
   socket.on('respuestaJugador', ({ userId }) => {
     
-    if (userId==usuariosJuego[0]) {
-      userId=usuariosJuego[1]
+    if (userId==usuariosJuego[0].nombreUsuario) {
+      userId=usuariosJuego[1].nombreUsuario;
     }else{
-      userId=usuariosJuego[0]
+      userId=usuariosJuego[0].nombreUsuario;
     }
-    
+
+    console.log("On respuesta jugador :: cambiar turno a :: ", userId);
     io.emit('cambiarTurno', { turno_de: userId }); 
 
  

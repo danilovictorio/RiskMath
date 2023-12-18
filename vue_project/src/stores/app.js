@@ -4,7 +4,8 @@ export const useAppStore = defineStore('app', {
   state: () => ({
     turnoDe: {
       nombre:'',
-      estado:''    
+      estado:'',
+      color: ''   
     },
     //ARRAY DE USUARIOS
     usuariosJuego:{
@@ -27,6 +28,9 @@ export const useAppStore = defineStore('app', {
     },
     setNombre(nombre) {
       this.nombre=nombre;
+    },
+    setColor(color){
+      this.turnoDe.color=color;
     }
   },
 })
