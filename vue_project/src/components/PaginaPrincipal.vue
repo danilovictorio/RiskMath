@@ -29,6 +29,9 @@ export default {
     iniciarPartida() {
      // const appStore = useAppStore();
       this.app.setNombre(this.nombreUsuario);
+     console.log("nombre",this.nombreUsuario);
+      console.log("nompinia",this.app.nombre);
+     //console.log("turno de",this.app.turnoDe.nombre);
       socket.emit('peticion_jugar',  { nombreUsuario: this.nombreUsuario });
       this.nombreEscrito = true;
     },
@@ -46,4 +49,65 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="css" scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: left;
+  height: 0rem;
+  width: 100rem;
+  padding: 0;
+  margin-left: 0;
+  font-family: Arial, sans-serif;
+}
+
+h1{
+  color: #FA3030;
+  font-family: impact;
+}
+.content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  margin-top: 20%;
+  margin-right: 25%;
+  height: 20vh;
+  width: 20vw;
+  padding: 5px;
+  border: 2px solid #52C8FA;
+}
+
+input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid #000;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+  background-color: transparent;
+}
+
+input::placeholder {
+  font-weight: bold;
+  color: #000;
+}
+
+
+button {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: 0.5s ease;
+  background-color: transparent;
+  font-weight: bold;
+}
+
+button:hover {
+  box-shadow: inset 0 0 0 50px #FA3030;
+}
+
+</style>

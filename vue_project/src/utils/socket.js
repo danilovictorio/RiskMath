@@ -9,9 +9,9 @@ export const socket = io(URL);
 
 
 socket.on('cambiarTurno', ({ turno_de }) => {
+  console.log('Cambio de turno. ¿Es mi turno?', turno_de);
   const app= useAppStore();
   app.setTurno(turno_de);
-  console.log('Cambio de turno. ¿Es mi turno?', turno_de);
 });
 
 socket.on('peticion_jugar_aceptada', (datos) => {
@@ -28,4 +28,10 @@ socket.on('actualizacionUsuario', (datos) => {
 });
 socket.on('actualizacionEstado', (datos) => {
   console.log('Han actualizado el estado', datos);
+});
+socket.on('actualizarColor', (color1,color2) => {
+  const appStore = useAppStore();
+  appStore.setColor(color1);
+  appStore.setColor(color2);
+  console.log('Han actualizado el color', color1,color2);
 });
