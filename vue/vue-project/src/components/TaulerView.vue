@@ -22,8 +22,8 @@
       xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
       xmlns:svg="http://www.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap">
       <defs id="defs30">
-        <amcharts:ammap projection="mercator" leftLongitude="-18.161674" topLatitude="43.794381" rightLongitude="4.332045"
-          bottomLatitude="27.636889" />
+        <!-- <amcharts:ammap projection="mercator" leftLongitude="-18.161674" topLatitude="43.794381" rightLongitude="4.332045"
+          bottomLatitude="27.636889" />-->
         <!-- All areas are listed in the line below. You can use this list in your script. -->
         <!--{id:"ES-AN"},{id:"ES-AR"},{id:"ES-AS"},{id:"ES-CB"},{id:"ES-CL"},{id:"ES-CM"},{id:"ES-CN"},{id:"ES-CT"},{id:"ES-EX"},{id:"ES-GA"},{id:"ES-RI"},{id:"ES-MD"},{id:"ES-MC"},{id:"ES-NC"},{id:"ES-IB"},{id:"ES-PV"},{id:"ES-VC"}-->
       </defs>
