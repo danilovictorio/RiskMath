@@ -1,3 +1,11 @@
+<!-- RUTAS PARA FETCH A LARAVEL
+  En LOCAL : http://localhost:8000
+  En PREPRODUCCIÓN : http://preprod.tr2g724.daw.inspedralbes.cat/laravel
+  En PRODUCCIÓN : http://tr2g724.daw.inspedralbes.cat/laravel
+
+  sustituir valor en variable global:  ruta
+ -->
+
 <template>
   <div class="container">
 
@@ -128,6 +136,7 @@ export default {
       esMiTurno: this.nombreUsuario,
       esActivo: true,
       preguntaAcertada: false,
+      ruta:'http://preprod.tr2g724.daw.inspedralbes.cat/laravel'
     };
   }, computed: {
     deberiaMostrarContenido() {
@@ -140,7 +149,7 @@ export default {
     //funció que serveix per obtenir el json de preguntes
     async obtenerPreguntas() {
       try {
-        const response = await fetch('http://localhost:8000/api/mostrar-preguntas');
+        const response = await fetch(`${this.ruta}/public/api/mostrar-preguntas`);
         const data = await response.json();
 
         this.preguntas = data.preguntas;
@@ -157,7 +166,7 @@ export default {
     //funció per obtenir el json de paisos
     async obtenerDatosPaises() {
       try {
-        const response = await fetch('http://localhost:8000/api/paises');
+        const response = await fetch(`${this.ruta}/public/api/paises`);
         const data = await response.json();
         this.paises = data.paises;
         console.log(data);
@@ -170,13 +179,13 @@ export default {
     //funció que valida si la resposta d'un usuari es la correcta 
     validateResponse(questionId, selectedOption) {
       /*if (this.nombreUsuario == this.app.usuario.nombre) {*/
-      this.app.setEstado("Acabado");
-      console.log('Pregunta ID:', questionId);
-      const apiUrl = 'http://localhost:8000/api/verificar-respuesta';
-      const requestData = {
-        preguntaId: questionId,
-        respuestaUsuario: selectedOption,
-      };
+        this.app.setEstado("Acabado");
+        console.log('Pregunta ID:', questionId);
+        const apiUrl = `${this.ruta}/public/api/verificar-respuesta`;
+        const requestData = {
+          preguntaId: questionId,
+          respuestaUsuario: selectedOption,
+        };
 
       fetch(apiUrl, {
         method: 'POST',
@@ -215,17 +224,17 @@ export default {
     //funció per confirmar atac
     async confirmarAtaque(idUser, paisSeleccionado) {
       //if (this.usuario == this.app.usuario.nombre) {
-      try {
-        const response = await fetch('http://localhost:8000/api/confirmar-ataque', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            idUser: idUser,
-            paisSeleccionado: paisSeleccionado,
-          }),
-        });
+        try {
+          const response = await fetch(`${this.ruta}/public/api/confirmar-ataque`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              idUser: idUser,
+              paisSeleccionado: paisSeleccionado,
+            }),
+          });
 
         if (!response.ok) {
           throw new Error(`Error en la solicitud: ${response.status}`);
@@ -249,21 +258,21 @@ export default {
 
     //funció enviar atac a server
     async enviarAtac(name, paisId, idUser) {
-
-      //if (this.usuario == this.app.usuario.nombre) {
-
-      this.app.setEstado("Atacando");
-      try {
-        const response = await fetch('http://localhost:8000/api/enviar-atac', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name: name,
-            idUser: idUser,
-          }),
-        });
+  
+     //if (this.usuario == this.app.usuario.nombre) {
+  
+        this.app.setEstado("Atacando");
+        try {
+          const response = await fetch(`${this.ruta}/public/api/enviar-atac`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              name: name,
+              idUser: idUser,
+            }),
+          });
 
         if (!response.ok) {
           throw new Error(`Error en la solicitud: ${response.status}`);

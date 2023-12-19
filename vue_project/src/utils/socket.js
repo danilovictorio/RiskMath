@@ -1,8 +1,17 @@
+/* 
+  RUTAS PARA EXPORTAR SOCKETS
+  En LOCAL : http://localhost:3001
+  En PREPRODUCCIÓN : http://preprod.tr2g724.daw.inspedralbes.cat:3001
+  En PRODUCCIÓN : http://tr2g724.daw.inspedralbes.cat:3001
+
+  sustituir valor en variable constante:  URL
+*/
+
 // Importar el cliente Socket.io
 import { io } from "socket.io-client";
 import { useAppStore } from '../stores/app';
 
-const URL = "http://localhost:3001"; 
+const URL = "http://preprod.tr2g724.daw.inspedralbes.cat:3001"; 
 
 
 export const socket = io(URL);
