@@ -60,6 +60,7 @@ export default {
   padding: 0;
   margin-left: 0;
   font-family: Arial, sans-serif;
+  background-image: url('artwork.png');
 }
 
 h1{

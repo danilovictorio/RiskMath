@@ -9,15 +9,15 @@
 <template>
   <div class="container">
 
-    <div class="torn" v-if="!deberiaMostrarContenido">
+    <div class="torn_container" v-if="deberiaMostrarContenido">
       <div class="torn">
-      <h1>Esperando...</h1>
-      <h2>TORN DE:</h2>
-      <p>{{this.app.turnoDe.nombre}}</p>   
-    </div>
+        <h1>Esperando...</h1>
+        <h2>TORN DE:</h2>
+        <p>{{ this.app.turnoDe.nombre }}</p>
+      </div>
     </div>
 
-    <div v-if="deberiaMostrarContenido">
+    <div class="preguntaResposta_container" v-if="deberiaMostrarContenido">
       <div class="pregunta_container" v-if="mostrarPregunta">
         <div class="pregunta">
           <h2>{{ pregunta ? pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
@@ -25,16 +25,16 @@
       </div>
 
       <div class="respostes" v-if="mostrarPregunta">
-        <button class="button_respostes button-resposta1" @click="validateResponse(pregunta.id, 'a')" v-if="pregunta">
+        <button class="btn_respostes btn_resposta1" @click="validateResponse(pregunta.id, 'a')" v-if="pregunta">
           Respuesta A: {{ pregunta.respuesta_a }}
         </button>
-        <button class="button_respostes button-resposta2" @click="validateResponse(pregunta.id, 'b')" v-if="pregunta">
+        <button class="btn_respostes btn_resposta2" @click="validateResponse(pregunta.id, 'b')" v-if="pregunta">
           Respuesta B: {{ pregunta.respuesta_b }}
         </button>
-        <button class="button_respostes button-resposta3" @click="validateResponse(pregunta.id, 'c')" v-if="pregunta">
+        <button class="btn_respostes btn_resposta3" @click="validateResponse(pregunta.id, 'c')" v-if="pregunta">
           Respuesta C: {{ pregunta.respuesta_c }}
         </button>
-        <button class="button_respostes button-resposta4" @click="validateResponse(pregunta.id, 'd')" v-if="pregunta">
+        <button class="btn_respostes btn_resposta4" @click="validateResponse(pregunta.id, 'd')" v-if="pregunta">
           Respuesta D: {{ pregunta.respuesta_d }}
         </button>
       </div>
@@ -44,7 +44,8 @@
       <svg version="1.1" id="svg47" sodipodi:docname="MAPA.SVG" inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
         xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
         xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
-        xmlns:svg="http://www.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap">
+        xmlns:svg="http://www.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap"
+        style="width: 350px; height: 285px;">
         <defs id="defs30">
           <!-- <amcharts:ammap projection="mercator" leftLongitude="-18.161674" topLatitude="43.794381" rightLongitude="4.332045"
           bottomLatitude="27.636889" /> -->
@@ -146,7 +147,7 @@ export default {
     deberiaMostrarContenido() {
       return this.app.nombre === this.app.turnoDe.nombre;
     }
-    
+
   },
   methods: {
 
@@ -322,9 +323,28 @@ export default {
 
 
 <style scoped>
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.torn_container{
+}
+
+.torn{
+}
+
 .container {
-  display: flex;
   height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 3fr;
+  grid-template-areas: "torn"
+    "preguntesiRespostes";
+  align-items: center;
+  justify-content: center;
+  background-image: url('mar.jpg');
 }
 
 .land {
@@ -333,33 +353,64 @@ export default {
   stroke-width: 1;
 }
 
+.pregunta_container {
+  border: 1px solid black;
+  justify-content: center;
+  padding: 10px;
+}
+
 .mapa {
-  width: 50%;
+  display: flex;
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  bottom: 40px;
+  left: 40%;
 }
 
-.disabled {
-  pointer-events: none;
-  opacity: 0.5
-}
-
-.pregunta-container {
-  width: 50%;
-  padding: 20px;
-  box-sizing: border-box;
+.preguntaResposta_container{
+  grid-area: preguntesiRespostes;
+  margin-bottom: 500px;
 }
 
 .pregunta {
-  border: 1px solid #ccc;
+  font-size: 1.5rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.respostes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas: "btn_resposta1 btn_resposta2"
+    "btn_resposta3 btn_resposta4";
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn_respostes {
+  background-color: burlywood;
+  border-radius: 5px;
   padding: 20px;
-  margin-bottom: 20px;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
+.btn_respostes:hover {
+  background-color: chocolate;
 }
 
-li button {
-  margin-bottom: 10px;
+.btn-resposta1 {
+  grid-area: btn-resposta1;
+}
+
+.btn-resposta2 {
+  grid-area: btn-resposta2;
+}
+
+.btn-resposta3 {
+  grid-area: btn-resposta3;
+}
+
+.btn-resposta4 {
+  grid-area: btn-resposta4;
 }
 </style>
