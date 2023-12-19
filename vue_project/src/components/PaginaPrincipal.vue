@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <h1>SOY LA PAGINA PRINCIPAL</h1>
-    <div v-if="!nombreEscrito">
-      <button @click="iniciarPartida">Iniciar Partida</button>
+  <div class="container">
+    <div v-if="!nombreEscrito" class="content">
+      <h1>¡Inicia sesion!</h1>
       <input v-model="nombreUsuario" placeholder="Nombre de usuario" />
+      <button @click="iniciarPartida">Iniciar Partida</button>
     </div>
     <ul>
       <li v-for="usuario in usuariosJuego" :key="usuario.id">{{ usuario.nombreUsuario }}</li>

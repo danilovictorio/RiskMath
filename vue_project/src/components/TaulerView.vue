@@ -188,9 +188,7 @@ export default {
 
     //funció que valida si la resposta d'un usuari es la correcta 
     validateResponse(questionId, selectedOption) {
-      alert("respuesta2")
       /*if (this.nombreUsuario == this.app.usuario.nombre) {*/
-        alert("respuesta")
         this.app.setEstado("Acabado");
         console.log('Pregunta ID:', questionId);
         const apiUrl = `${this.ruta}/public/api/verificar-respuesta`;
@@ -270,9 +268,9 @@ export default {
 
     //funció enviar atac a server
     async enviarAtac(name, paisId, idUser) {
-      alert("hola1")
+  
      //if (this.usuario == this.app.usuario.nombre) {
-        alert("hola")
+  
         this.app.setEstado("Atacando");
         try {
           const response = await fetch(`${this.ruta}/public/api/enviar-atac`, {
