@@ -72,10 +72,10 @@ h1{
   justify-content: center;
   backdrop-filter: blur(10px);
   border-radius: 10px;
-  margin-top: 20%;
+  margin-top: 40%;
   height: 20vh;
   width: 20vw;
-  padding: 5px;
+  padding: 5px 16px;
   border: 2px solid #52C8FA;
 }
 
