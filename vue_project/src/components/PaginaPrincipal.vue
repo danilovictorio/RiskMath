@@ -72,18 +72,20 @@ h1{
   justify-content: center;
   backdrop-filter: blur(10px);
   border-radius: 10px;
-  margin-top: 40%;
+  margin-top: 32%;
   height: 20vh;
-  width: 20vw;
+  width: 80vw;
   padding: 5px 16px;
   border: 2px solid #52C8FA;
+  max-width: fit-content;
 }
 
 input {
   padding: 10px;
+  text-align: center;
   border-radius: 8px;
   border: 2px solid #000;
-  margin-bottom: 20px;
+  margin-bottom: 7px;
   backdrop-filter: blur(10px);
   background-color: transparent;
 }
