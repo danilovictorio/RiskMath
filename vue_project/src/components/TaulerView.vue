@@ -9,8 +9,12 @@
 <template>
   <div class="container">
 
-    <div class="torn">
-
+    <div class="torn" v-if="!deberiaMostrarContenido">
+      <div class="torn">
+      <h1>Esperando...</h1>
+      <h2>TORN DE:</h2>
+      <p>{{this.app.turnoDe.nombre}}</p>   
+    </div>
     </div>
 
     <div v-if="deberiaMostrarContenido">
@@ -142,6 +146,7 @@ export default {
     deberiaMostrarContenido() {
       return this.app.nombre === this.app.turnoDe.nombre;
     }
+    
   },
   methods: {
 
