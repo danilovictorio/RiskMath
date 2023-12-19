@@ -56,7 +56,6 @@ export default {
   align-items: center;
   justify-content: left;
   height: 0rem;
-  width: 100rem;
   padding: 0;
   margin-left: 0;
   font-family: Arial, sans-serif;
@@ -74,7 +73,6 @@ h1{
   backdrop-filter: blur(10px);
   border-radius: 10px;
   margin-top: 20%;
-  margin-right: 25%;
   height: 20vh;
   width: 20vw;
   padding: 5px;
