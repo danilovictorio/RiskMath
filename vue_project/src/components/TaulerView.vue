@@ -136,7 +136,7 @@ export default {
       esMiTurno: this.nombreUsuario,
       esActivo: true,
       preguntaAcertada: false,
-      ruta:'http://localhost:8000'
+      ruta: 'http://localhost:8000'
     };
   }, computed: {
     deberiaMostrarContenido() {
@@ -149,7 +149,7 @@ export default {
     //funció que serveix per obtenir el json de preguntes
     async obtenerPreguntas() {
       try {
-        const response = await fetch(`${this.ruta}/public/api/mostrar-preguntas`);
+        const response = await fetch(`${this.ruta}/api/mostrar-preguntas`);
         const data = await response.json();
 
         this.preguntas = data.preguntas;
@@ -166,7 +166,7 @@ export default {
     //funció per obtenir el json de paisos
     async obtenerDatosPaises() {
       try {
-        const response = await fetch(`${this.ruta}/public/api/paises`);
+        const response = await fetch(`${this.ruta}/api/paises`);
         const data = await response.json();
         this.paises = data.paises;
         console.log(data);
@@ -179,13 +179,13 @@ export default {
     //funció que valida si la resposta d'un usuari es la correcta 
     validateResponse(questionId, selectedOption) {
       /*if (this.nombreUsuario == this.app.usuario.nombre) {*/
-        this.app.setEstado("Acabado");
-        console.log('Pregunta ID:', questionId);
-        const apiUrl = `${this.ruta}/public/api/verificar-respuesta`;
-        const requestData = {
-          preguntaId: questionId,
-          respuestaUsuario: selectedOption,
-        };
+      this.app.setEstado("Acabado");
+      console.log('Pregunta ID:', questionId);
+      const apiUrl = `${this.ruta}/api/verificar-respuesta`;
+      const requestData = {
+        preguntaId: questionId,
+        respuestaUsuario: selectedOption,
+      };
 
       fetch(apiUrl, {
         method: 'POST',
@@ -224,17 +224,17 @@ export default {
     //funció per confirmar atac
     async confirmarAtaque(idUser, paisSeleccionado) {
       //if (this.usuario == this.app.usuario.nombre) {
-        try {
-          const response = await fetch(`${this.ruta}/public/api/confirmar-ataque`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              idUser: idUser,
-              paisSeleccionado: paisSeleccionado,
-            }),
-          });
+      try {
+        const response = await fetch(`${this.ruta}/api/confirmar-ataque`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            idUser: idUser,
+            paisSeleccionado: paisSeleccionado,
+          }),
+        });
 
         if (!response.ok) {
           throw new Error(`Error en la solicitud: ${response.status}`);
@@ -258,21 +258,21 @@ export default {
 
     //funció enviar atac a server
     async enviarAtac(name, paisId, idUser) {
-  
-     //if (this.usuario == this.app.usuario.nombre) {
-  
-        this.app.setEstado("Atacando");
-        try {
-          const response = await fetch(`${this.ruta}/public/api/enviar-atac`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              name: name,
-              idUser: idUser,
-            }),
-          });
+
+      //if (this.usuario == this.app.usuario.nombre) {
+
+      this.app.setEstado("Atacando");
+      try {
+        const response = await fetch(`${this.ruta}/api/enviar-atac`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: name,
+            idUser: idUser,
+          }),
+        });
 
         if (!response.ok) {
           throw new Error(`Error en la solicitud: ${response.status}`);
