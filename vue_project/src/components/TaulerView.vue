@@ -136,7 +136,7 @@ export default {
       esMiTurno: this.nombreUsuario,
       esActivo: true,
       preguntaAcertada: false,
-      ruta:'http://preprod.tr2g724.daw.inspedralbes.cat/laravel'
+      ruta:'http://localhost:8000'
     };
   }, computed: {
     deberiaMostrarContenido() {

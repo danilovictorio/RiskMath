@@ -11,7 +11,7 @@
 import { io } from "socket.io-client";
 import { useAppStore } from '../stores/app';
 
-const URL = "http://preprod.tr2g724.daw.inspedralbes.cat:3001"; 
+const URL = "http://localhost:3001"; 
 
 
 export const socket = io(URL);
