@@ -11,7 +11,7 @@ export const socket = io(URL);
 socket.on('cambiarTurno', ({ turno_de }) => {
   const app= useAppStore();
   app.setNombre(turno_de);
-  console.log('Cambio de turno. ¿Es mi turno?', turno_de);
+  console.log('Cambio de turno. le toca a :', turno_de);
 });
 
 socket.on('peticion_jugar_aceptada', (datos) => {

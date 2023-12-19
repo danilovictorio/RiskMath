@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="pregunta_container" v-if="mostrarPregunta">
+    <div class="pregunta_container" v-if="mostrarPregunta  && this.nombreUsuario==appStore.usuario.nombre">
       <div class="pregunta">
         <h2>{{ pregunta ? pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
       </div>
