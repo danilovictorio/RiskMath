@@ -22,10 +22,8 @@ socket.on('cambiarTurno', ({ turno_de, idPais, color }) => {
   const app= useAppStore();
   app.setTurno(turno_de);
   const paisElement = document.getElementById(idPais);
-
-  // Verificar si el elemento existe antes de intentar cambiar el color
+  
   if (paisElement) {
-    // Cambiar el color del país en el elemento SVG
     paisElement.style.fill = color;
   }
 });

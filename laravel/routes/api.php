@@ -24,8 +24,8 @@ Route::post('/verificar-respuesta', [PreguntaController::class, 'verificarRespue
 Route::post('/enviar-atac', [AtacController::class, 'enviarAtac']);
 Route::post('/cambiar-estado-ataque', [AtacController::class, 'cambiarEstadoAtaque']);
 
-
-
+Route::post('/propietarios-paises', [PaisController::class, 'propietariosPaises']);
+Route::get('/todos-paises-conquistados', [PaisController::class, 'todosPaisesConquistados']);
 
 //Rutas de paisos
 Route::get('/paises', [PaisController::class, 'obtenerPaises']);
