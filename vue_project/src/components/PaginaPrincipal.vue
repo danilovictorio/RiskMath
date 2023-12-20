@@ -51,14 +51,13 @@ export default {
 
 <style lang="css" scoped>
 .container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: left;
-  height: 0rem;
-  width: 100rem;
-  padding: 0;
-  margin-left: 0;
+  display: grid;
+  /* flex-direction: column; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  /* padding: 0; */
+  place-items: center;
+  /* margin-left: 0; */
   font-family: Arial, sans-serif;
 }
 
@@ -67,25 +66,28 @@ h1{
   font-family: impact;
 }
 .content{
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
   justify-content: center;
   backdrop-filter: blur(10px);
   border-radius: 10px;
-  margin-top: 20%;
-  margin-right: 25%;
+  top: 27vh;
   height: 20vh;
-  width: 20vw;
-  padding: 5px;
+  width: 80vw;
+  padding: 5px 16px;
   border: 2px solid #52C8FA;
+  max-width: fit-content;
+  height: auto;
 }
 
 input {
   padding: 10px;
+  text-align: center;
   border-radius: 8px;
   border: 2px solid #000;
-  margin-bottom: 20px;
+  margin-bottom: 7px;
   backdrop-filter: blur(10px);
   background-color: transparent;
 }

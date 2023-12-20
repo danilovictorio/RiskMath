@@ -22,7 +22,6 @@ a,
   }
 }
 
-@media (min-width: 1024px) {
   body {
     margin: 0%;
     padding: 0%;
@@ -32,8 +31,10 @@ a,
     height: 100vh;
     width: 100vw;
     background-image: url('artwork.png');
+    background-size: cover;
     background-repeat: no-repeat;
-    background-size: 100%; /* Reducir la imagen al 70% del tamaño original */
+    background-attachment: fixed;
+    background-position: center;
     font-family: Arial, sans-serif;
   }
   
@@ -43,4 +44,4 @@ a,
     height: 100%;
     width: 100%;
   }
-}
+
