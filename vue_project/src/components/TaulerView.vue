@@ -335,6 +335,7 @@ export default {
 .container {
   display: flex;
   height: 100vh;
+  width: 100vw;
 }
 
 .land {
@@ -344,7 +345,14 @@ export default {
 }
 
 .mapa {
+  bottom:0; 
   width: 50%;
+  height: 75vh;
+}
+
+svg{
+  width: 100em;
+  height: 100em;
 }
 
 .disabled {
