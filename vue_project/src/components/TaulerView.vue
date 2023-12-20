@@ -13,11 +13,13 @@
       <div class="torn">
       <h1>Esperando...</h1>
       <h2>TORN DE:</h2>
-      <p>{{this.app.turnoDe.nombre}}</p>   
+      <p>{{this.app.turnoDe.nombre}}</p>  
+      <p class="info">{{ this.app.missatge }}</p> 
     </div>
     </div>
 
     <div v-if="deberiaMostrarContenido">
+    <p >prueba</p>{{ deberiaMostrarContenido }}
       <div class="pregunta_container" v-if="mostrarPregunta">
         <div class="pregunta">
           <h2>{{ pregunta ? pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
@@ -118,11 +120,6 @@
 </template>
 
 
-
-
-
-
-
 <script>
 import { socket } from '@/utils/socket.js';
 import { useAppStore } from '../stores/app';
@@ -156,6 +153,7 @@ export default {
         this.enviarAtac(idPais,name, idUser);
       }else{
         console.log("no es TU TURNOooooooooooo");
+
       }
     },
 
@@ -221,7 +219,7 @@ export default {
           console.log("turno", this.app.turnoDe.nombre)
           //emit al server de nombreUsuario, id del pais y si ha fallado o acertado
           socket.emit('respuestaJugador', { 
-          userId: this.app.nombre,
+          userName: this.app.nombre,
           paisId: this.paisSeleccionado,
           acertado: this.resultadoPregunta, });
           this.app.setEstado("Respondiendo");
