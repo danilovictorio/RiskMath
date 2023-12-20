@@ -64,9 +64,11 @@ export default {
 h1{
   color: #FA3030;
   font-family: impact;
+  font-size: xx-large;
 }
 .content{
   position: relative;
+  text-align: center;
   display: flex;
   flex-direction: column;
   /* align-items: center; */
@@ -74,7 +76,8 @@ h1{
   backdrop-filter: blur(10px);
   border-radius: 10px;
   top: 27vh;
-  height: 20vh;
+  right: 2.25%;
+  /* height: 20vh; */
   width: 80vw;
   padding: 5px 16px;
   border: 2px solid #52C8FA;
@@ -90,6 +93,7 @@ input {
   margin-bottom: 7px;
   backdrop-filter: blur(10px);
   background-color: transparent;
+  font-size: medium;
 }
 
 input::placeholder {
@@ -106,10 +110,31 @@ button {
   transition: 0.5s ease;
   background-color: transparent;
   font-weight: bold;
+  font-size: medium;
 }
 
 button:hover {
   box-shadow: inset 0 0 0 50px #FA3030;
 }
+@media (min-width: 1620px) {
+  .content{
+    right: 4.65%;
+  }
 
+  .content{
+    right: 4.65%;
+  }
+}
+
+@media (min-width: 1720px) {
+  .content{
+    right: 10%;
+  }
+}
+
+@media (orientation: portrait) {
+  input::placeholder, button{
+    font-size: large;
+  } 
+}
 </style>
