@@ -17,7 +17,7 @@
     </div>
     </div>
 
-    <div v-if="deberiaMostrarContenido">
+    <div v-if="deberiaMostrarContenido" class="preguntes">
       <div class="pregunta_container" v-if="mostrarPregunta">
         <div class="pregunta">
           <h2>{{ pregunta ? pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
@@ -360,6 +360,9 @@ svg{
   opacity: 0.5
 }
 
+.preguntes{
+  
+}
 .pregunta-container {
   width: 50%;
   padding: 20px;
