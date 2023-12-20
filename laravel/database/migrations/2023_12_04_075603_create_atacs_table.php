@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('atacs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('idUser'); 
+            $table->string('idUser'); 
             $table->unsignedBigInteger('idPregunta');
             $table->foreign('idPregunta')
                 ->references('id')

@@ -17,10 +17,17 @@ const URL = "http://localhost:3001";
 export const socket = io(URL);
 
 
-socket.on('cambiarTurno', ({ turno_de }) => {
+socket.on('cambiarTurno', ({ turno_de, idPais, color }) => {
   console.log('Cambio de turno. ¿Es mi turno?', turno_de);
   const app= useAppStore();
   app.setTurno(turno_de);
+  const paisElement = document.getElementById(idPais);
+
+  // Verificar si el elemento existe antes de intentar cambiar el color
+  if (paisElement) {
+    // Cambiar el color del país en el elemento SVG
+    paisElement.style.fill = color;
+  }
 });
 
 socket.on('peticion_jugar_aceptada', (datos) => {

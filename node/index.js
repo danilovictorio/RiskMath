@@ -52,16 +52,19 @@ io.on('connection', (socket) => {
      
     }
   });
-  socket.on('respuestaJugador', ({ userId }) => {
-    
+  socket.on('respuestaJugador', ({ userId, paisId, acertado }) => {
+
+    let color ="";
     if (userId==usuariosJuego[0].nombreUsuario) {
       userId=usuariosJuego[1].nombreUsuario;
+      color = usuariosJuego[1].color;
     }else{
       userId=usuariosJuego[0].nombreUsuario;
+      color = usuariosJuego[0].color;
     }
 
     console.log("On respuesta jugador :: cambiar turno a :: ", userId);
-    io.emit('cambiarTurno', { turno_de: userId }); 
+    io.emit('cambiarTurno', { turno_de: userId,idPais: paisId,color: color });
 
  
   });
