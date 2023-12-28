@@ -5,13 +5,15 @@ export const useAppStore = defineStore('app', {
     turnoDe: {
       nombre:'',
       estado:'',
-      color: ''   
+      color: '',
+      idPais: ''   
     },
     //ARRAY DE USUARIOS
     usuariosJuego:{
       users:[]
     },
-    nombre:''
+    nombre:'',
+    paisesConquistados: 0,
   }),
   actions: {
     setTurno( nombre ) {
@@ -29,8 +31,17 @@ export const useAppStore = defineStore('app', {
     setNombre(nombre) {
       this.nombre=nombre;
     },
+    getColor(){
+      return this.color;
+    },
     setColor(color){
       this.turnoDe.color=color;
+    },
+    getIdPais(){
+      return this.turnoDe.idPais;
+    }, 
+    esMiturno(){
+      return this.turnoDe.nombre === this.nombre;
     }
   },
 })
