@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pais;  
+use Illuminate\Support\Facades\DB;
+
 
 class PaisController extends Controller
 {
@@ -11,6 +13,14 @@ class PaisController extends Controller
     {
         $paises = Pais::all();
         return response()->json(['paises' => $paises]);
+    }
+    public function borrarOcupantes()
+    {
+        
+            DB::table('pais')->update(['ocupante' => null]);
+
+            return response()->json(['message' => 'Contenido del campo "ocupante" borrado con éxito']);
+        
     }
 
 

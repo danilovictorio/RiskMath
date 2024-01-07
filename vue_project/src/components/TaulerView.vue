@@ -9,7 +9,7 @@
 <template>
   <div class="container" >
 
-    <div class="torn_container" v-if="deberiaMostrarContenido">
+    <div class="torn_container" v-if="!deberiaMostrarContenido">
       <div class="torn">
         <h1>Esperando...</h1>
         <h2>TORN DE:</h2>
@@ -384,11 +384,7 @@ export default {
   margin: 0;
 }
 
-.torn_container{
-}
 
-.torn{
-}
 
 .container {
   height: 100vh;
@@ -399,7 +395,7 @@ export default {
     "preguntesiRespostes";
   align-items: center;
   justify-content: center;
-  background-image: url('mar.jpg');
+  background-image: url('../assets/mar.jpg');
 }
 
 .land {

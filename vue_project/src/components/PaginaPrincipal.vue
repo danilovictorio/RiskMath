@@ -23,19 +23,41 @@ export default {
       nombreEscrito: false,
       app: useAppStore(),
       user: "",
+      ruta: 'http://localhost:8000'
     };
   },
   methods: {
-    iniciarPartida() {
-     // const appStore = useAppStore();
+    async iniciarPartida() {
+      try {
+      await this.borrarOcupantes(); // Espera a que se complete borrarOcupantes
       this.app.setNombre(this.nombreUsuario);
-     console.log("nombre",this.nombreUsuario);
-      console.log("nompinia",this.app.nombre);
-     //console.log("turno de",this.app.turnoDe.nombre);
-      socket.emit('peticion_jugar',  { nombreUsuario: this.nombreUsuario });
+      socket.emit('peticion_jugar', { nombreUsuario: this.nombreUsuario });
       this.nombreEscrito = true;
+    } catch (error) {
+      console.error('Error al iniciar la partida:', error);
+    }
     },
-  },
+    async borrarOcupantes() {
+    try {
+      // Realiza una solicitud al servidor para borrar los ocupantes
+      const response = await fetch(`${this.ruta}/api/borrar-ocupantes`, {
+        method: 'POST', // O el método que estés utilizando en tu controlador
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error en la solicitud: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log(data.message);
+      // Puedes realizar acciones adicionales después de borrar los ocupantes si es necesario
+      console.log("DATOS BORRADOS DE OCUPANTES");
+    } catch (error) {
+      console.error('Error al borrar ocupantes:', error);
+      throw error; // Puedes propagar el error para manejarlo en el bloque catch de iniciarPartida
+    }
+  }
+},
   mounted() {  
     socket.on('actualizacionUsuario', (usuarios) => {
       console.log('Usuarios actualizados:', usuarios);
@@ -59,7 +81,10 @@ export default {
   place-items: center;
   /* margin-left: 0; */
   font-family: Arial, sans-serif;
-  background-image: url('artwork.png');
+  background-image: url('../assets/artwork.png');
+  background-size: cover; /* Ajusta el tamaño de la imagen para cubrir completamente el contenedor */
+  background-position: center; /* Centra la imagen en el contenedor */
+  height: 100vh;
 }
 
 h1{
