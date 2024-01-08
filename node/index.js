@@ -87,6 +87,6 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(3184, () => {
+server.listen(3123, () => {
   console.log('Server running on port: 3123');
 });
