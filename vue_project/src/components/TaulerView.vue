@@ -150,7 +150,7 @@ export default {
       if (this.app.esMiturno()) {
         this.enviarAtac(idPais, name, idUser);
       } else {
-        console.log("no es TU TURNOooooooooooo");
+        console.log("no es TU TURNO");
 
       }
     },
@@ -373,10 +373,9 @@ export default {
 
 
 <style scoped>
-@import 'src/assets/normalise.css';
 
 :root{
-    --color-primary: ;
+    --color-primary:  ;
     --color-secondary: ;
     --color-white: #fff;
     --color-black:#000;
@@ -393,7 +392,7 @@ export default {
   height: 100vh;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 3fr;
+  grid-template-rows: 0.5fr 3fr;
   grid-template-areas: "torn"
     "preguntesiRespostes";
   align-items: center;
@@ -407,6 +406,18 @@ export default {
   stroke-width: 1;
 }
 
+.torn_container {
+  display: flex;
+  height: auto;
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.torn{
+  
+}
+
 .pregunta_container {
   border: 1px solid black;
   justify-content: center;
@@ -418,7 +429,7 @@ export default {
   position: absolute;
   width: 360px;
   height: 360px;
-  bottom: 40px;
+  bottom: 15px;
   left: 40%;
   transform: scale(1.5);
 }
