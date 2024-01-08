@@ -3,7 +3,7 @@ Tota la informació del vostre projecte ha de ser accessible a partir d'aquí
 
 Teniu la carpeta /doc per deixar-hi tota la documentació que genereu, en format markdown
 
-HEU DE MODIFICAR AQUEST DOCUMENT AMB LA VOSTRA INFORMACIÖ:
+HEU DE MODIFICAR AQUEST DOCUMENT AMB LA VOSTRA INFORMACIÓ:
 
 Nom del projecte -> MathCup
 
