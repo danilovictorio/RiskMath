@@ -374,17 +374,12 @@ export default {
 </script>
 
 
-
-
-
 <style scoped>
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
-
-
 
 .container {
   height: 100vh;
@@ -417,6 +412,7 @@ export default {
   height: 360px;
   bottom: 40px;
   left: 40%;
+  transform: scale(2);
 }
 
 .preguntaResposta_container{
