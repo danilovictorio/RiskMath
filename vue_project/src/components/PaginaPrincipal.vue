@@ -1,9 +1,14 @@
 <template>
   <div class="container">
     <div v-if="!nombreEscrito" class="content">
-      <h1>¡Inicia sesion!</h1>
-      <input v-model="nombreUsuario" placeholder="Nombre de usuario" />
+      <h1>¡Inicia sesió!</h1>
+      <input v-model="nombreUsuario" placeholder="Nom d'usuari" />
       <button @click="iniciarPartida">Iniciar Partida</button>
+      <img src="../assets/info_icon.png" @click="popupInfo">
+      <div class="superpuesto" id="superpuesto">
+          <button @click="popoffInfo">x</button>
+          <p>En "MultipliCAT", dos jugadors competeixen responent preguntes sobre mesures per conquerir territoris. Cada territori té una pregunta sobre sistemes de mesures. L'objectiu: guanyar responent correctament i dominar el món demostrant coneixements en unitats i conversions.</p>
+      </div>
     </div>
     <ul>
       <li v-for="usuario in usuariosJuego" :key="usuario.id">{{ usuario.nombreUsuario }}</li>
@@ -56,6 +61,14 @@ export default {
       console.error('Error al borrar ocupantes:', error);
       throw error; // Puedes propagar el error para manejarlo en el bloque catch de iniciarPartida
     }
+  },
+  popupInfo(){
+    var superpuesto = document.getElementById("superpuesto");
+    superpuesto.classList.add("mostrar");
+  },
+  popoffInfo(){
+    var superpuesto = document.getElementById("superpuesto");
+    superpuesto.classList.remove("mostrar");
   }
 },
   mounted() {  
@@ -109,6 +122,42 @@ h1{
   border: 2px solid #52C8FA;
   max-width: fit-content;
   height: auto;
+}
+
+img{
+  max-height: 26px;
+  max-width: 26px;
+  padding-left: 250px;
+  cursor: pointer;
+}
+
+.superpuesto {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 250px;
+  transform: translate(-50%, -50%) scale(0);
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  border-radius: 10px;
+  border: 2px solid #52C8FA;
+}
+
+.superpuesto button {
+  display: flex;
+  height: 30px;
+  width: 40px;
+  margin-left: 200px;
+}
+
+.mostrar {
+  display: block;
+  transform: translate(-50%, -50%) scale(1);
+  border-radius: 10px;
+  border: 2px solid red;
 }
 
 input {
