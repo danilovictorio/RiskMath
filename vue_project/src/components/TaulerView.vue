@@ -11,16 +11,9 @@
 
     <div class="torn_container" v-if="!deberiaMostrarContenido">
       <div class="torn">
-        <h1>TORN DE:</h1>
+        <h1>Esperando...</h1>
+        <h2>TORN DE:</h2>
         <p>{{ this.app.turnoDe.nombre }}</p>
-        <h2>Espera el teu torn</h2>
-      </div>
-    </div>
-    <div class="torn_container" v-if="deberiaMostrarContenido">
-      <div class="torn">
-        <h1>TORN DE:</h1>
-        <p>{{ this.app.turnoDe.nombre }}</p>
-        <h2>AL ATAC!!!</h2>
       </div>
     </div>
 
