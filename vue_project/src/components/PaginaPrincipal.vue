@@ -1,4 +1,12 @@
-<template>
+<!-- RUTAS PARA FETCH A LARAVEL
+  En LOCAL : http://localhost:8000
+  En PREPRODUCCIÓN : http://preprod.tr2g724.daw.inspedralbes.cat/laravel/public
+  En PRODUCCIÓN : http://tr2g724.daw.inspedralbes.cat/laravel/public
+
+  sustituir valor en variable global:  ruta
+ -->
+
+ <template>
   <div class="container">
     <div v-if="!nombreEscrito" class="content">
       <h1>¡Inicia sesió!</h1>

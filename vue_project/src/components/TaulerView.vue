@@ -121,9 +121,7 @@
           @click="manejarClic($event.target.getAttribute('id'), $event.target.getAttribute('title'), this.app.nombre)" />
       </svg>
     </div>
-
   </div>
-  
 </template>
 
 
@@ -382,6 +380,16 @@ export default {
 
 
 <style scoped>
+@import 'src/assets/normalise.css';
+
+:root{
+    --color-primary: ;
+    --color-secondary: ;
+    --color-white: #fff;
+    --color-black:#000;
+    --color-button-hover: ;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -419,7 +427,7 @@ export default {
   height: 360px;
   bottom: 40px;
   left: 40%;
-  transform: scale(2);
+  transform: scale(1.5);
 }
 
 .preguntaResposta_container{
