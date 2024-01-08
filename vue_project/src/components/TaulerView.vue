@@ -412,7 +412,7 @@ export default {
   height: 360px;
   bottom: 40px;
   left: 40%;
-  transform: scale(2);
+  transform: scale(1.5);
 }
 
 .preguntaResposta_container{
