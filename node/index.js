@@ -1,3 +1,11 @@
+/*
+PUERTO DE LOCALHOST: 3123
+PUERTO DE PREPROD: 3184
+PUERTO DE PROD: 3123
+
+Substituir en el server.listen
+*/
+
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
@@ -79,6 +87,6 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(3123, () => {
-  console.log('Server running at http://localhost:3123');
+server.listen(3184, () => {
+  console.log('Server running on port: 3123');
 });
