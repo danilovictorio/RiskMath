@@ -1,8 +1,8 @@
 /* 
   RUTAS PARA EXPORTAR SOCKETS
-  En LOCAL : http://localhost:3001
-  En PREPRODUCCIÓN : http://preprod.tr2g724.daw.inspedralbes.cat:3001
-  En PRODUCCIÓN : http://tr2g724.daw.inspedralbes.cat:3001
+  En LOCAL : http://localhost:3123
+  En PREPRODUCCIÓN : http://preprod.tr2g724.daw.inspedralbes.cat:3123
+  En PRODUCCIÓN : http://tr2g724.daw.inspedralbes.cat:3123
 
   sustituir valor en variable constante:  URL
 */
@@ -11,16 +11,21 @@
 import { io } from "socket.io-client";
 import { useAppStore } from '../stores/app';
 
-const URL = "http://localhost:3001"; 
+const URL = "http://localhost:3123"; 
 
 
 export const socket = io(URL);
 
 
-socket.on('cambiarTurno', ({ turno_de }) => {
+socket.on('cambiarTurno', ({ turno_de, idPais, color }) => {
   console.log('Cambio de turno. ¿Es mi turno?', turno_de);
   const app= useAppStore();
   app.setTurno(turno_de);
+  const paisElement = document.getElementById(idPais);
+  
+  if (paisElement) {
+    paisElement.style.fill = color;
+  }
 });
 
 socket.on('peticion_jugar_aceptada', (datos) => {
