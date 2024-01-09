@@ -11,9 +11,16 @@
 
     <div class="torn_container" v-if="!deberiaMostrarContenido">
       <div class="torn">
-        <h1>Esperando...</h1>
-        <h2>TORN DE:</h2>
+        <h1>TORN DE:</h1>
         <p>{{ this.app.turnoDe.nombre }}</p>
+        <h2>Espera el teu torn</h2>
+      </div>
+    </div>
+    <div class="torn_container" v-if="deberiaMostrarContenido">
+      <div class="torn">
+        <h1>TORN DE:</h1>
+        <p>{{ this.app.turnoDe.nombre }}</p>
+        <h2>AL ATAC!!!</h2>
       </div>
     </div>
 
@@ -40,7 +47,7 @@
       </div>
     </div>
 
-    <div class="mapa">
+    <div>
       <svg version="1.1" id="svg47" sodipodi:docname="MAPA.SVG" inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
         xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
         xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
@@ -148,6 +155,10 @@ export default {
   methods: {
     manejarClic(name, idPais, idUser) {
       this.paisId = name;
+      if (this.app.esMiturno()) {
+        this.enviarAtac(idPais, name, idUser);
+      } else {
+        console.log("no es TU TURNO");
 
         if (this.app.esMiturno()) {
           this.enviarAtac(idPais, name, idUser);
@@ -156,7 +167,7 @@ export default {
 
         }
       
-    },
+    }},
 
     //funció que serveix per obtenir el json de preguntes
     async obtenerPreguntas() {
@@ -376,6 +387,7 @@ export default {
 
 
 <style scoped>
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -383,15 +395,19 @@ export default {
 }
 
 .container {
-  height: 100vh;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 3fr;
+  grid-template-rows: 0.5fr 3fr;
   grid-template-areas: "torn"
     "preguntesiRespostes";
   align-items: center;
   justify-content: center;
-  background-image: url('../assets/mar.jpg');
+  width: 100vw;
+  height: 100vh;
+  background-image: url('../assets/mar.gif');
+  background-position: center;
+  background-size: cover;
+  object-fit: cover;
 }
 
 .land {
@@ -400,18 +416,27 @@ export default {
   stroke-width: 1;
 }
 
+.torn_container {
+  display: flex;
+  height: auto;
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.torn{
+  
+}
+
 .pregunta_container {
   border: 1px solid black;
   justify-content: center;
   padding: 10px;
 }
 
-.mapa {
-  display: flex;
+svg {
   position: absolute;
-  width: 360px;
-  height: 360px;
-  bottom: 40px;
+  bottom: 15px;
   left: 40%;
   transform: scale(1.5);
 }

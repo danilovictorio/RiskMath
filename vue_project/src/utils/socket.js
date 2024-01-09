@@ -1,7 +1,7 @@
 /* 
   RUTAS PARA EXPORTAR SOCKETS
   En LOCAL : http://localhost:3123
-  En PREPRODUCCIÓN : http://preprod.tr2g724.daw.inspedralbes.cat:3123
+  En PREPRODUCCIÓN : http://preprod.tr2g724.daw.inspedralbes.cat:3184
   En PRODUCCIÓN : http://tr2g724.daw.inspedralbes.cat:3123
 
   sustituir valor en variable constante:  URL
