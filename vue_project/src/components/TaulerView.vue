@@ -374,13 +374,7 @@ export default {
 
 <style scoped>
 
-:root{
-    --color-primary:  ;
-    --color-secondary: ;
-    --color-white: #fff;
-    --color-black:#000;
-    --color-button-hover: ;
-}
+@import url(../assets/normalise.css);
 
 * {
   box-sizing: border-box;
@@ -389,7 +383,6 @@ export default {
 }
 
 .container {
-  height: 100vh;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 0.5fr 3fr;
@@ -397,7 +390,12 @@ export default {
     "preguntesiRespostes";
   align-items: center;
   justify-content: center;
+  width: 100vw;
+  height: 100vh;
   background-image: url('../assets/mar.jpg');
+  background-position: center;
+  background-size: cover;
+  object-fit: cover;
 }
 
 .land {

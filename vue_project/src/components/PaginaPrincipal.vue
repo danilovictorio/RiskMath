@@ -75,6 +75,7 @@ export default {
 
 <style lang="css" scoped>
 
+@import url(../assets/normalise.css);
 
 .container {
   display: flex;
@@ -82,10 +83,12 @@ export default {
   align-items: center;
   width: 100vw;
   height: 100vh;
-  background: url(../assets/hola.jpg) no-repeat;
+  background: url(../assets/mapaRisk.jpg) no-repeat center center fixed;
   background-position: center;
   background-size: cover;
+  object-fit: cover;
 }
+
 
 .login-container {
   position: relative;
@@ -136,8 +139,8 @@ export default {
   color: #fff;
 }
 
-.input-container input:focus ~ label,
-.input-container input:valid ~ label {
+.input-container input:focus~label,
+.input-container input:valid~label {
   top: -5px;
 }
 
@@ -156,17 +159,10 @@ export default {
 
 .login-btn:hover {
   opacity: 0.9;
+  background-color: #000;
+  color: #fff;
 }
 
-@media only screen and (max-width: 600px) {
-  .container {
-    background-size: auto;
-  }
-
-  .login-container {
-    width: 90%;
-  }
-}
 
 /* button {}
 
