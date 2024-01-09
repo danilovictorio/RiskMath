@@ -22,5 +22,5 @@ URL del taiga.io -> https://tree.taiga.io/project/a19pabmatpav-transversal-2-mul
 
 URL de preproducció -> http://preprod.tr2g724.daw.inspedralbes.cat
 
-URL de producció (amb un domini registrat) -> tr2g724.daw.inspedralbes.cat
+URL de producció (amb un domini registrat) -> http://tr2g724.daw.inspedralbes.cat
 
