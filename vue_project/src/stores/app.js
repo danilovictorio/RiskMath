@@ -6,7 +6,9 @@ export const useAppStore = defineStore('app', {
       nombre:'',
       estado:'',
       color: '',
-      idPais: ''   
+      idPais: '',
+      ganador: null,
+      colorActual: ""   
     },
     //ARRAY DE USUARIOS
     usuariosJuego:{
@@ -42,6 +44,15 @@ export const useAppStore = defineStore('app', {
     }, 
     esMiturno(){
       return this.turnoDe.nombre === this.nombre;
-    }
+    },
+    setGanador(ganador) {
+      this.ganador = ganador;
+    },
+    setColorActual(color){
+      this.turnoDe.colorActual =color;
+    },
+    getColorActual(){
+      return this.turnoDe.colorActual;
+    },
   },
 })
