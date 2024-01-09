@@ -155,19 +155,23 @@ export default {
   methods: {
     manejarClic(name, idPais, idUser) {
       this.paisId = name;
-      if (this.app.esMiturno()) {
-        this.enviarAtac(idPais, name, idUser);
-      } else {
-        console.log("no es TU TURNO");
-
+      let paisElement
         if (this.app.esMiturno()) {
-          this.enviarAtac(idPais, name, idUser);
+
+
+          paisElement = document.getElementById(name);
+          if (paisElement.style.fill === this.app.turnoDe.color) {
+            console.log("pais ya conquistado");
+          }else{
+            this.enviarAtac(idPais, name, idUser);
+          }
+          
+          console.log("paisElement: ",paisElement)
+          
         } else {
           console.log("no es TU TURNOooooooooooo");
-
         }
-      
-    }},
+      },
 
     //funció que serveix per obtenir el json de preguntes
     async obtenerPreguntas() {
