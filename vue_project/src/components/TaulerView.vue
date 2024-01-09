@@ -11,9 +11,16 @@
 
     <div class="torn_container" v-if="!deberiaMostrarContenido">
       <div class="torn">
-        <h1>Esperando...</h1>
-        <h2>TORN DE:</h2>
+        <h1>TORN DE:</h1>
         <p>{{ this.app.turnoDe.nombre }}</p>
+        <h2>Espera el teu torn</h2>
+      </div>
+    </div>
+    <div class="torn_container" v-if="deberiaMostrarContenido">
+      <div class="torn">
+        <h1>TORN DE:</h1>
+        <p>{{ this.app.turnoDe.nombre }}</p>
+        <h2>AL ATAC!!!</h2>
       </div>
     </div>
 
@@ -114,7 +121,9 @@
           @click="manejarClic($event.target.getAttribute('id'), $event.target.getAttribute('title'), this.app.nombre)" />
       </svg>
     </div>
+
   </div>
+  
 </template>
 
 
@@ -373,16 +382,6 @@ export default {
 
 
 <style scoped>
-@import 'src/assets/normalise.css';
-
-:root{
-    --color-primary: ;
-    --color-secondary: ;
-    --color-white: #fff;
-    --color-black:#000;
-    --color-button-hover: ;
-}
-
 * {
   box-sizing: border-box;
   padding: 0;
@@ -420,7 +419,7 @@ export default {
   height: 360px;
   bottom: 40px;
   left: 40%;
-  transform: scale(1.5);
+  transform: scale(2);
 }
 
 .preguntaResposta_container{
