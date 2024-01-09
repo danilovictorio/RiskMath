@@ -159,7 +159,7 @@ export default {
       if (this.app.esMiturno()) {
         this.enviarAtac(idPais, name, idUser);
       } else {
-        console.log("no es TU TURNOooooooooooo");
+        console.log("no es TU TURNO");
 
       }
     },
@@ -382,6 +382,8 @@ export default {
 
 
 <style scoped>
+@import 'src/assets/normalise.css';
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -389,21 +391,37 @@ export default {
 }
 
 .container {
-  height: 100vh;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 3fr;
+  grid-template-rows: 0.5fr 3fr;
   grid-template-areas: "torn"
     "preguntesiRespostes";
   align-items: center;
   justify-content: center;
+  width: 100vw;
+  height: 100vh;
   background-image: url('../assets/mar.jpg');
+  background-position: center;
+  background-size: cover;
+  object-fit: cover;
 }
 
 .land {
   stroke: black;
   stroke-opacity: 1;
   stroke-width: 1;
+}
+
+.torn_container {
+  display: flex;
+  height: auto;
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.torn{
+  
 }
 
 .pregunta_container {
@@ -417,7 +435,7 @@ export default {
   position: absolute;
   width: 360px;
   height: 360px;
-  bottom: 40px;
+  bottom: 15px;
   left: 40%;
   transform: scale(2);
 }
