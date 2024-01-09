@@ -217,4 +217,19 @@ img.info-icon {
   border-radius: 10px;
   border: 2px solid red;
 }
+
+button {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: 0.5s ease;
+  background-color: transparent;
+  font-weight: bold;
+  font-size: medium;
+}
+
+button:hover {
+  box-shadow: inset 0 0 0 50px #FA3030;
+}
 </style>
