@@ -27,6 +27,7 @@ Route::post('/cambiar-estado-ataque', [AtacController::class, 'cambiarEstadoAtaq
 Route::post('/propietarios-paises', [PaisController::class, 'propietariosPaises']);
 Route::get('/todos-paises-conquistados', [PaisController::class, 'todosPaisesConquistados']);
 Route::post('/borrar-ocupantes', [PaisController::class, 'borrarOcupantes']);
+Route::post('/final-confirmado', [PaisController::class, 'finalConfirmado']);
 
 
 //Rutas de paisos

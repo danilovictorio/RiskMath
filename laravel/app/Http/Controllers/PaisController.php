@@ -50,6 +50,9 @@ class PaisController extends Controller
     
         foreach ($arrayUsers as $usuario) {
             $cantidadPaises = $paisesConquistados->where('ocupante', $usuario['nombreUsuario'])->count();
+            if ($cantidadPaises === $) {
+                # code...
+            }
             $cantidadPaisesPorUsuario[] = [
                 'nombre' => $usuario['nombreUsuario'],
                 'cantidad' => $cantidadPaises,
@@ -65,8 +68,17 @@ class PaisController extends Controller
         $paisesConquistados = Pais::whereNotNull('ocupante')->count();
         $todosConquistados = $totalPaises == $paisesConquistados;
 
-    return response()->json(['todosConquistados' => $todosConquistados]);
-}
+        return response()->json(['todosConquistados' => $todosConquistados]);
+    }
+
+    public function finalConfirmado() {
+        $totalPaises = Pais::count();
+        $paisesConquistados = Pais::whereNotNull('ocupante')->count();
+
+        if ($totalPaises===$paisesConquistados) {
+            
+        }
+    }
     
 
 }

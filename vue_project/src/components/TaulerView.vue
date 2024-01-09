@@ -139,6 +139,7 @@ export default {
       pregunta: {},
       idUser: 1,
       paisId: '',
+      conquistado: 0,
       paisSeleccionado: null,
       mostrarPregunta: false,
       app: useAppStore(),
@@ -311,8 +312,8 @@ export default {
         console.log(result.message);
         this.propietariosPaises();
         console.log('Usuario: ' + idUser, 'Conquista Pais: ' + paisId);
-
-
+        this.conquistado++;
+        comprovarFinal();
 
       } catch (error) {
         console.error('Error en la solicitud:', error);
@@ -323,6 +324,11 @@ export default {
       }*/
     },
 
+    async comprovarFinal(){
+      if (this.conquistado===this.preguntes.length) {
+        // Lanzar mensaje de final del juego 
+      }
+    }
 
     //funció enviar atac a server
     async enviarAtac(name, paisId, idUser) {
