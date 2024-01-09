@@ -8,20 +8,12 @@
       </div>
       <button class="login-btn" @click="iniciarPartida">Iniciar Partida</button>
 
-      <img src="../assets/info_icon.png" @click="popupInfo">
+      <img src="../assets/info_icon.png" @click="popupInfo" class="info-icon">
       <div class="superpuesto" id="superpuesto">
-        <button @click="popoffInfo">x</button>
+        <button @click="popoffInfo" class="poppup_btn">x</button>
         <p>En "MultipliCAT", dos jugadors competeixen responent preguntes sobre mesures per conquerir territoris. Cada
           territori té una pregunta sobre sistemes de mesures. L'objectiu: guanyar responent correctament i dominar el món
           demostrant coneixements en unitats i conversions.</p>
-      </div>
-      <div class="login-container" v-if="!nombreEscrito">
-        <h2>Iniciar sesión</h2>
-        <div class="input-container">
-          <input v-model="nombreUsuario" />
-          <label for="nombreUsuario">Nombre de usuario</label>
-        </div>
-        <button class="login-btn" @click="iniciarPartida">Iniciar Partida</button>
       </div>
       <h3 v-for="usuario in usuariosJuego" :key="usuario.id">{{ usuario.nombreUsuario }}</h3>
     </div>
@@ -100,8 +92,6 @@ export default {
 </script>
 
 <style lang="css" scoped>
-@import url(../assets/normalise.css);
-
 .container {
   display: flex;
   justify-content: center;
@@ -170,7 +160,7 @@ export default {
 }
 
 .login-btn {
-  width: 80%;
+  width: 60%;
   height: 45px;
   border-radius: 40px;
   background-color: #fff;
@@ -188,34 +178,43 @@ export default {
   color: #fff;
 }
 
-
-/* button {}
-
-button:hover {
-  box-shadow: inset 0 0 0 50px #FA3030;
+img.info-icon {
+  cursor: pointer;
+  position: fixed;
+  bottom: 60px;
+  right: 30px;
 }
 
-@media (min-width: 1620px) {
-  .content {
-    right: 4.65%;
-  }
-
-  .content {
-    right: 4.65%;
-  }
+.superpuesto {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 250px;
+  transform: translate(-50%, -50%) scale(0);
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  border-radius: 10px;
+  border: 2px solid #52C8FA;
 }
 
-@media (min-width: 1720px) {
-  .content {
-    right: 10%;
-  }
+.poppup_btn {
+
 }
 
-@media (orientation: portrait) {
+.superpuesto button {
+  display: flex;
+  height: 30px;
+  width: 40px;
+  margin-left: 200px;
+}
 
-  input::placeholder,
-  button {
-    font-size: large;
-  }
-} */
+.mostrar {
+  display: block;
+  transform: translate(-50%, -50%) scale(1);
+  border-radius: 10px;
+  border: 2px solid red;
+}
 </style>

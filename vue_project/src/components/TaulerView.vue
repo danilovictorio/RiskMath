@@ -47,7 +47,7 @@
       </div>
     </div>
 
-    <div class="mapa">
+    <div>
       <svg version="1.1" id="svg47" sodipodi:docname="MAPA.SVG" inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
         xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
         xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
@@ -382,7 +382,6 @@ export default {
 
 
 <style scoped>
-@import 'src/assets/normalise.css';
 
 * {
   box-sizing: border-box;
@@ -400,7 +399,7 @@ export default {
   justify-content: center;
   width: 100vw;
   height: 100vh;
-  background-image: url('../assets/mar.jpg');
+  background-image: url('../assets/mar.gif');
   background-position: center;
   background-size: cover;
   object-fit: cover;
@@ -430,14 +429,11 @@ export default {
   padding: 10px;
 }
 
-.mapa {
-  display: flex;
+svg {
   position: absolute;
-  width: 360px;
-  height: 360px;
   bottom: 15px;
   left: 40%;
-  transform: scale(2);
+  transform: scale(1.5);
 }
 
 .preguntaResposta_container{
