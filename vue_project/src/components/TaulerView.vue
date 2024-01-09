@@ -47,7 +47,7 @@
       </div>
     </div>
 
-    <div>
+    <div class="mapa">
       <svg version="1.1" id="svg47" sodipodi:docname="MAPA.SVG" inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
         xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
         xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
@@ -391,10 +391,10 @@ export default {
 
 .container {
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 0.5fr 3fr;
-  grid-template-areas: "torn"
-    "preguntesiRespostes";
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "mapa torn"
+  "mapa preguntesiRespostes"
+  "mapa preguntesiRespostes";
   align-items: center;
   justify-content: center;
   width: 100vw;
@@ -412,6 +412,7 @@ export default {
 }
 
 .torn_container {
+  grid-area: torn;
   display: flex;
   height: auto;
   padding: 20px;
@@ -429,16 +430,15 @@ export default {
   padding: 10px;
 }
 
-svg {
-  position: absolute;
-  bottom: 15px;
-  left: 40%;
-  transform: scale(1.5);
+.mapa {
+  grid-area: mapa;
+  width: 360px;
+  height: 300px;
+  display: flex;
 }
 
 .preguntaResposta_container{
   grid-area: preguntesiRespostes;
-  margin-bottom: 500px;
 }
 
 .pregunta {
