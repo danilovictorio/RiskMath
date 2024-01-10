@@ -20,7 +20,7 @@
       <div class="torn">
         <h1>TORN DE:</h1>
         <p>{{ this.app.turnoDe.nombre }}</p>
-        <h2>AL ATAC!!!</h2>
+        <h2>AL ATAC!!!!</h2>
       </div>
     </div>
 
@@ -136,6 +136,7 @@ export default {
       paises: [],
       preguntas: [],
       pregunta: {},
+      colores: ['blue', 'green'],
       idUser: 1,
       paisId: '',
       paisSeleccionado: null,
@@ -155,19 +156,23 @@ export default {
   methods: {
     manejarClic(name, idPais, idUser) {
       this.paisId = name;
+      let paisElement
+
       if (this.app.esMiturno()) {
-        this.enviarAtac(idPais, name, idUser);
-      } else {
-        console.log("no es TU TURNO");
-
-        if (this.app.esMiturno()) {
-          this.enviarAtac(idPais, name, idUser);
+        paisElement = document.getElementById(name);
+        console.log("paisElement.style.fill:", paisElement.style.fill, "app.turnode.color:", this.app.turnoDe.color);
+        if (paisElement.style.fill === this.app.turnoDe.color) {
+          console.log("pais ya conquistado");
         } else {
-          console.log("no es TU TURNOooooooooooo");
-
+          this.enviarAtac(idPais, name, idUser);
         }
-      
-    }},
+        
+        console.log("paisElement: ", paisElement)
+
+      } else {
+        console.log("no es TU TURNOooooooooooo");
+      }
+    },
 
     //funció que serveix per obtenir el json de preguntes
     async obtenerPreguntas() {
@@ -316,7 +321,7 @@ export default {
         console.log(result.message);
         this.propietariosPaises();
         console.log('Usuario: ' + idUser, 'Conquista Pais: ' + paisId);
-
+        this.resultadoPregunta = false;
 
 
       } catch (error) {
@@ -387,7 +392,6 @@ export default {
 
 
 <style scoped>
-
 * {
   box-sizing: border-box;
   padding: 0;
@@ -424,9 +428,7 @@ export default {
   justify-content: center;
 }
 
-.torn{
-  
-}
+.torn {}
 
 .pregunta_container {
   border: 1px solid black;
