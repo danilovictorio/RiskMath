@@ -1,6 +1,7 @@
 <template>
     <div class="container">
      <div class="guanyador">FELICITATS!!! EL GUANYADOR DE LA PARTIDA HA ESTAT : (NOM)</div>
+     <h1>El ganador es: {{ this.$route.params.ganador }}</h1>
      <div class="perdedor">HAS PERDUT......(NOM) </div>
     </div>
   </template>
