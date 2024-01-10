@@ -155,9 +155,10 @@ export default {
   },
   methods: {
     manejarClic(name, idPais, idUser) {
+
       this.paisId = name;
       let paisElement
-
+      
       if (this.app.esMiturno()) {
         paisElement = document.getElementById(name);
         console.log("paisElement.style.fill:", paisElement.style.fill, "app.turnode.color:", this.app.turnoDe.color);
@@ -400,9 +401,10 @@ export default {
 
 .container {
   display: grid;
-  grid-template-columns: 1fr 2fr; /* Added a second column for the SVG map */
-  grid-template-rows: auto; /* Removed explicit rows definition */
-  grid-template-areas: "torn preguntesiRespostes"; /* Updated grid areas */
+  grid-template-columns: 1fr;
+  grid-template-rows: 0.5fr 3fr;
+  grid-template-areas: "torn"
+    "preguntesiRespostes";
   align-items: center;
   justify-content: center;
   width: 100vw;
@@ -420,8 +422,6 @@ export default {
 }
 
 .torn_container {
-  position: relative; /* Added position relative to make it stack on top */
-  z-index: 2; /* Added z-index to make it appear on top of other elements */
   display: flex;
   height: auto;
   padding: 20px;
@@ -438,17 +438,15 @@ export default {
 }
 
 svg {
-  width: 350px;
-  height: 285px;
-  margin-bottom: 500px;
   position: absolute;
-  top: 15px; /* Adjusted top position */
-  left: 15px; /* Adjusted left position */
+  bottom: 15px;
+  left: 40%;
   transform: scale(1.5);
 }
 
 .preguntaResposta_container {
   grid-area: preguntesiRespostes;
+  margin-bottom: 500px;
 }
 
 .pregunta {
@@ -491,5 +489,4 @@ svg {
 .btn-resposta4 {
   grid-area: btn-resposta4;
 }
-
 </style>
