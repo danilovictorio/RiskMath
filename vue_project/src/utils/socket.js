@@ -17,12 +17,27 @@ const URL = "http://localhost:3123";
 export const socket = io(URL);
 
 const colores = ['green','blue'];
-
-socket.on('cambiarTurno', ({ turno_de, idPais, color,acertado,user }) => {
+socket.on('cambiarPrimerTurno', ({ turno_de, color }) => {
   console.log('Cambio de turno. ¿Es mi turno?', turno_de);
   const app= useAppStore();
   app.setTurno(turno_de);
   app.setColor(color);
+  
+});
+socket.on('cambiarTurno', ({ turno_de, usuarios }) => {
+  console.log('Cambio de turno. ¿Es mi turno?', turno_de);
+  const app= useAppStore();
+  app.setTurno(turno_de);
+  if (app.turnoDe.nombre===usuarios[0].nombreUsuario) {
+    console.log('entrandoooooo1')
+    app.setColor(usuarios[1].color);
+    console.log('así queda: ', app.getColor())
+  }else{
+    console.log("entrandooooooo2")
+    app.setColor(usuarios[0].color)
+    console.log('así queda: ', app.getColor())
+  }
+ 
 
   
 });
