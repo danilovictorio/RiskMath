@@ -81,7 +81,7 @@ io.on('connection', (socket) => {
       user = usuariosJuego[1];
       if (acertado) {
         console.log('hola2');
-         color = usuariosJuego[0].color; 
+         color = usuariosJuego[1].color; 
        }
 
     } 
@@ -93,7 +93,7 @@ io.on('connection', (socket) => {
       user = usuariosJuego[0];
        if (acertado) {
         console.log('hola4');
-        color = usuariosJuego[1].color;
+        color = usuariosJuego[0].color;
       
        }
 

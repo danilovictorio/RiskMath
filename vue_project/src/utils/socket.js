@@ -62,7 +62,7 @@ socket.on('peticion_jugar_aceptada', (datos) => {
 socket.on('rellenarColor',(colorTurno)=>{
   const appStore = useAppStore();
   appStore.setColor(colorTurno);
-  console.log('color turno pinia actualizado',appStore.getColor())
+  console.log('1r color turno pinia actualizado',appStore.getColor())
 });
 socket.on('actualizacionUsuario', (datos) => {
   console.log('Han actualizado los usuarios', datos);
