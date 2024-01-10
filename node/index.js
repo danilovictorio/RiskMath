@@ -86,7 +86,7 @@ io.on('connection', (socket) => {
        }
 
     }
-    io.emit('comprobarColorActualMapa', {  idPais: paisId, color: color, acertado:acertado });
+    io.emit('comprobarColorActualMapa', {  idPais: paisId, color: color, acertado:acertado, color0: usuariosJuego[0].color, color1: usuariosJuego[1].color});
     console.log("On respuesta jugador :: cambiar turno a :: ", nextName);
     io.emit('cambiarTurno', { turno_de: nextName, idPais: paisId, color: color, acertado:acertado });
 

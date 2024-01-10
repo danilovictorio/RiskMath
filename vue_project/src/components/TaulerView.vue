@@ -157,9 +157,8 @@ export default {
       this.paisId = name;
       let paisElement
         if (this.app.esMiturno()) {
-
-
           paisElement = document.getElementById(name);
+          console.log("paisElement.style.fill:",paisElement.style.fill,"app.turnode.color:",this.app.turnoDe.color);
           if (paisElement.style.fill === this.app.turnoDe.color) {
             console.log("pais ya conquistado");
           }else{
