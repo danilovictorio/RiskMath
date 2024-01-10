@@ -20,7 +20,7 @@
       <div class="torn">
         <h1>TORN DE:</h1>
         <p>{{ this.app.turnoDe.nombre }}</p>
-        <h2>AL ATAC!!!</h2>
+        <h2>AL ATAC!!!!</h2>
       </div>
     </div>
 
