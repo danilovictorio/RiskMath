@@ -136,6 +136,7 @@ export default {
       paises: [],
       preguntas: [],
       pregunta: {},
+      colores: ['blue','green'],
       idUser: 1,
       paisId: '',
       paisSeleccionado: null,
@@ -154,6 +155,11 @@ export default {
   },
   methods: {
     manejarClic(name, idPais, idUser) {
+      if (this.app.turnoDe.color===this.colores[0]) {
+        this.app.setColor(this.colores[1]);
+      }else{
+        this.app.setColor(this.colores[0]);
+      }
       this.paisId = name;
       let paisElement
         if (this.app.esMiturno()) {
@@ -319,7 +325,7 @@ export default {
         console.log(result.message);
         this.propietariosPaises();
         console.log('Usuario: ' + idUser, 'Conquista Pais: ' + paisId);
-
+        this.resultadoPregunta=false;
 
 
       } catch (error) {

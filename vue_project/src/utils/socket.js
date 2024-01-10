@@ -16,14 +16,15 @@ const URL = "http://localhost:3123";
 
 export const socket = io(URL);
 
+const colores = ['green','blue'];
 
-socket.on('cambiarTurno', ({ turno_de, idPais, color,acertado }) => {
+socket.on('cambiarTurno', ({ turno_de, idPais, color,acertado,user }) => {
   console.log('Cambio de turno. ¿Es mi turno?', turno_de);
   const app= useAppStore();
   app.setTurno(turno_de);
   app.setColor(color);
-  
 
+  
 });
 socket.on('finDelJuego', ({ ganador, empate }) => {
   const appStore = useAppStore();
@@ -46,7 +47,7 @@ socket.on('peticion_jugar_aceptada', (datos) => {
 socket.on('rellenarColor',(colorTurno)=>{
   const appStore = useAppStore();
   appStore.setColor(colorTurno);
-  console.log('color turno pinia actualizado')
+  console.log('color turno pinia actualizado',appStore.getColor())
 });
 socket.on('actualizacionUsuario', (datos) => {
   console.log('Han actualizado los usuarios', datos);
@@ -56,20 +57,20 @@ socket.on('actualizacionUsuario', (datos) => {
 socket.on('actualizacionEstado', (datos) => {
   console.log('Han actualizado el estado', datos);
 });
-socket.on('actualizarColor', (color1,color2) => {
-  const appStore = useAppStore();
-  appStore.setColor(color1);
-  appStore.setColor(color2);
-  console.log('Han actualizado el color', color1,color2);
-});
+// socket.on('actualizarColor', (color1,color2) => {
+//   const appStore = useAppStore();
+//   appStore.setColor(color1);
+//   appStore.setColor(color2);
+//   console.log('Han actualizado el color', color1,color2);
+// });
 socket.on('comprobarColorActualMapa', ({ idPais, color, acertado,color0,color1 }) => {
   const paisElement = document.getElementById(idPais);
   const appStore = useAppStore();
-  if (appStore.turnoDe.color==color0) {
-    appStore.setColor(color1);
-  }else{
-    appStore.setColor(color0);
-  }
+  // if (appStore.turnoDe.color==color0) {
+  //   appStore.setColor(color1);
+  // }else{
+  //   appStore.setColor(color0);
+  // }
   if (paisElement) {
     if (acertado) {
       paisElement.style.fill = color;

@@ -34,7 +34,7 @@ export const useAppStore = defineStore('app', {
       this.nombre=nombre;
     },
     getColor(){
-      return this.color;
+      return this.turnoDe.color;
     },
     setColor(color){
       this.turnoDe.color=color;
