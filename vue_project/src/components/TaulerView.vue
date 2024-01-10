@@ -313,8 +313,11 @@ export default {
         this.propietariosPaises();
         console.log('Usuario: ' + idUser, 'Conquista Pais: ' + paisId);
         this.conquistado++;
-        comprovarFinal();
-
+        if (comprovarFinal()) {
+          console.log('FINAL CONFIRMADO');
+        } else{
+          console.log('Todavia no ha acabado el juego');
+        }
       } catch (error) {
         console.error('Error en la solicitud:', error);
       }
@@ -324,10 +327,33 @@ export default {
       }*/
     },
 
+    //funció per a comprovar el final del joc
     async comprovarFinal(){
-      if (this.conquistado===this.preguntes.length) {
-        // Lanzar mensaje de final del juego 
-      }
+      try {
+        const response = await fetch(`${this.ruta}/api/final-confirmado`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            idUser: idUser
+          }),
+        });
+        if (response.ok) {
+                const data = await response.json(); 
+                if (data.acabat) {
+                    console.log('JOC ACABAT!!');
+                    return data.acabat;
+                } else {
+                    console.log('Continua jugant');
+                    return data.acabat;
+                }
+            } else {
+                console.error('Error al obtener la respuesta del servidor');
+            }
+        } catch (error) {
+            console.error('Error en la solicitud:', error);
+        }
     }
 
     //funció enviar atac a server
