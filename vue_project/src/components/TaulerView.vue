@@ -126,6 +126,7 @@
 </template>
 
 
+
 <script>
 import { socket } from '@/utils/socket.js';
 import { useAppStore } from '../stores/app';
@@ -166,7 +167,7 @@ export default {
         } else {
           this.enviarAtac(idPais, name, idUser);
         }
-
+        
         console.log("paisElement: ", paisElement)
 
       } else {
@@ -208,34 +209,26 @@ export default {
         const result = await response.json();
         const cantidadPaisesPorUsuario = result.ocupantes;
 
-        let jugadorConMasPaises = null;
-        let cantidadMaximaPaises = 0;
 
         cantidadPaisesPorUsuario.forEach(usuarioInfo => {
           const usuario = usuarioInfo.nombre;
           const cantidadPaises = usuarioInfo.cantidad;
           console.log(`${usuario} tiene ${cantidadPaises} países conquistados`);
-          if (cantidadPaises > cantidadMaximaPaises) {
-            jugadorConMasPaises = usuario;
-            cantidadMaximaPaises = cantidadPaises;
-          }
         });
+
+        console.log(result.message);
+
 
         const todosConquistadosResponse = await fetch(`${this.ruta}/api/todos-paises-conquistados`);
         const todosConquistadosResult = await todosConquistadosResponse.json();
 
         if (todosConquistadosResult.todosConquistados) {
           console.log('¡Todos los países han sido conquistados!');
-          this.app.setEstado("Acabado");
-          console.log('Todos los países han sido conquistados. Ganador:', jugadorConMasPaises);
-          
-            // Emitir el evento con el nombre del jugador que tiene más países
-            io.emit('todosConquistados', { ganador: jugadorConMasPaises });
-            this.$router.push({ name: 'ganador', params: { ganador: jugadorConMasPaises } });
-       
+          this.$router.push({ name: 'PartidaFinalitzada' });
         } else {
           console.log('Aún no se han conquistado todos los países.');
         }
+
       } catch (error) {
         console.error('Error en la solicitud:', error);
       }
@@ -398,7 +391,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 * {
