@@ -11,15 +11,13 @@
 
     <div class="torn_container" v-if="!deberiaMostrarContenido">
       <div class="torn">
-        <h1>TORN DE:</h1>
-        <p>{{ this.app.turnoDe.nombre }}</p>
-        <h2>Espera el teu torn</h2>
+        <h3>Torn de :</h3><h2>{{ this.app.turnoDe.nombre }}</h2>
+        <h3>Espera el teu torn</h3>
       </div>
     </div>
     <div class="torn_container" v-if="deberiaMostrarContenido">
       <div class="torn">
-        <h1>TORN DE:</h1>
-        <p>{{ this.app.turnoDe.nombre }}</p>
+        <h3>Torn de :</h3><h2>{{ this.app.turnoDe.nombre }}</h2>
         <h2>AL ATAC!!!!</h2>
       </div>
     </div>
@@ -473,23 +471,22 @@ export default {
 }
 
 .torn{
-  border: 2px solid rgba(255, 255, 255, 0.6);
   border-radius: 20px;
-  backdrop-filter: blur(15px);
+  backdrop-filter: blur(80px);
   width: 250px;
   height: 100px;
   padding: 5px;
-  text-align: left;
-  color: white;
+  text-align: center;
+  color: #000;
 }
 
 .pregunta_container {
   padding: 10px;
   margin: 20px;
-  background-color: #fff;
   border-radius: 20px;
   text-align: center;
-  
+  backdrop-filter: blur(100px);
+  color: #fff;
 }
 
 .mapa {
@@ -521,15 +518,19 @@ export default {
   grid-template-areas: "btn_resposta1 btn_resposta2"
     "btn_resposta3 btn_resposta4";
   gap: 30px;
-  
 }
 
 .btn_respostes {
   border-radius: 30px;
-  padding: 20px;
+  padding: 40px;
   font-size: 1em;
-  background-color:cornflowerblue;
   border: none;
+  background-color:lightblue;
+}
+
+.btn_respostes:hover {
+  background-color: #00339a;
+  color: #fff;
 }
 
 .btn-resposta1 {
