@@ -472,6 +472,17 @@ export default {
   justify-content: center;
 }
 
+.torn{
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  width: 250px;
+  height: 100px;
+  padding: 5px;
+  text-align: left;
+  color: white;
+}
+
 .pregunta_container {
   border: 1px solid black;
   padding: 10px;
