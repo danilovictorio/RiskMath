@@ -48,11 +48,13 @@
     </div>
 
     <div class="mapa">
-      <svg version="1.1" id="svg47" sodipodi:docname="MAPA.SVG" inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+      <svg class="mapImage" version="1.1" id="svg47" sodipodi:docname="MAPA.SVG" inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
         xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
         xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
         xmlns:svg="http://www.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap"
-        style="width: 350px; height: 285px;">
+        style="width: 40vw; height: 40vw;"
+        viewBox="0 60 400 100" >
+        
         <defs id="defs30">
           <!-- <amcharts:ammap projection="mercator" leftLongitude="-18.161674" topLatitude="43.794381" rightLongitude="4.332045"
           bottomLatitude="27.636889" /> -->
@@ -402,7 +404,9 @@ export default {
   background-size: cover;
   object-fit: cover;
 }
-
+.mapImage{
+  width: 100vw;
+}
 .land {
   stroke: black;
   stroke-opacity: 1;
@@ -421,6 +425,7 @@ export default {
 .pregunta_container {
   border: 1px solid black;
   padding: 10px;
+  margin: 20px;
 }
 
 .mapa {
@@ -428,7 +433,6 @@ export default {
   width: auto;
   height: auto;
   display: flex;
-  transform: scale(1.5);
   justify-content: center;
   align-items: center;
 }
@@ -436,7 +440,6 @@ export default {
 .preguntaResposta_container {
   grid-area: preguntesiRespostes;
   display: flex;
-  height: 700px;
   flex-direction: column;
   justify-content: space-evenly;
 }
@@ -447,13 +450,13 @@ export default {
 }
 
 .respostes {
+  margin: 20px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   grid-template-areas: "btn_resposta1 btn_resposta2"
     "btn_resposta3 btn_resposta4";
   gap: 30px;
-
 }
 
 .btn_respostes {
@@ -483,27 +486,23 @@ export default {
 
 @media only screen and (max-width: 1200px) {
   .container {
-    display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 2fr 3fr;
+    grid-template-rows: 0.5fr 2fr 3fr;
     grid-template-areas: "torn"
       "preguntesiRespostes"
       "mapa";
-    align-items: center;
-    justify-content: center;
-    width: 100vw;
-    height: 100vh;
-    background-image: url('../assets/mar.gif');
-    background-position: center;
-    background-size: cover;
-    object-fit: cover;
   }
 
   .mapa {
     display: flex;
-    transform: scale(1.3);
     align-items: center;
+    height: auto;
   }
-  
+}
+
+@media only screen and (min-width: 1200px){
+  .preguntaResposta_container{
+    height: 700px;
+  }
 }
 </style>
