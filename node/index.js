@@ -42,6 +42,11 @@ io.on('connection', (socket) => {
       socket.emit('actualizarColor', usuariosJuego[0].color, usuariosJuego[1].color);
       const primerTurno = Math.floor(Math.random() * usuariosJuego.length);
       const jugadorInicial = usuariosJuego[primerTurno];
+      if (jugadorInicial.nombreUsuario==usuariosJuego[0].nombreUsuario) {
+        socket.emit("rellenarColor", usuariosJuego[0].color);
+      }else{
+        socket.emit("rellenarColor", usuariosJuego[1].color);
+      }
       io.emit('cambiarTurno', { turno_de: jugadorInicial.nombreUsuario });
     }
   });
@@ -65,27 +70,40 @@ io.on('connection', (socket) => {
 
     let color = "white";
     let nextName = "";
-
+    
     if (userName == usuariosJuego[0].nombreUsuario) {
+      
       nextName = usuariosJuego[1].nombreUsuario;
+      
       if (acertado) {
-        color = usuariosJuego[0].color;
-      }
+         color = usuariosJuego[1].color;
+       }
 
     } else {
       nextName = usuariosJuego[0].nombreUsuario;
-      if (acertado) {
-        color = usuariosJuego[1].color;
-      }
+       if (acertado) {
+        color = usuariosJuego[0].color;
+       }
 
     }
-
+    io.emit('comprobarColorActualMapa', {  idPais: paisId, color: color, acertado:acertado });
     console.log("On respuesta jugador :: cambiar turno a :: ", nextName);
-    io.emit('cambiarTurno', { turno_de: nextName, idPais: paisId, color: color });
+    io.emit('cambiarTurno', { turno_de: nextName, idPais: paisId, color: color, acertado:acertado });
 
+  //   const conquistasJugador1 = usuariosJuego[0].paisesConquistados.length;
+  //   const conquistasJugador2 = usuariosJuego[1].paisesConquistados.length;
+  //   const totalPaises = 15;
 
-  });
-});
+  // if (conquistasJugador1 === totalPaises) {
+  // io.emit('finDelJuego', { ganador: usuariosJuego[0].nombreUsuario });
+  // } else if (conquistasJugador2 === totalPaises) {
+  //   io.emit('finDelJuego', { ganador: usuariosJuego[1].nombreUsuario });
+  // } else if (conquistasJugador1 + conquistasJugador2 === totalPaises) {
+  //   io.emit('finDelJuego', { empate: true });
+  // }
+
+   });
+ });
 
 server.listen(3123, () => {
   console.log('Server running on port: 3123');
