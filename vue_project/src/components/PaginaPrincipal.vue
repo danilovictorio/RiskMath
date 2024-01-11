@@ -25,6 +25,7 @@
       </div>
       <h3 v-for="usuario in usuariosJuego" :key="usuario.id">{{ usuario.nombreUsuario }}</h3>
     </div>
+    <p class="contador" v-if="this.mostrarContador">CONTADOR:{{ this.countdown }}</p>
   </div>
 </template>
 
@@ -41,25 +42,48 @@ export default {
       nombreEscrito: false,
       app: useAppStore(),
       user: "",
-      ruta: 'http://localhost:8000'
+      ruta: 'http://localhost:8000',
+      countdown: 0, 
+      mostrarContador:false,
     };
   },
   methods: {
     async iniciarPartida() {
       try {
-        await this.borrarOcupantes(); // Espera a que se complete borrarOcupantes
+        await this.borrarOcupantes();
         this.app.setNombre(this.nombreUsuario);
+
+        if (this.usuariosJuego.length >= 2) {
+          this.startCountdown();
+        }
+       
         socket.emit('peticion_jugar', { nombreUsuario: this.nombreUsuario });
         this.nombreEscrito = true;
       } catch (error) {
         console.error('Error al iniciar la partida:', error);
       }
     },
+    async startCountdown() {
+     this.mostrarContador=true;
+      this.countdown = 5;
+
+      const timer = setInterval(() => {
+        this.countdown--;
+
+        console.log(this.countdown);
+        if (this.countdown === 0) {
+         
+          clearInterval(timer);
+
+          this.$router.push({ name: 'TaulerView' });
+        }
+      }, 1000);
+    },
     async borrarOcupantes() {
       try {
-        // Realiza una solicitud al servidor para borrar los ocupantes
+       
         const response = await fetch(`${this.ruta}/api/borrar-ocupantes`, {
-          method: 'POST', // O el método que estés utilizando en tu controlador
+          method: 'POST', 
         });
 
         if (!response.ok) {
@@ -68,11 +92,11 @@ export default {
 
         const data = await response.json();
         console.log(data.message);
-        // Puedes realizar acciones adicionales después de borrar los ocupantes si es necesario
+       
         console.log("DATOS BORRADOS DE OCUPANTES");
       } catch (error) {
         console.error('Error al borrar ocupantes:', error);
-        throw error; // Puedes propagar el error para manejarlo en el bloque catch de iniciarPartida
+        throw error; 
       }
     },
     popupInfo() {
@@ -90,8 +114,7 @@ export default {
       console.log('Usuarios actualizados:', usuarios);
       this.usuariosJuego = usuarios;
       if (this.usuariosJuego.length >= 2) {
-        console.log('Redireccionando a TaulerView...');
-        this.$router.push({ name: 'TaulerView' });
+        this.startCountdown();
       }
     });
   },
@@ -206,6 +229,15 @@ img.info-icon {
   transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
   border-radius: 10px;
   border: 2px solid #52C8FA;
+}
+.contador{
+  font-size: 2.3rem;
+  color: #fff;
+  background-color: #52C8FA;
+  text-align: center;
+}
+.poppup_btn {
+
 }
 
 .superpuesto button {
