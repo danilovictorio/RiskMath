@@ -14,6 +14,7 @@ class PaisController extends Controller
         $paises = Pais::all();
         return response()->json(['paises' => $paises]);
     }
+    
     public function borrarOcupantes()
     {
         
@@ -22,7 +23,6 @@ class PaisController extends Controller
             return response()->json(['message' => 'Contenido del campo "ocupante" borrado con éxito']);
         
     }
-
 
     public function confirmarAtaque(Request $request){
     $idPais = $request->paisSeleccionado;
@@ -50,6 +50,9 @@ class PaisController extends Controller
     
         foreach ($arrayUsers as $usuario) {
             $cantidadPaises = $paisesConquistados->where('ocupante', $usuario['nombreUsuario'])->count();
+            if ($cantidadPaises === $todosConquistados) {
+                # code...
+            }
             $cantidadPaisesPorUsuario[] = [
                 'nombre' => $usuario['nombreUsuario'],
                 'cantidad' => $cantidadPaises,
@@ -65,8 +68,21 @@ class PaisController extends Controller
         $paisesConquistados = Pais::whereNotNull('ocupante')->count();
         $todosConquistados = $totalPaises == $paisesConquistados;
 
-    return response()->json(['todosConquistados' => $todosConquistados]);
-}
+        return response()->json(['todosConquistados' => $todosConquistados]);
+    }
+
+    public function finalConfirmado(Request $request) {
+        $acabat = false;
+        $idUser = $request->idUser;
+        $totalPaises = Pais::count();
+        $paisesUsuario = Pais::where('ocupante', $idUser)->count();
+
+        if ($totalPaises == $paisesUsuario) {
+            $acabat = true;
+        }
+
+        return response()->json(['acabat'=>$acabat]);
+    }
     
 
 }

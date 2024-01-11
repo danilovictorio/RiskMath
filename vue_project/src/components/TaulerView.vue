@@ -141,6 +141,7 @@ export default {
       colores: ['blue', 'green'],
       idUser: 1,
       paisId: '',
+      conquistado: 0,
       paisSeleccionado: null,
       mostrarPregunta: false,
       app: useAppStore(),
@@ -344,6 +345,34 @@ export default {
       }*/
     },
 
+    //funció per a comprovar el final del joc
+    async comprovarFinal(idUser){
+      try {
+        const response = await fetch(`${this.ruta}/api/final-confirmado`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            idUser: idUser
+          }),
+        });
+        if (response.ok) {
+                const data = await response.json(); 
+                if (data.acabat) {
+                    console.log('JOC ACABAT!!');
+                    return data.acabat;
+                } else {
+                    console.log('Continua jugant');
+                    return data.acabat;
+                }
+            } else {
+                console.error('Error al obtener la respuesta del servidor');
+            }
+        } catch (error) {
+            console.error('Error en la solicitud:', error);
+        }
+    },
 
     //funció enviar atac a server
     async enviarAtac(name, paisId, idUser) {
