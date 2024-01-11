@@ -37,7 +37,7 @@ Node Snippets:
 
 Programació: 
 
-- Variables: ANGLES
+- Variables: CASTELLÀ
 - MVC
 
 

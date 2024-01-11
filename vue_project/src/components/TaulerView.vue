@@ -7,7 +7,7 @@
  -->
 
 <template>
-  <div class="container" >
+  <div class="container">
 
     <div class="torn_container" v-if="!deberiaMostrarContenido">
       <div class="torn">
@@ -123,7 +123,6 @@
     </div>
 
   </div>
-  
 </template>
 
 
@@ -382,7 +381,6 @@ export default {
 
 
 <style scoped>
-
 * {
   box-sizing: border-box;
   padding: 0;
@@ -393,8 +391,8 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-areas: "mapa torn"
-  "mapa preguntesiRespostes"
-  "mapa preguntesiRespostes";
+    "mapa preguntesiRespostes"
+    "mapa preguntesiRespostes";
   align-items: center;
   justify-content: center;
   width: 100vw;
@@ -420,29 +418,31 @@ export default {
   justify-content: center;
 }
 
-.torn{
-  
-}
-
 .pregunta_container {
   border: 1px solid black;
-  justify-content: center;
   padding: 10px;
 }
 
 .mapa {
   grid-area: mapa;
-  width: 360px;
-  height: 300px;
+  width: auto;
+  height: auto;
   display: flex;
+  transform: scale(1.5);
+  justify-content: center;
+  align-items: center;
 }
 
-.preguntaResposta_container{
+.preguntaResposta_container {
   grid-area: preguntesiRespostes;
+  display: flex;
+  height: 700px;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
-.pregunta {
-  font-size: 1.5rem;
+.pregunta h2{
+  font-size: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -452,33 +452,58 @@ export default {
   grid-template-rows: 1fr 1fr;
   grid-template-areas: "btn_resposta1 btn_resposta2"
     "btn_resposta3 btn_resposta4";
-  gap: 10px;
-  margin-top: 20px;
+  gap: 30px;
+
 }
 
 .btn_respostes {
-  background-color: burlywood;
-  border-radius: 5px;
+  border-radius: 30px;
   padding: 20px;
 }
 
-.btn_respostes:hover {
-  background-color: chocolate;
-}
-
 .btn-resposta1 {
+  background-color: red;
   grid-area: btn-resposta1;
 }
 
 .btn-resposta2 {
+  background-color: blue;
   grid-area: btn-resposta2;
 }
 
 .btn-resposta3 {
+  background-color: green;
   grid-area: btn-resposta3;
 }
 
 .btn-resposta4 {
+  background-color: yellow;
   grid-area: btn-resposta4;
+}
+
+@media only screen and (max-width: 1200px) {
+  .container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 2fr 3fr;
+    grid-template-areas: "torn"
+      "preguntesiRespostes"
+      "mapa";
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('../assets/mar.gif');
+    background-position: center;
+    background-size: cover;
+    object-fit: cover;
+  }
+
+  .mapa {
+    display: flex;
+    transform: scale(1.3);
+    align-items: center;
+  }
+  
 }
 </style>
