@@ -1,3 +1,11 @@
+<!-- RUTAS PARA FETCH A LARAVEL
+  En LOCAL : http://localhost:8000
+  En PREPRODUCCIÓN : http://preprod.tr2g724.daw.inspedralbes.cat/laravel/public
+  En PRODUCCIÓN : http://tr2g724.daw.inspedralbes.cat/laravel/public
+
+  sustituir valor en variable global:  ruta
+ -->
+
 <template>
   <div class="container">
     <div class="login-container" v-if="!nombreEscrito">
@@ -216,5 +224,20 @@ img.info-icon {
   transform: translate(-50%, -50%) scale(1);
   border-radius: 10px;
   border: 2px solid red;
+}
+
+button {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: 0.5s ease;
+  background-color: transparent;
+  font-weight: bold;
+  font-size: medium;
+}
+
+button:hover {
+  box-shadow: inset 0 0 0 50px #FA3030;
 }
 </style>
