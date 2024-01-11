@@ -404,6 +404,7 @@ export default {
   background-size: cover;
   object-fit: cover;
 }
+
 .mapImage{
   width: 100vw;
 }
@@ -431,7 +432,7 @@ export default {
 .mapa {
   grid-area: mapa;
   width: auto;
-  height: auto;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -496,13 +497,18 @@ export default {
   .mapa {
     display: flex;
     align-items: center;
-    height: auto;
+    height: 52vh;
+    width: auto;
   }
 }
 
 @media only screen and (min-width: 1200px){
   .preguntaResposta_container{
-    height: 700px;
+    height: 70vh;
+  }
+
+  .torn_container{
+    height: 20vh;
   }
 }
 </style>
