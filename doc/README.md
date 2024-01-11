@@ -43,3 +43,9 @@ Programació:
 
 
 *Aquestes extensions que anem a utilitzar són útils per a desenvolupadors la pàgina web i ajuden a millorar l'eficiència de la mateixa.
+
+
+# Instruccions de desplegament
+
+- [Desplegament Local per probes](https://github.com/inspedralbes/tr2-MultipliCAT-G7/blob/docUpdate/doc/LocalDeploy.md)
+- [Desplegament Remot](https://github.com/inspedralbes/tr2-MultipliCAT-G7/blob/docUpdate/doc/RemoteDeploy.pdf)
