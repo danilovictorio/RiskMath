@@ -313,7 +313,10 @@ export default {
         this.propietariosPaises();
         console.log('Usuario: ' + idUser, 'Conquista Pais: ' + paisId);
         this.conquistado++;
-        if (comprovarFinal()) {
+        console.log('antes d comprobar')
+
+        const resultado = await this.comprovarFinal(idUser);
+        if (resultado) {
           console.log('FINAL CONFIRMADO');
         } else{
           console.log('Todavia no ha acabado el juego');
@@ -328,7 +331,7 @@ export default {
     },
 
     //funció per a comprovar el final del joc
-    async comprovarFinal(){
+    async comprovarFinal(idUser){
       try {
         const response = await fetch(`${this.ruta}/api/final-confirmado`, {
           method: 'POST',
@@ -354,7 +357,7 @@ export default {
         } catch (error) {
             console.error('Error en la solicitud:', error);
         }
-    }
+    },
 
     //funció enviar atac a server
     async enviarAtac(name, paisId, idUser) {
