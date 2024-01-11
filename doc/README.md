@@ -47,5 +47,5 @@ Programació:
 
 # Instruccions de desplegament
 
-- [Desplegament Local per probes]()
+- [Desplegament Local per probes](https://github.com/inspedralbes/tr2-MultipliCAT-G7/blob/docUpdate/doc/LocalDeploy.md)
 - [Desplegament Remot]()
