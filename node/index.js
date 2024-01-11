@@ -17,7 +17,7 @@ app.use(cors());
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    // origin: '*',
     methods: ['GET', 'POST'],
   },
 });
@@ -39,15 +39,17 @@ io.on('connection', (socket) => {
     if (usuariosJuego.length === 2) {
       usuariosJuego[0].color = "green";
       usuariosJuego[1].color = "blue";
-      socket.emit('actualizarColor', usuariosJuego[0].color, usuariosJuego[1].color);
+      // socket.emit('actualizarColor', usuariosJuego[0].color, usuariosJuego[1].color);
       const primerTurno = Math.floor(Math.random() * usuariosJuego.length);
       const jugadorInicial = usuariosJuego[primerTurno];
       if (jugadorInicial.nombreUsuario==usuariosJuego[0].nombreUsuario) {
-        socket.emit("rellenarColor", usuariosJuego[0].color);
+        console.log('entro al primero');
+        io.emit("rellenarColor", usuariosJuego[1].color);
       }else{
-        socket.emit("rellenarColor", usuariosJuego[1].color);
+        console.log('entro al segundo');
+        io.emit("rellenarColor", usuariosJuego[0].color);
       }
-      io.emit('cambiarTurno', { turno_de: jugadorInicial.nombreUsuario });
+      io.emit('cambiarPrimerTurno', { turno_de: jugadorInicial.nombreUsuario });
     }
   });
 
@@ -68,27 +70,37 @@ io.on('connection', (socket) => {
 
   socket.on('respuestaJugador', ({ userName, paisId, acertado }) => {
 
-    let color = "white";
+    let color = "";
     let nextName = "";
+    let user = "";
     
-    if (userName == usuariosJuego[0].nombreUsuario) {
-      
+    if (userName === usuariosJuego[0].nombreUsuario) {
+      console.log('hola1');
+      color = usuariosJuego[0].color;
       nextName = usuariosJuego[1].nombreUsuario;
-      
+      user = usuariosJuego[1];
       if (acertado) {
-         color = usuariosJuego[1].color;
+        console.log('hola2');
+         color = usuariosJuego[1].color; 
        }
 
-    } else {
+    } 
+    
+    if (userName === usuariosJuego[1].nombreUsuario) {
       nextName = usuariosJuego[0].nombreUsuario;
+      console.log('hsola3');
+      color = usuariosJuego[1].color;
+      user = usuariosJuego[0];
        if (acertado) {
+        console.log('hola4');
         color = usuariosJuego[0].color;
+      
        }
 
     }
-    io.emit('comprobarColorActualMapa', {  idPais: paisId, color: color, acertado:acertado });
+    io.emit('comprobarColorActualMapa', {  idPais: paisId, color: color, acertado:acertado, color0: usuariosJuego[0].color, color1: usuariosJuego[1].color});
     console.log("On respuesta jugador :: cambiar turno a :: ", nextName);
-    io.emit('cambiarTurno', { turno_de: nextName, idPais: paisId, color: color, acertado:acertado });
+    io.emit('cambiarTurno', { turno_de: nextName,usuarios: usuariosJuego});
 
   //   const conquistasJugador1 = usuariosJuego[0].paisesConquistados.length;
   //   const conquistasJugador2 = usuariosJuego[1].paisesConquistados.length;
