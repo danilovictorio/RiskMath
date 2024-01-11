@@ -10,15 +10,13 @@
   <div class="container">
     <div class="torn_container" v-if="!deberiaMostrarContenido">
       <div class="torn">
-        <h1>TORN DE:</h1>
-        <p>{{ this.app.turnoDe.nombre }}</p>
-        <h2>Espera el teu torn</h2>
+        <h3>Torn de :</h3><h2>{{ this.app.turnoDe.nombre }}</h2>
+        <h3>Espera el teu torn</h3>
       </div>
     </div>
     <div class="torn_container" v-if="deberiaMostrarContenido">
       <div class="torn">
-        <h1>TORN DE:</h1>
-        <p>{{ this.app.turnoDe.nombre }}</p>
+        <h3>Torn de :</h3><h2>{{ this.app.turnoDe.nombre }}</h2>
         <h2>AL ATAC!!!!</h2>
       </div>
     </div>
@@ -33,43 +31,23 @@
       </div>
 
       <div class="respostes" v-if="mostrarPregunta">
-        <button
-          class="btn_respostes btn_resposta1"
-          @click="validateResponse(pregunta.id, 'a')"
-          v-if="pregunta"
-        >
-          Respuesta A: {{ pregunta.respuesta_a }}
+        <button class="btn_respostes btn_resposta1" @click="validateResponse(pregunta.id, 'a')" v-if="pregunta">
+          <h3>Respuesta A:</h3> {{ pregunta.respuesta_a }} 
         </button>
-        <button
-          class="btn_respostes btn_resposta2"
-          @click="validateResponse(pregunta.id, 'b')"
-          v-if="pregunta"
-        >
-          Respuesta B: {{ pregunta.respuesta_b }}
+        <button class="btn_respostes btn_resposta2" @click="validateResponse(pregunta.id, 'b')" v-if="pregunta">
+          <h3>Respuesta B:</h3> {{ pregunta.respuesta_b }}
         </button>
-        <button
-          class="btn_respostes btn_resposta3"
-          @click="validateResponse(pregunta.id, 'c')"
-          v-if="pregunta"
-        >
-          Respuesta C: {{ pregunta.respuesta_c }}
+        <button class="btn_respostes btn_resposta3" @click="validateResponse(pregunta.id, 'c')" v-if="pregunta">
+          <h3>Respuesta C:</h3> {{ pregunta.respuesta_c }}
         </button>
-        <button
-          class="btn_respostes btn_resposta4"
-          @click="validateResponse(pregunta.id, 'd')"
-          v-if="pregunta"
-        >
-          Respuesta D: {{ pregunta.respuesta_d }}
+        <button class="btn_respostes btn_resposta4" @click="validateResponse(pregunta.id, 'd')" v-if="pregunta">
+          <h3>Respuesta D:</h3> {{ pregunta.respuesta_d }}
         </button>
       </div>
     </div>
 
-    <div>
-      <svg
-        version="1.1"
-        id="svg47"
-        sodipodi:docname="MAPA.SVG"
-        inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+    <div class="mapa">
+      <svg class="mapImage" version="1.1" id="svg47" sodipodi:docname="MAPA.SVG" inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
         xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
         xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
         xmlns="http://www.w3.org/2000/svg"
@@ -77,6 +55,11 @@
         xmlns:amcharts="http://amcharts.com/ammap"
         style="width: 350px; height: 285px"
       >
+        xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
+        xmlns:svg="http://www.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap"
+        style="width: 30vw; height: 30vw;"
+        viewBox="0 60 400 100" >
+        
         <defs id="defs30">
           <!-- <amcharts:ammap projection="mercator" leftLongitude="-18.161674" topLatitude="43.794381" rightLongitude="4.332045"
           bottomLatitude="27.636889" /> -->
@@ -422,7 +405,7 @@ export default {
 
         console.log("paisElement: ", paisElement);
       } else {
-        console.log("no es TU TURNOooooooooooo");
+        console.log("no es TU TURNO");
       }
     },
 
@@ -578,6 +561,35 @@ export default {
       }*/
     },
 
+    //funció per a comprovar el final del joc
+    async comprovarFinal(idUser){
+      try {
+        const response = await fetch(`${this.ruta}/api/final-confirmado`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            idUser: idUser
+          }),
+        });
+        if (response.ok) {
+                const data = await response.json(); 
+                if (data.acabat) {
+                    console.log('JOC ACABAT!!');
+                    return data.acabat;
+                } else {
+                    console.log('Continua jugant');
+                    return data.acabat;
+                }
+            } else {
+                console.error('Error al obtener la respuesta del servidor');
+            }
+        } catch (error) {
+            console.error('Error en la solicitud:', error);
+        }
+    },
+
     //funció enviar atac a server
     async enviarAtac(name, paisId, idUser) {
       //if (this.usuario == this.app.usuario.nombre) {
@@ -641,11 +653,10 @@ export default {
 
 .container {
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 0.5fr 3fr;
-  grid-template-areas:
-    "torn"
-    "preguntesiRespostes";
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "mapa torn"
+    "mapa preguntesiRespostes"
+    "mapa preguntesiRespostes";
   align-items: center;
   justify-content: center;
   width: 100vw;
@@ -656,6 +667,9 @@ export default {
   object-fit: cover;
 }
 
+.mapImage{
+  width: 100vw;
+}
 .land {
   stroke: black;
   stroke-opacity: 1;
@@ -663,6 +677,7 @@ export default {
 }
 
 .torn_container {
+  grid-area: torn;
   display: flex;
   height: auto;
   padding: 20px;
@@ -671,50 +686,79 @@ export default {
 }
 
 .torn {
+  border-radius: 20px;
+  backdrop-filter: blur(8px); /* Reduce el valor para un efecto de desenfoque más sutil */
+  width: 250px;
+  height: 150px; /* Aumenta la altura para dar más espacio al contenido */
+  padding: 20px;
+  text-align: center;
+  color: #fff; /* Cambiado a blanco para mejorar la legibilidad del texto */
+  background-color: rgba(1, 5, 63, 0.7); /* Fondo semi-transparente para resaltar */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para resaltar el contorno */
 }
 
+/* Estilo adicional para el mensaje de "AL ATAC!!!!" */
+.torn h2:last-child {
+  color: #ff4500; /* Color naranja para destacar el mensaje de ataque */
+  font-size: 24px; /* Tamaño de fuente más grande para el mensaje especial */
+}
+
+/* Estilo adicional para mejorar el espaciado entre los elementos de texto */
+.torn h3 {
+  margin-bottom: 10px;
+}
 .pregunta_container {
-  border: 1px solid black;
-  justify-content: center;
   padding: 10px;
+  margin: 20px;
+  border-radius: 20px;
+  text-align: center;
+  backdrop-filter: blur(100px);
+  color: #fff;
 }
 
-svg {
-  position: absolute;
-  bottom: 15px;
-  left: 40%;
-  transform: scale(1.5);
+.mapa {
+  grid-area: mapa;
+  width: auto;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .preguntaResposta_container {
   grid-area: preguntesiRespostes;
-  margin-bottom: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
-.pregunta {
-  font-size: 1.5rem;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+.pregunta h2{
+  font-size: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .respostes {
+  margin: 20px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   grid-template-areas:
     "btn_resposta1 btn_resposta2"
     "btn_resposta3 btn_resposta4";
-  gap: 10px;
-  margin-top: 20px;
+  gap: 30px;
 }
 
 .btn_respostes {
-  background-color: burlywood;
-  border-radius: 5px;
-  padding: 20px;
+  border-radius: 30px;
+  padding: 40px;
+  font-size: 1em;
+  border: none;
+  background-color:lightblue;
 }
 
 .btn_respostes:hover {
-  background-color: chocolate;
+  background-color: #00339a;
+  color: #fff;
 }
 
 .btn-resposta1 {
@@ -731,5 +775,36 @@ svg {
 
 .btn-resposta4 {
   grid-area: btn-resposta4;
+}
+
+@media only screen and (max-width: 1200px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.5fr 2fr 3fr;
+    grid-template-areas: "torn"
+      "preguntesiRespostes"
+      "mapa";
+  }
+
+  .mapa {
+    display: flex;
+    align-items: center;
+    height: 40vh;
+    width: auto;
+  }
+}
+
+@media only screen and (min-width: 1200px){
+  .preguntaResposta_container{
+    height: 70vh;
+  }
+
+  .torn_container{
+    height: 20vh;
+  }
+
+  .mapa {
+    height: 30vh;
+  }
 }
 </style>
