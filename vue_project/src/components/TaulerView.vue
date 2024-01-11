@@ -470,16 +470,28 @@ export default {
   justify-content: center;
 }
 
-.torn{
+.torn {
   border-radius: 20px;
-  backdrop-filter: blur(80px);
+  backdrop-filter: blur(8px); /* Reduce el valor para un efecto de desenfoque más sutil */
   width: 250px;
-  height: 100px;
-  padding: 5px;
+  height: 150px; /* Aumenta la altura para dar más espacio al contenido */
+  padding: 20px;
   text-align: center;
-  color: #000;
+  color: #fff; /* Cambiado a blanco para mejorar la legibilidad del texto */
+  background-color: rgba(1, 5, 63, 0.7); /* Fondo semi-transparente para resaltar */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para resaltar el contorno */
 }
 
+/* Estilo adicional para el mensaje de "AL ATAC!!!!" */
+.torn h2:last-child {
+  color: #ff4500; /* Color naranja para destacar el mensaje de ataque */
+  font-size: 24px; /* Tamaño de fuente más grande para el mensaje especial */
+}
+
+/* Estilo adicional para mejorar el espaciado entre los elementos de texto */
+.torn h3 {
+  margin-bottom: 10px;
+}
 .pregunta_container {
   padding: 10px;
   margin: 20px;
