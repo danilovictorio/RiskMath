@@ -208,10 +208,6 @@ img.info-icon {
   border: 2px solid #52C8FA;
 }
 
-.poppup_btn {
-
-}
-
 .superpuesto button {
   display: flex;
   height: 30px;
