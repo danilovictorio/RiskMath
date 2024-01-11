@@ -33,16 +33,16 @@
 
       <div class="respostes" v-if="mostrarPregunta">
         <button class="btn_respostes btn_resposta1" @click="validateResponse(pregunta.id, 'a')" v-if="pregunta">
-          Respuesta A: {{ pregunta.respuesta_a }}
+          <h3>Respuesta A:</h3> {{ pregunta.respuesta_a }} 
         </button>
         <button class="btn_respostes btn_resposta2" @click="validateResponse(pregunta.id, 'b')" v-if="pregunta">
-          Respuesta B: {{ pregunta.respuesta_b }}
+          <h3>Respuesta B:</h3> {{ pregunta.respuesta_b }}
         </button>
         <button class="btn_respostes btn_resposta3" @click="validateResponse(pregunta.id, 'c')" v-if="pregunta">
-          Respuesta C: {{ pregunta.respuesta_c }}
+          <h3>Respuesta C:</h3> {{ pregunta.respuesta_c }}
         </button>
         <button class="btn_respostes btn_resposta4" @click="validateResponse(pregunta.id, 'd')" v-if="pregunta">
-          Respuesta D: {{ pregunta.respuesta_d }}
+          <h3>Respuesta D:</h3> {{ pregunta.respuesta_d }}
         </button>
       </div>
     </div>
@@ -52,7 +52,7 @@
         xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
         xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
         xmlns:svg="http://www.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap"
-        style="width: 40vw; height: 40vw;"
+        style="width: 30vw; height: 30vw;"
         viewBox="0 60 400 100" >
         
         <defs id="defs30">
@@ -173,7 +173,7 @@ export default {
         console.log("paisElement: ", paisElement)
 
       } else {
-        console.log("no es TU TURNOooooooooooo");
+        console.log("no es TU TURNO");
       }
     },
 
@@ -472,10 +472,24 @@ export default {
   justify-content: center;
 }
 
+.torn{
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  width: 250px;
+  height: 100px;
+  padding: 5px;
+  text-align: left;
+  color: white;
+}
+
 .pregunta_container {
-  border: 1px solid black;
   padding: 10px;
   margin: 20px;
+  background-color: #fff;
+  border-radius: 20px;
+  text-align: center;
+  
 }
 
 .mapa {
@@ -507,30 +521,30 @@ export default {
   grid-template-areas: "btn_resposta1 btn_resposta2"
     "btn_resposta3 btn_resposta4";
   gap: 30px;
+  
 }
 
 .btn_respostes {
   border-radius: 30px;
   padding: 20px;
+  font-size: 1em;
+  background-color:cornflowerblue;
+  border: none;
 }
 
 .btn-resposta1 {
-  background-color: red;
   grid-area: btn-resposta1;
 }
 
 .btn-resposta2 {
-  background-color: blue;
   grid-area: btn-resposta2;
 }
 
 .btn-resposta3 {
-  background-color: green;
   grid-area: btn-resposta3;
 }
 
 .btn-resposta4 {
-  background-color: yellow;
   grid-area: btn-resposta4;
 }
 
@@ -546,7 +560,7 @@ export default {
   .mapa {
     display: flex;
     align-items: center;
-    height: 52vh;
+    height: 40vh;
     width: auto;
   }
 }
@@ -558,6 +572,10 @@ export default {
 
   .torn_container{
     height: 20vh;
+  }
+
+  .mapa {
+    height: 30vh;
   }
 }
 </style>
