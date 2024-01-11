@@ -47,7 +47,7 @@ class PaisController extends Controller
         $paisesConquistados = Pais::whereIn('ocupante', $usuarios)->get();
     
         $cantidadPaisesPorUsuario = [];
-    
+        $todosConquistados = 15;
         foreach ($arrayUsers as $usuario) {
             $cantidadPaises = $paisesConquistados->where('ocupante', $usuario['nombreUsuario'])->count();
             if ($cantidadPaises === $todosConquistados) {

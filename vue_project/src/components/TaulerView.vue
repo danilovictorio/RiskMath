@@ -157,45 +157,35 @@ export default {
   methods: {
     manejarClic(name, idPais, idUser) {
       this.paisId = name;
-      let paisElement
+      let paisElement;
 
       if (this.app.esMiturno()) {
         paisElement = document.getElementById(name);
-        console.log("paisElement.style.fill:", paisElement.style.fill, "app.turnode.color:", this.app.turnoDe.color);
+        console.log(
+          "paisElement.style.fill:",
+          paisElement.style.fill,
+          "app.turnode.color:",
+          this.app.turnoDe.color
+        );
         if (paisElement.style.fill === this.app.turnoDe.color) {
           console.log("pais ya conquistado");
         } else {
           this.enviarAtac(idPais, name, idUser);
         }
 
-        console.log("paisElement: ", paisElement)
-
+        console.log("paisElement: ", paisElement);
       } else {
         console.log("no es TU TURNO");
       }
     },
 
     //funció que serveix per obtenir el json de preguntes
-    async obtenerPreguntas() {
-      try {
-        const response = await fetch(`${this.ruta}/api/mostrar-preguntas`);
-        const data = await response.json();
-
-        this.preguntas = data.preguntas;
-        this.respuesta = data.preguntas[0].opciones;
-
-        console.log(data.preguntas);
-
-      } catch (error) {
-        console.error('Error al obtener preguntas:', error);
-      }
-    },
     async propietariosPaises() {
       try {
         const response = await fetch(`${this.ruta}/api/propietarios-paises`, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             arrayUsers: this.app.usuariosJuego.users,
@@ -209,36 +199,40 @@ export default {
         const result = await response.json();
         const cantidadPaisesPorUsuario = result.ocupantes;
 
-        let jugadorConMasPaises = null;
-        let cantidadMaximaPaises = 0;
+        let usuarioConMasPaises = "";
+        let maxCantidadPaises = 0;
 
-        cantidadPaisesPorUsuario.forEach(usuarioInfo => {
+        cantidadPaisesPorUsuario.forEach((usuarioInfo) => {
           const usuario = usuarioInfo.nombre;
           const cantidadPaises = usuarioInfo.cantidad;
           console.log(`${usuario} tiene ${cantidadPaises} países conquistados`);
-          if (cantidadPaises > cantidadMaximaPaises) {
-            jugadorConMasPaises = usuario;
-            cantidadMaximaPaises = cantidadPaises;
+
+          if (cantidadPaises > maxCantidadPaises) {
+            maxCantidadPaises = cantidadPaises;
+            usuarioConMasPaises = usuario;
           }
         });
 
-        const todosConquistadosResponse = await fetch(`${this.ruta}/api/todos-paises-conquistados`);
+        console.log(result.message);
+
+        const todosConquistadosResponse = await fetch(
+          `${this.ruta}/api/todos-paises-conquistados`
+        );
         const todosConquistadosResult = await todosConquistadosResponse.json();
 
         if (todosConquistadosResult.todosConquistados) {
-          console.log('¡Todos los países han sido conquistados!');
-          this.app.setEstado("Acabado");
-          console.log('Todos los países han sido conquistados. Ganador:', jugadorConMasPaises);
+          console.log("¡Todos los países han sido conquistados!");
+
+            this.$router.push({
+              name: "PartidaFinalitzada",
+              params: { usuarioGanador: usuarioConMasPaises },
+            });
           
-            // Emitir el evento con el nombre del jugador que tiene más países
-            io.emit('todosConquistados', { ganador: jugadorConMasPaises });
-            this.$router.push({ name: 'ganador', params: { ganador: jugadorConMasPaises } });
-       
         } else {
-          console.log('Aún no se han conquistado todos los países.');
+          console.log("Aún no se han conquistado todos los países.");
         }
       } catch (error) {
-        console.error('Error en la solicitud:', error);
+        console.error("Error en la solicitud:", error);
       }
     },
 
@@ -250,16 +244,15 @@ export default {
         this.paises = data.paises;
         console.log(data);
       } catch (error) {
-        console.error('Error al obtener datos de países:', error);
+        console.error("Error al obtener datos de países:", error);
       }
     },
 
-
-    //funció que valida si la resposta d'un usuari es la correcta 
+    //funció que valida si la resposta d'un usuari es la correcta
     validateResponse(questionId, selectedOption) {
       /*if (this.nombreUsuario == this.app.usuario.nombre) {*/
       this.app.setEstado("Acabado");
-      console.log('Pregunta ID:', questionId);
+      console.log("Pregunta ID:", questionId);
       const apiUrl = `${this.ruta}/api/verificar-respuesta`;
       const requestData = {
         preguntaId: questionId,
@@ -267,39 +260,37 @@ export default {
       };
 
       fetch(apiUrl, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(requestData),
       })
-        .then(response => response.json())
-        .then(result => {
+        .then((response) => response.json())
+        .then((result) => {
           if (result.resultado === true) {
-            console.log('La respuesta es verdadera');
+            console.log("La respuesta es verdadera");
             this.confirmarAtaque(this.app.turnoDe.nombre, this.paisId);
             this.resultadoPregunta = true;
             if (this.app.nombre == this.app.turnoDe.nombre) {
               this.app.paisesConquistados++;
             }
-
           } else {
-            console.log('La respuesta es falsa');
+            console.log("La respuesta es falsa");
             this.resultadoPregunta = false;
           }
           console.log("paises conquistados", this.app.paisesConquistados);
 
-          socket.emit('respuestaJugador', {
+          socket.emit("respuestaJugador", {
             userName: this.app.nombre,
             paisId: this.paisSeleccionado,
             acertado: this.resultadoPregunta,
           });
           this.app.setEstado("Respondiendo");
           this.mostrarPregunta = false;
-
         })
-        .catch(error => {
-          console.error('Error validating response:', error);
+        .catch((error) => {
+          console.error("Error validating response:", error);
         });
       /*} else {
         this.esActivo = false;
@@ -307,15 +298,14 @@ export default {
       }*/
     },
 
-
     //funció per confirmar atac
     async confirmarAtaque(idUser, paisId) {
       console.log("ID QUE PASO AL CONFIRMAR ATAUQE", idUser + paisId);
       try {
         const response = await fetch(`${this.ruta}/api/confirmar-ataque`, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             idUser: idUser,
@@ -330,12 +320,10 @@ export default {
         const result = await response.json();
         console.log(result.message);
         this.propietariosPaises();
-        console.log('Usuario: ' + idUser, 'Conquista Pais: ' + paisId);
+        console.log("Usuario: " + idUser, "Conquista Pais: " + paisId);
         this.resultadoPregunta = false;
-
-
       } catch (error) {
-        console.error('Error en la solicitud:', error);
+        console.error("Error en la solicitud:", error);
       }
       /* } else {
         this.esActivo = false;
@@ -374,15 +362,14 @@ export default {
 
     //funció enviar atac a server
     async enviarAtac(name, paisId, idUser) {
-
       //if (this.usuario == this.app.usuario.nombre) {
 
       this.app.setEstado("Atacando");
       try {
         const response = await fetch(`${this.ruta}/api/enviar-atac`, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             name: name,
@@ -395,7 +382,7 @@ export default {
         }
 
         const data = await response.json();
-        console.log('Respuesta del servidor:', data);
+        console.log("Respuesta del servidor:", data);
 
         this.pregunta = {
           id: data.pregunta.id,
@@ -411,7 +398,7 @@ export default {
         this.app.setEstado("Respondiendo");
         this.mostrarPregunta = true;
       } catch (error) {
-        console.error('Error en la solicitud:', error);
+        console.error("Error en la solicitud:", error);
       }
       //} else {
       // this.esActivo = false;

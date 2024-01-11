@@ -17,9 +17,10 @@ const router = createRouter({
       component: TaulerView
     },
     {
-      path: '/PartidaFinalitzada',
+      path: '/partida-finalitzada/:usuarioGanador',
       name: 'PartidaFinalitzada',
-      component: PartidaFinalitzada
+      component: PartidaFinalitzada,
+      props: true
     },
     
   ]
