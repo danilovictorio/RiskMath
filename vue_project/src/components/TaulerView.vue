@@ -47,12 +47,14 @@
       </div>
     </div>
 
-    <div>
-      <svg version="1.1" id="svg47" sodipodi:docname="MAPA.SVG" inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+    <div class="mapa">
+      <svg class="mapImage" version="1.1" id="svg47" sodipodi:docname="MAPA.SVG" inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
         xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
         xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
         xmlns:svg="http://www.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap"
-        style="width: 350px; height: 285px;">
+        style="width: 40vw; height: 40vw;"
+        viewBox="0 60 400 100" >
+        
         <defs id="defs30">
           <!-- <amcharts:ammap projection="mercator" leftLongitude="-18.161674" topLatitude="43.794381" rightLongitude="4.332045"
           bottomLatitude="27.636889" /> -->
@@ -409,10 +411,10 @@ export default {
 
 .container {
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 0.5fr 3fr;
-  grid-template-areas: "torn"
-    "preguntesiRespostes";
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "mapa torn"
+    "mapa preguntesiRespostes"
+    "mapa preguntesiRespostes";
   align-items: center;
   justify-content: center;
   width: 100vw;
@@ -423,6 +425,9 @@ export default {
   object-fit: cover;
 }
 
+.mapImage{
+  width: 100vw;
+}
 .land {
   stroke: black;
   stroke-opacity: 1;
@@ -430,6 +435,7 @@ export default {
 }
 
 .torn_container {
+  grid-area: torn;
   display: flex;
   height: auto;
   padding: 20px;
@@ -437,64 +443,92 @@ export default {
   justify-content: center;
 }
 
-.torn {}
-
 .pregunta_container {
   border: 1px solid black;
-  justify-content: center;
   padding: 10px;
+  margin: 20px;
 }
 
-svg {
-  position: absolute;
-  bottom: 15px;
-  left: 40%;
-  transform: scale(1.5);
+.mapa {
+  grid-area: mapa;
+  width: auto;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .preguntaResposta_container {
   grid-area: preguntesiRespostes;
-  margin-bottom: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
-.pregunta {
-  font-size: 1.5rem;
+.pregunta h2{
+  font-size: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .respostes {
+  margin: 20px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   grid-template-areas: "btn_resposta1 btn_resposta2"
     "btn_resposta3 btn_resposta4";
-  gap: 10px;
-  margin-top: 20px;
+  gap: 30px;
 }
 
 .btn_respostes {
-  background-color: burlywood;
-  border-radius: 5px;
+  border-radius: 30px;
   padding: 20px;
 }
 
-.btn_respostes:hover {
-  background-color: chocolate;
-}
-
 .btn-resposta1 {
+  background-color: red;
   grid-area: btn-resposta1;
 }
 
 .btn-resposta2 {
+  background-color: blue;
   grid-area: btn-resposta2;
 }
 
 .btn-resposta3 {
+  background-color: green;
   grid-area: btn-resposta3;
 }
 
 .btn-resposta4 {
+  background-color: yellow;
   grid-area: btn-resposta4;
+}
+
+@media only screen and (max-width: 1200px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.5fr 2fr 3fr;
+    grid-template-areas: "torn"
+      "preguntesiRespostes"
+      "mapa";
+  }
+
+  .mapa {
+    display: flex;
+    align-items: center;
+    height: 52vh;
+    width: auto;
+  }
+}
+
+@media only screen and (min-width: 1200px){
+  .preguntaResposta_container{
+    height: 70vh;
+  }
+
+  .torn_container{
+    height: 20vh;
+  }
 }
 </style>
