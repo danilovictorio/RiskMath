@@ -2,7 +2,7 @@ Al clonar el proyecto, para inicializar el entorno de pruebas, se debe iniciar u
 
     cd ./laravel/
     composer install
-    cp .env.example .env
+    cp .env.exemple .env
     php artisan key:generate
     php artisan migrate
     php artisan db:seed
