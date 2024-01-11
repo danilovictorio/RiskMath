@@ -25,7 +25,9 @@
       </div>
       <h3 v-for="usuario in usuariosJuego" :key="usuario.id">{{ usuario.nombreUsuario }}</h3>
     </div>
-    <p class="contador" v-if="this.mostrarContador">CONTADOR:{{ this.countdown }}</p>
+    <div class="contador" v-if="this.mostrarContador">
+      CONTADOR:{{ this.countdown }}
+    </div>
   </div>
 </template>
 
@@ -65,7 +67,7 @@ export default {
     },
     async startCountdown() {
      this.mostrarContador=true;
-      this.countdown = 5;
+      this.countdown = 15;
 
       const timer = setInterval(() => {
         this.countdown--;
@@ -230,15 +232,7 @@ img.info-icon {
   border-radius: 10px;
   border: 2px solid #52C8FA;
 }
-.contador{
-  font-size: 2.3rem;
-  color: #fff;
-  background-color: #52C8FA;
-  text-align: center;
-}
-.poppup_btn {
 
-}
 
 .superpuesto button {
   display: flex;
@@ -268,4 +262,19 @@ button {
 button:hover {
   box-shadow: inset 0 0 0 50px #FA3030;
 }
+
+.contador {
+  padding: 50px;
+
+}
+
+.contador{
+  font-size: 2.3rem;
+  text-align: center;
+  border-radius: 50%;
+  backdrop-filter: blur(5px);
+  border: 3px solid #fff;
+  color: #fff;
+}
+
 </style>
