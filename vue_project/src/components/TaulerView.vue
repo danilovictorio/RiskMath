@@ -173,7 +173,7 @@ export default {
           this.enviarAtac(idPais, name, idUser);
         }
 
-        console.log("paisElement: ", paisElement);
+        //console.log("paisElement: ", paisElement);
       } else {
         console.log("no es TU TURNO");
       }

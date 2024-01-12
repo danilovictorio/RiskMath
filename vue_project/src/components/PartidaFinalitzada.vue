@@ -7,9 +7,11 @@
  -->
 
  <template>
-  <div class="container">
-    <h1>El ganador es: {{ ganador }}</h1>
-    <br />
+   <div class="container">
+    <div class="result-container">
+      <h1>¡El ganador es:</h1>
+      <h1 class="ganador">{{ ganador }}</h1>
+    </div>
   </div>
 </template>
 
@@ -96,6 +98,27 @@ export default {
   background-position: center;
   background-size: cover;
   object-fit: cover;
+}
+/* Estilos adicionales para el mensaje del ganador */
+.ganador {
+  color: #28a745; /* Color verde, puedes cambiarlo según tu preferencia */
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Sombra para resaltar el texto */
+}
+.result-container {
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  margin-top: 20px;
+}
+
+.result-container h1 {
+  color: #333; /* Cambia el color del texto según tu preferencia */
+  font-size: 2rem;
+  margin-bottom: 10px;
 }
 
 .login-container {
