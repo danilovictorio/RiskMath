@@ -216,8 +216,7 @@ img.info-icon {
   border: 2px solid #52c8fa;
 }
 
-.poppup_btn {
-}
+
 
 .superpuesto button {
   display: flex;
