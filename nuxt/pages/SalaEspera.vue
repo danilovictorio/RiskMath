@@ -11,8 +11,9 @@
   
   <script>
   import { socket } from '@/utils/socket.js';
-  
+  import { AppStore } from '../stores/app';
   export default {
+
     data() {
       return {
         usuarios: [],
@@ -26,7 +27,8 @@
       },
     },
     mounted() {
-      this.codigoSala = this.$route.params.id; // Establece el código de la sala al montar el componente
+        let storeApp = AppStore();
+      this.codigoSala = storeApp.codigoSala; // Establece el código de la sala al montar el componente
   
       socket.on('usuarioUnido', (usuario) => {
         this.usuarios.push(usuario);

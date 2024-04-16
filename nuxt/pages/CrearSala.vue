@@ -16,6 +16,7 @@
 
 <script>
 import { socket } from '@/utils/socket.js';
+import { AppStore } from '../stores/app';
 
 export default {
     data() {
@@ -29,9 +30,12 @@ export default {
     },
     methods: {
         crearSala() {
+            let storeApp = AppStore();
+
             socket.emit('createRoom', { nombreSala: this.nombreSala, capacidadSala: this.capacidadSala });
             socket.on('roomCreated', (roomId) => {
-                this.codigoSala = roomId; // Accede a roomId directamente
+                console.log('Sala creada, con ID:', roomId);
+                this.storeApp.codigoSala = roomId; // Accede a roomId directamente
                 this.$router.push({ name: 'SalaEspera', params: { id: roomId } });
                 this.esCreador = true; // Establece esCreador a true
             });
