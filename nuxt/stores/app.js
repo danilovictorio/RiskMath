@@ -16,6 +16,9 @@ export const useAppStore = defineStore('app', {
     },
     nombre:'',
     paisesConquistados: 0,
+    // Agregamos los nuevos objetos aquí
+    countries: {}, // Mapea los nombres de los países a los jugadores que los poseen
+    players: {}, // Mapea los nombres de los jugadores a los colores que representan
   }),
   actions: {
     setTurno( nombre ) {
@@ -53,6 +56,18 @@ export const useAppStore = defineStore('app', {
     },
     getColorActual(){
       return this.turnoDe.colorActual;
+    },
+    assignCountryToPlayer(country, player) {
+      // Asigna el país al jugador
+      this.countries[country] = player;
+    },
+    resetCountryColor(country) {
+      // Restablece el país a un estado neutral
+      this.countries[country] = null;
+    },
+    setPlayerColor(player, color) {
+      // Asigna un color a un jugador
+      this.players[player] = color;
     },
   },
 })
