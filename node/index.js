@@ -10,6 +10,7 @@ import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import { nanoid } from 'nanoid';
 
 const app = express();
 app.use(cors());
@@ -31,12 +32,15 @@ io.on('connection', (socket) => {
 
   socket.esMiTurno = false;
 
-  socket.on('createRoom', (capacity) => {
-    const roomId = socket.id;
-    rooms[roomId] = { capacity, players: [socket.id] };
-    socket.join(roomId);
+  socket.on('createRoom', (data) => {
+    const roomId = nanoid(6); // Genera un ID de 10 caracteres
+    rooms[roomId] = {
+      name: data.nombreSala,
+      capacity: data.capacidadSala,
+      players: [],
+    };
+    socket.emit('roomCreated', roomId);
   });
-
   socket.on('joinRoom', (roomId) => {
     const room = rooms[roomId];
     if (room && room.players.length < room.capacity) {

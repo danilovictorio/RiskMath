@@ -6,136 +6,133 @@
   sustituir valor en variable global:  ruta
  -->
 
-<template>
+ <template>
     <div class="container">
-        <div class="login-container" v-if="!nombreEscrito">
-            <h2>Iniciar sesión</h2>
-            <div class="input-container">
-                <input v-model="nombreUsuario" />
-                <label for="nombreUsuario">Nombre de usuario</label>
-            </div>
-            <button @click="createRoom">Crear sala</button>
-            <button @click="joinRoom">Unirse a sala</button>
-            <button class="login-btn" @click="iniciarPartida">Iniciar Partida</button>
-
-            <img src="../public/info_icon.png" @click="popupInfo" class="info-icon">
-            <div class="superpuesto" id="superpuesto">
-                <button @click="popoffInfo" class="poppup_btn">x</button>
-                <p>En "MultipliCAT", dos jugadors competeixen responent preguntes sobre mesures per conquerir
-                    territoris. Cada
-                    territori té una pregunta sobre sistemes de mesures. L'objectiu: guanyar responent correctament i
-                    dominar el món
-                    demostrant coneixements en unitats i conversions.</p>
-            </div>
-            <h3 v-for="usuario in usuariosJuego" :key="usuario.id">{{ usuario.nombreUsuario }}</h3>
+      <div class="login-container" v-if="!nombreEscrito">
+        <h2>Iniciar sesión</h2>
+        <div class="input-container">
+          <input v-model="nombreUsuario" />
+          <label for="nombreUsuario">Nombre de usuario</label>
         </div>
-        <div class="contador" v-if="this.mostrarContador">
-            CONTADOR:{{ this.countdown }}
+        <button @click="crearSala">Crear sala</button>
+        <button @click="unirseSala">Unirse a sala</button>
+        <button class="login-btn" @click="iniciarPartida">Iniciar Partida</button>
+  
+        <img src="../public/info_icon.png" @click="popupInfo" class="info-icon">
+        <div class="superpuesto" id="superpuesto">
+          <button @click="popoffInfo" class="poppup_btn">x</button>
+          <p>En "MultipliCAT", dos jugadors competeixen responent preguntes sobre mesures per conquerir
+            territoris. Cada
+            territori té una pregunta sobre sistemes de mesures. L'objectiu: guanyar responent correctament i
+            dominar el món
+            demostrant coneixements en unitats i conversions.</p>
         </div>
+        <h3 v-for="usuario in usuariosJuego" :key="usuario.id">{{ usuario.nombreUsuario }}</h3>
+        <p v-if="link">Enlace de la sala: {{ link }}</p>
+      </div>
+      <div class="contador" v-if="this.mostrarContador">
+        CONTADOR:{{ this.countdown }}
+      </div>
     </div>
-</template>
-
-
-<script>
-import { socket } from '@/utils/socket.js';
-import { useAppStore } from '../stores/app';
-
-export default {
+  </template>
+  
+  <script>
+  import { socket } from '@/utils/socket.js';
+  import { useAppStore } from '../stores/app';
+  
+  export default {
     data() {
-        return {
-            nombreUsuario: "",
-            usuariosJuego: [],
-            nombreEscrito: false,
-            app: useAppStore(),
-            user: "",
-            ruta: 'http://localhost:8000',
-            countdown: 0,
-            mostrarContador: false,
-        };
+      return {
+        nombreUsuario: "",
+        usuariosJuego: [],
+        nombreEscrito: false,
+        app: useAppStore(),
+        user: "",
+        ruta: 'http://localhost:8000',
+        countdown: 0,
+        mostrarContador: false,
+        link: '',
+      };
     },
     methods: {
-        async iniciarPartida() {
-            try {
-                await this.borrarOcupantes();
-                this.app.setNombre(this.nombreUsuario);
-
-                if (this.usuariosJuego.length >= 2) {
-                    this.startCountdown();
-                }
-
-                socket.emit('peticion_jugar', { nombreUsuario: this.nombreUsuario });
-                this.nombreEscrito = true;
-            } catch (error) {
-                console.error('Error al iniciar la partida:', error);
-            }
-        },
-        async startCountdown() {
-            this.mostrarContador = true;
-            this.countdown = 3;
-
-            const timer = setInterval(() => {
-                this.countdown--;
-
-                console.log(this.countdown);
-                if (this.countdown === 0) {
-
-                    clearInterval(timer);
-
-                    this.$router.push({ name: 'TaulerView' });
-                }
-            }, 1000);
-        },
-        async borrarOcupantes() {
-            try {
-
-                const response = await fetch(`${this.ruta}/api/borrar-ocupantes`, {
-                    method: 'POST',
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Error en la solicitud: ${response.status}`);
-                }
-
-                const data = await response.json();
-                console.log(data.message);
-
-                console.log("DATOS BORRADOS DE OCUPANTES");
-            } catch (error) {
-                console.error('Error al borrar ocupantes:', error);
-                throw error;
-            }
-        },
-        popupInfo() {
-            var superpuesto = document.getElementById("superpuesto");
-            superpuesto.classList.add("mostrar");
-        },
-        popoffInfo() {
-            var superpuesto = document.getElementById("superpuesto");
-            superpuesto.classList.remove("mostrar");
-        },
-        createRoom() {
-            socket.emit('createRoom', 2);
-        },
-
-        joinRoom() {
-            // Aquí necesitarías obtener el ID correcto de la sala
-            const roomId = 'roomId';
-            socket.emit('joinRoom', roomId);
-        },
+      async iniciarPartida() {
+        try {
+          await this.borrarOcupantes();
+          this.app.setNombre(this.nombreUsuario);
+  
+          if (this.usuariosJuego.length >= 2) {
+            this.startCountdown();
+          }
+  
+          socket.emit('peticion_jugar', { nombreUsuario: this.nombreUsuario });
+          this.nombreEscrito = true;
+        } catch (error) {
+          console.error('Error al iniciar la partida:', error);
+        }
+      },
+      async startCountdown() {
+        this.mostrarContador = true;
+        this.countdown = 3;
+  
+        const timer = setInterval(() => {
+          this.countdown--;
+  
+          console.log(this.countdown);
+          if (this.countdown === 0) {
+  
+            clearInterval(timer);
+  
+            this.$router.push({ name: 'TaulerView' });
+          }
+        }, 1000);
+      },
+      async borrarOcupantes() {
+        try {
+  
+          const response = await fetch(`${this.ruta}/api/borrar-ocupantes`, {
+            method: 'POST',
+          });
+  
+          if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.status}`);
+          }
+  
+          const data = await response.json();
+          console.log(data.message);
+  
+          console.log("DATOS BORRADOS DE OCUPANTES");
+        } catch (error) {
+          console.error('Error al borrar ocupantes:', error);
+          throw error;
+        }
+      },
+      popupInfo() {
+        var superpuesto = document.getElementById("superpuesto");
+        superpuesto.classList.add("mostrar");
+      },
+      popoffInfo() {
+        var superpuesto = document.getElementById("superpuesto");
+        superpuesto.classList.remove("mostrar");
+      },
+      crearSala() {
+        this.$router.push({ name: 'CrearSala' });
+      },
+      unirseSala() {
+        // Aquí necesitarías obtener el ID correcto de la sala
+        this.$router.push({ name: 'UnirseSala' });
+      },
     },
-
     mounted() {
-        socket.on('actualizacionUsuario', (usuarios) => {
-            console.log('Usuarios actualizados:', usuarios);
-            this.usuariosJuego = usuarios;
-            if (this.usuariosJuego.length >= 2) {
-                this.startCountdown();
-            }
-        });
+      socket.on('actualizacionUsuario', (usuarios) => {
+        console.log('Usuarios actualizados:', usuarios);
+        this.usuariosJuego = usuarios;
+        if (this.usuariosJuego.length >= 2) {
+          this.startCountdown();
+        }
+      });
     },
-};
-
-</script>
+  };
+  </script>
 
 <style lang="css" scoped>
 .container {

@@ -11,10 +11,8 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.5.1",
-<<<<<<< HEAD
     "express": "^4.19.2",
-=======
->>>>>>> c1126c0f51b7db2e440a747d3f11a966f5e7a271
+    "nanoid": "^5.0.7",
     "nuxt": "^3.11.2",
     "pinia": "^2.1.7",
     "socket.io": "^4.7.5",

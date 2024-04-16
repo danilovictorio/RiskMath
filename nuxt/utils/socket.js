@@ -18,7 +18,7 @@ const colores = ['green','blue'];
 
 // Emitir eventos para crear y unirse a salas
  
-Deberías mover estos a funciones o métodos que puedas llamar en respuesta a acciones del usuario
+//Deberías mover estos a funciones o métodos que puedas llamar en respuesta a acciones del usuario
 // socket.emit('createRoom', 2); // Crear una sala con capacidad para 2 jugadores
 // socket.emit('joinRoom', 'roomId'); // Unirse a la sala con el ID 'roomId'
 
