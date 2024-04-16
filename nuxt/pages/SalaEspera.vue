@@ -15,12 +15,12 @@
     data() {
       return {
         usuarios: [],
-        esCreador: false, // Deberías establecer esto en función de si el usuario actual es el creador de la sala
+        esCreador: false, 
       };
     },
     methods: {
       iniciarPartida() {
-        // Aquí podrías emitir un evento al servidor para iniciar la partida
+       
         socket.emit('iniciarPartida');
       },
     },
