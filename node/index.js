@@ -33,13 +33,16 @@ io.on('connection', (socket) => {
   socket.esMiTurno = false;
 
   socket.on('createRoom', (data) => {
-    const roomId = nanoid(6); // Genera un ID de 10 caracteres
+    const roomId = nanoid(6); // Genera un ID de 6 caracteres
     rooms[roomId] = {
       name: data.nombreSala,
       capacity: data.capacidadSala,
       players: [],
+      creator: socket.id,
     };
-    socket.emit('roomCreated', roomId);
+    console.log('Sala creada con ID:', roomId);
+    console.log('Datos de la sala:', rooms[roomId]);
+    socket.emit('roomCreated', { roomId: roomId });
   });
   socket.on('joinRoom', (roomId) => {
     const room = rooms[roomId];
@@ -47,13 +50,16 @@ io.on('connection', (socket) => {
       room.players.push(socket.id);
       socket.join(roomId);
 
+      // Envía al usuario la información de si es el creador de la sala
+      socket.emit('joinedRoom', { esCreador: socket.id === room.creator });
+
       if (room.players.length === room.capacity) {
         // Iniciar el juego
         io.to(roomId).emit('startGame');
       }
     }
   });
-
+/*
   socket.on('peticion_jugar', (datos) => {
     usuariosJuego.push({ id: socket.id, nombreUsuario: datos.nombreUsuario, estado: "", color: "" });
     console.log('quiere jugar', datos.nombreUsuario);
@@ -77,7 +83,7 @@ io.on('connection', (socket) => {
       io.emit('cambiarPrimerTurno', { turno_de: jugadorInicial.nombreUsuario });
     }
   });
-
+*/
 
   socket.on('disconnect', () => {
     console.log("Se ha desconectado alguien!! con id " + socket.id);

@@ -1,6 +1,7 @@
 <template>
     <div>
       <h1>Sala de espera</h1>
+      <p>Código de la sala: {{ codigoSala }}</p>
       <ul>
         <li v-for="usuario in usuarios" :key="usuario.id">{{ usuario.nombre }}</li>
       </ul>
@@ -15,19 +16,28 @@
     data() {
       return {
         usuarios: [],
-        esCreador: false, // Deberías establecer esto en función de si el usuario actual es el creador de la sala
+        esCreador: false,
+        codigoSala: '', // Añade una propiedad para el código de la sala
       };
     },
     methods: {
       iniciarPartida() {
-        // Aquí podrías emitir un evento al servidor para iniciar la partida
-        socket.emit('iniciarPartida');
+        socket.emit('iniciarPartida', this.$route.params.id);
       },
     },
     mounted() {
-      // Aquí podrías escuchar a un evento del servidor que te informe cuando un nuevo usuario se une a la sala
+      this.codigoSala = this.$route.params.id; // Establece el código de la sala al montar el componente
+  
       socket.on('usuarioUnido', (usuario) => {
         this.usuarios.push(usuario);
+      });
+  
+      socket.on('joinedRoom', (data) => {
+        this.esCreador = data.esCreador;
+      });
+  
+      socket.on('startGame', () => {
+        this.$router.push({ name: 'Tablero' });
       });
     },
   };
