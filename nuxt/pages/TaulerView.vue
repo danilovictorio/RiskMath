@@ -433,7 +433,7 @@
     justify-content: center;
     width: 100vw;
     height: 100vh;
-    background-image: url('../assets/mar.gif');
+    background-image: url('../public/mar.gif');
     background-position: center;
     background-size: cover;
     object-fit: cover;

@@ -6,17 +6,26 @@
 
   sustituir valor en variable constante:  URL
 */
-
 // Importar el cliente Socket.io
 import { io } from "socket.io-client";
 import { useAppStore } from '../stores/app';
 
 const URL = "http://localhost:3123"; 
 
-
 export const socket = io(URL);
 
 const colores = ['green','blue'];
+
+// Emitir eventos para crear y unirse a salas
+ 
+Deberías mover estos a funciones o métodos que puedas llamar en respuesta a acciones del usuario
+// socket.emit('createRoom', 2); // Crear una sala con capacidad para 2 jugadores
+// socket.emit('joinRoom', 'roomId'); // Unirse a la sala con el ID 'roomId'
+
+// Escuchar el evento 'startGame' para saber cuándo ha comenzado el juego
+socket.on('startGame', () => { 
+  // Aquí puedes agregar código para manejar el inicio del juego
+});
 socket.on('cambiarPrimerTurno', ({ turno_de, color }) => {
   console.log('Cambio de turno. ¿Es mi turno?', turno_de);
   const app= useAppStore();
