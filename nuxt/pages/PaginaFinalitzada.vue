@@ -94,7 +94,7 @@
    align-items: center;
    width: 100vw;
    height: 100vh;
-   background: url(../assets/mapaRisk.jpg) no-repeat center center fixed;
+   background: url(../public/mapaRisk.jpg) no-repeat center center fixed;
    background-position: center;
    background-size: cover;
    object-fit: cover;

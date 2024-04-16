@@ -23,12 +23,32 @@ const io = new Server(server, {
   },
 });
 
+const rooms = {};
 const usuariosJuego = [];
 
 io.on('connection', (socket) => {
   console.log("Se ha conectado alguien!! con id " + socket.id);
 
   socket.esMiTurno = false;
+
+  socket.on('createRoom', (capacity) => {
+    const roomId = socket.id;
+    rooms[roomId] = { capacity, players: [socket.id] };
+    socket.join(roomId);
+  });
+
+  socket.on('joinRoom', (roomId) => {
+    const room = rooms[roomId];
+    if (room && room.players.length < room.capacity) {
+      room.players.push(socket.id);
+      socket.join(roomId);
+
+      if (room.players.length === room.capacity) {
+        // Iniciar el juego
+        io.to(roomId).emit('startGame');
+      }
+    }
+  });
 
   socket.on('peticion_jugar', (datos) => {
     usuariosJuego.push({ id: socket.id, nombreUsuario: datos.nombreUsuario, estado: "", color: "" });
@@ -43,10 +63,10 @@ io.on('connection', (socket) => {
       // socket.emit('actualizarColor', usuariosJuego[0].color, usuariosJuego[1].color);
       const primerTurno = Math.floor(Math.random() * usuariosJuego.length);
       const jugadorInicial = usuariosJuego[primerTurno];
-      if (jugadorInicial.nombreUsuario==usuariosJuego[0].nombreUsuario) {
+      if (jugadorInicial.nombreUsuario == usuariosJuego[0].nombreUsuario) {
         console.log('entro al primero');
         io.emit("rellenarColor", usuariosJuego[1].color);
-      }else{
+      } else {
         console.log('entro al segundo');
         io.emit("rellenarColor", usuariosJuego[0].color);
       }
@@ -65,7 +85,17 @@ io.on('connection', (socket) => {
         const siguienteTurno = usuariosJuego.length > 0 ? usuariosJuego[0].id : null;
         io.emit('cambiarTurno', { esMiTurno: socket.id === siguienteTurno });
       }
+    }
 
+    for (const roomId in rooms) {
+      const room = rooms[roomId];
+      const index = room.players.indexOf(socket.id);
+      if (index !== -1) {
+        room.players.splice(index, 1);
+        if (room.players.length === 0) {
+          delete rooms[roomId];
+        }
+      }
     }
   });
 
@@ -74,7 +104,7 @@ io.on('connection', (socket) => {
     let color = "";
     let nextName = "";
     let user = "";
-    
+
     if (userName === usuariosJuego[0].nombreUsuario) {
       console.log('hola1');
       color = usuariosJuego[0].color;
@@ -82,42 +112,42 @@ io.on('connection', (socket) => {
       user = usuariosJuego[1];
       if (acertado) {
         console.log('hola2');
-         color = usuariosJuego[1].color; 
-       }
+        color = usuariosJuego[1].color;
+      }
 
-    } 
-    
+    }
+
     if (userName === usuariosJuego[1].nombreUsuario) {
       nextName = usuariosJuego[0].nombreUsuario;
       console.log('hsola3');
       color = usuariosJuego[1].color;
       user = usuariosJuego[0];
-       if (acertado) {
+      if (acertado) {
         console.log('hola4');
         color = usuariosJuego[0].color;
-      
-       }
+
+      }
 
     }
-    io.emit('comprobarColorActualMapa', {  idPais: paisId, color: color, acertado:acertado, color0: usuariosJuego[0].color, color1: usuariosJuego[1].color});
+    io.emit('comprobarColorActualMapa', { idPais: paisId, color: color, acertado: acertado, color0: usuariosJuego[0].color, color1: usuariosJuego[1].color });
     console.log("On respuesta jugador :: cambiar turno a :: ", nextName);
-    io.emit('cambiarTurno', { turno_de: nextName,usuarios: usuariosJuego});
+    io.emit('cambiarTurno', { turno_de: nextName, usuarios: usuariosJuego });
 
-  //   const conquistasJugador1 = usuariosJuego[0].paisesConquistados.length;
-  //   const conquistasJugador2 = usuariosJuego[1].paisesConquistados.length;
-  //   const totalPaises = 15;
+    //   const conquistasJugador1 = usuariosJuego[0].paisesConquistados.length;
+    //   const conquistasJugador2 = usuariosJuego[1].paisesConquistados.length;
+    //   const totalPaises = 15;
 
-  // if (conquistasJugador1 === totalPaises) {
-  // io.emit('finDelJuego', { ganador: usuariosJuego[0].nombreUsuario });
-  // } else if (conquistasJugador2 === totalPaises) {
-  //   io.emit('finDelJuego', { ganador: usuariosJuego[1].nombreUsuario });
-  // } else if (conquistasJugador1 + conquistasJugador2 === totalPaises) {
-  //   io.emit('finDelJuego', { empate: true });
-  // }
+    // if (conquistasJugador1 === totalPaises) {
+    // io.emit('finDelJuego', { ganador: usuariosJuego[0].nombreUsuario });
+    // } else if (conquistasJugador2 === totalPaises) {
+    //   io.emit('finDelJuego', { ganador: usuariosJuego[1].nombreUsuario });
+    // } else if (conquistasJugador1 + conquistasJugador2 === totalPaises) {
+    //   io.emit('finDelJuego', { empate: true });
+    // }
 
-   });
- });
+  });
+});
 
 server.listen(port, () => {
-  console.log('Server running on port:'+port);
+  console.log('Server running on port:' + port);
 });
