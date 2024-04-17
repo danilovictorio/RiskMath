@@ -33,11 +33,10 @@ export default {
             const storeApp = useAppStore();
 
             socket.emit('crearSala', { nombreSala: this.nombreSala, capacidadSala: this.capacidadSala });
-            socket.on('roomCreated', (roomId) => {
-                console.log('Sala creada, con ID:', roomId);
-                storeApp.codigoSala = roomId; // Accede a roomId directamente
-                this.$router.push({ name: 'SalaEspera', params: { id: roomId } });
-                this.esCreador = true; // Establece esCreador a true
+            socket.on('roomCreated', (data) => {
+                storeApp.sala = data.room; 
+                console.log('Sala creada en pinia:', storeApp.sala );
+                this.$router.push({ name: 'SalaEspera' });
             });
         },
     },

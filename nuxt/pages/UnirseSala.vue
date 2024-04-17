@@ -20,10 +20,10 @@ export default {
   },
   methods: {
     unirseSala() {
-      const roomId = this.linkSala.split('/').pop();
-      socket.emit('unirseSala', roomId, (response) => {
+      
+      socket.emit('unirseSala', this.linkSala, (response) => {
         if (response.success) {
-          this.$router.push({ name: 'SalaEspera', params: { id: roomId } });
+          this.$router.push({ name: 'SalaEspera' });
         } else {
           // Manejar errores o mostrar un mensaje de error
           console.error(response.message);

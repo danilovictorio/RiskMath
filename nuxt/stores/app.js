@@ -10,7 +10,7 @@ export const useAppStore = defineStore('app', {
       ganador: null,
       colorActual: ""   
     },
-    codigoSala: [],
+    sala: {},
     //ARRAY DE USUARIOS
     usuariosJuego:{
       users:[]
