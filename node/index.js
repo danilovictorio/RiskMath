@@ -1,4 +1,4 @@
-/*
+ /*
 PUERTO DE LOCALHOST: 3123
 PUERTO DE PREPROD: 3184
 PUERTO DE PROD: 3123
@@ -35,28 +35,29 @@ io.on('connection', (socket) => {
   socket.on('crearSala', (data) => {
     const roomId = nanoid(6); // Genera un ID de 6 caracteres
     rooms[roomId] = {
+      id: roomId,
       nombre: data.nombreSala,
       capacidad: data.capacidadSala,
-      jugadores: [],
+      jugadores: [socket.id],
       creador: socket.id,
     };
     console.log('Sala creada con ID:', roomId);
     console.log('Datos de la sala:', rooms[roomId]);
-    socket.emit('roomCreated', { roomId: roomId });
+    socket.emit('roomCreated', { room: rooms[roomId] });
   });
-  socket.on('unirseSala', (roomId) => {
+  socket.on('unirseSala', (roomId, callback) => {
     const room = rooms[roomId];
     if (room && room.jugadores.length < room.capacidad) {
       room.jugadores.push(socket.id);
       socket.join(roomId);
 
       // Envía al usuario la información de si es el creador de la sala
-      socket.emit('joinedRoom', { esCreador: socket.id === room.creador });
+      callback({ success: true, message: 'Te has unido a la sala correctamente.' });
 
-      if (room.jugadores.length === room.capacidad) {
-       
-        io.to(roomId).emit('inicioJuego');
-      }
+      // Emite el evento 'actualizarUsuarios' con la lista actualizada de usuarios
+      io.to(roomId).emit('actualizarUsuarios', room.jugadores);
+    } else {
+      callback({ success: false, message: 'La sala está llena o no existe.' });
     }
   });
 /*
@@ -85,29 +86,31 @@ io.on('connection', (socket) => {
   });
 */
 
-  socket.on('disconnect', () => {
-    console.log("Se ha desconectado alguien!! con id " + socket.id);
-    const index = usuariosJuego.findIndex((user) => user.id === socket.id);
-    if (index !== -1) {
-      usuariosJuego.splice(index, 1);
+socket.on('disconnect', () => {
+  console.log("Se ha desconectado alguien!! con id " + socket.id);
+  const index = usuariosJuego.findIndex((user) => user.id === socket.id);
+  if (index !== -1) {
+    usuariosJuego.splice(index, 1);
 
-      if (socket.esMiTurno) {
-        const siguienteTurno = usuariosJuego.length > 0 ? usuariosJuego[0].id : null;
-        io.emit('cambiarTurno', { esMiTurno: socket.id === siguienteTurno });
-      }
+    if (socket.esMiTurno) {
+      const siguienteTurno = usuariosJuego.length > 0 ? usuariosJuego[0].id : null;
+      io.emit('cambiarTurno', { esMiTurno: socket.id === siguienteTurno });
     }
+  }
 
-    for (const roomId in rooms) {
-      const room = rooms[roomId];
-      const index = room.players.indexOf(socket.id);
+  for (const roomId in rooms) {
+    const room = rooms[roomId];
+    if (room) { // Asegúrate de que room no es undefined
+      const index = room.jugadores.indexOf(socket.id);
       if (index !== -1) {
-        room.players.splice(index, 1);
-        if (room.players.length === 0) {
+        room.jugadores.splice(index, 1);
+        if (room.jugadores.length === 0) {
           delete rooms[roomId];
         }
       }
     }
-  });
+  }
+});
 
   socket.on('respuestaJugador', ({ userName, paisId, acertado }) => {
 
