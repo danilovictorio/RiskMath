@@ -20,12 +20,13 @@ export default {
   },
   methods: {
     unirseSala() {
-      
+      // Emitir el evento 'unirseSala' con el ID de la sala
       socket.emit('unirseSala', this.linkSala, (response) => {
         if (response.success) {
+          // Si la unión a la sala fue exitosa, redirigir a la Sala de Espera
           this.$router.push({ name: 'SalaEspera' });
         } else {
-          // Manejar errores o mostrar un mensaje de error
+          // Manejar caso de error, por ejemplo, mostrar un mensaje al usuario
           console.error(response.message);
         }
       });

@@ -24,20 +24,15 @@ export default {
             nombreSala: '',
             capacidadSala: 2,
             link: '',
-            esCreador: false,
             codigoSala: '',
         };
     },
     methods: {
         crearSala() {
             const storeApp = useAppStore();
-
+            storeApp.esCreador = true;
             socket.emit('crearSala', { nombreSala: this.nombreSala, capacidadSala: this.capacidadSala });
-            socket.on('roomCreated', (data) => {
-                storeApp.sala = data.room; 
-                console.log('Sala creada en pinia:', storeApp.sala );
-                this.$router.push({ name: 'SalaEspera' });
-            });
+            this.$router.push({ name: 'SalaEspera' });
         },
     },
 };
