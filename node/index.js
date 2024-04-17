@@ -32,30 +32,30 @@ io.on('connection', (socket) => {
 
   socket.esMiTurno = false;
 
-  socket.on('createRoom', (data) => {
+  socket.on('crearSala', (data) => {
     const roomId = nanoid(6); // Genera un ID de 6 caracteres
     rooms[roomId] = {
-      name: data.nombreSala,
-      capacity: data.capacidadSala,
-      players: [],
-      creator: socket.id,
+      nombre: data.nombreSala,
+      capacidad: data.capacidadSala,
+      jugadores: [],
+      creador: socket.id,
     };
     console.log('Sala creada con ID:', roomId);
     console.log('Datos de la sala:', rooms[roomId]);
     socket.emit('roomCreated', { roomId: roomId });
   });
-  socket.on('joinRoom', (roomId) => {
+  socket.on('unirseSala', (roomId) => {
     const room = rooms[roomId];
-    if (room && room.players.length < room.capacity) {
-      room.players.push(socket.id);
+    if (room && room.jugadores.length < room.capacidad) {
+      room.jugadores.push(socket.id);
       socket.join(roomId);
 
       // Envía al usuario la información de si es el creador de la sala
-      socket.emit('joinedRoom', { esCreador: socket.id === room.creator });
+      socket.emit('joinedRoom', { esCreador: socket.id === room.creador });
 
-      if (room.players.length === room.capacity) {
-        // Iniciar el juego
-        io.to(roomId).emit('startGame');
+      if (room.jugadores.length === room.capacidad) {
+       
+        io.to(roomId).emit('inicioJuego');
       }
     }
   });
