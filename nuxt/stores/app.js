@@ -74,5 +74,11 @@ export const useAppStore = defineStore('app', {
       // Asigna un color a un jugador
       this.players[player] = color;
     },
+    setSala(sala) {
+      this.sala = sala;
+    },
+    setUsuariosJuego(usuarios) {
+      this.usuariosJuego.users = usuarios;
+    },
   },
 })

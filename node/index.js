@@ -27,13 +27,14 @@ const io = new Server(server, {
 const rooms = {};
 const usuariosJuego = [];
 
+
 io.on('connection', (socket) => {
   console.log("Se ha conectado alguien!! con id " + socket.id);
 
   socket.esMiTurno = false;
 
   socket.on('crearSala', (data) => {
-    const roomId = nanoid(6); // Genera un ID de 6 caracteres
+    const roomId = nanoid(6);
     rooms[roomId] = {
       id: roomId,
       nombre: data.nombreSala,
@@ -43,6 +44,7 @@ io.on('connection', (socket) => {
     };
     console.log('Sala creada con ID:', roomId);
     console.log('Datos de la sala:', rooms[roomId]);
+    console.log('todas las salas: ', rooms)
     const sala = rooms[roomId];
     socket.join(roomId);
 
@@ -50,8 +52,14 @@ io.on('connection', (socket) => {
     io.to(roomId).emit('salaCreada', {
       sala: sala,
       jugadores: sala.jugadores.map(id => ({ id, nombre: 'Usuario' + id }))
+
     });
   });
+  socket.on('obtenerSalas', () => {
+    // Enviar datos de las salas al cliente
+    io.emit('salas', Object.values(rooms));
+  });
+  
   socket.on('unirseSala', (roomId, callback) => {
     const room = rooms[roomId];
     if (room && room.jugadores.length < room.capacidad) {
@@ -61,6 +69,7 @@ io.on('connection', (socket) => {
       console.log('Se ha unido a la sala con ID:', socket.id);
       socket.join(roomId);
 
+      // Aquí es donde se emite el evento 'usuarioUnidoSala' con los datos de la sala y los usuarios
       io.to(roomId).emit('usuarioUnidoSala', {
         sala: room,
         usuarios: room.jugadores.map(id => ({ id, nombre: 'Usuario' + id }))
@@ -74,6 +83,7 @@ io.on('connection', (socket) => {
       callback({ success: false, message: 'La sala está llena o no existe.' });
     }
   });
+
   /*
     socket.on('peticion_jugar', (datos) => {
       usuariosJuego.push({ id: socket.id, nombreUsuario: datos.nombreUsuario, estado: "", color: "" });

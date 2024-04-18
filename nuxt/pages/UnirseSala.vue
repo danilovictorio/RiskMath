@@ -11,26 +11,40 @@
 
 <script>
 import { socket } from '@/utils/socket.js';
+import { ref, onMounted } from 'vue';
+import { useAppStore } from '../stores/app.js';
+import { useRouter } from 'vue-router';
 
 export default {
-  data() {
-    return {
-      linkSala: '',
-    };
-  },
-  methods: {
-    unirseSala() {
-      // Emitir el evento 'unirseSala' con el ID de la sala
-      socket.emit('unirseSala', this.linkSala, (response) => {
+  setup() {
+    const linkSala = ref('');
+    const store = useAppStore();
+    const router = useRouter();
+
+    const unirseSala = () => {
+      socket.emit('unirseSala', linkSala.value, (response) => {
         if (response.success) {
-          // Si la unión a la sala fue exitosa, redirigir a la Sala de Espera
-          this.$router.push({ name: 'SalaEspera' });
+          store.setSala(response.sala);
+          store.setUsuariosJuego(response.usuarios);
+          router.push({ name: 'SalaEspera' });
         } else {
-          // Manejar caso de error, por ejemplo, mostrar un mensaje al usuario
           console.error(response.message);
         }
       });
-    },
+    };
+
+    onMounted(() => {
+      socket.on('usuarioUnidoSala', (data) => {
+        store.setSala(data.sala);
+        store.setUsuariosJuego(data.usuarios);
+        console.log('Usuarios en la sala:', store.usuariosJuego.users);
+      });
+    });
+
+    return {
+      linkSala,
+      unirseSala,
+    };
   },
 };
 </script>
