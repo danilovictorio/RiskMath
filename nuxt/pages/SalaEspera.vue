@@ -54,7 +54,7 @@ export default {
         }
       });
 
-      //socket.emit('obtenerSalas');
+      socket.emit('obtenerSalas');
 
       socket.on('usuarioUnidoSala', (data) => {
         store.setSala(data.sala);
@@ -62,6 +62,7 @@ export default {
         console.log('Datos de la sala:', store.sala);
         console.log('Usuarios en la sala:', store.usuariosJuego.users);
       });
+    });
 
       const iniciarPartida = async () => {
       try {
@@ -81,6 +82,6 @@ export default {
     return {
       iniciarPartida,
     };
-  },
-
+  }
+};
 </script>
