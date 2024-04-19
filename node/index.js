@@ -39,7 +39,6 @@ io.on('connection', (socket) => {
       nombre: data.nombreSala,
       capacidad: data.capacidadSala,
       jugadores: [socket.id],
-      creador: socket.id,
     };
     console.log('Sala creada con ID:', roomId);
     console.log('Datos de la sala:', rooms[roomId]);

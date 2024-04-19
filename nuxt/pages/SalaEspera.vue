@@ -26,6 +26,10 @@ export default {
     usuarios() {
       let store = useAppStore();
       return store.usuariosJuego.users;
+    },
+    esCreador() {
+      let store = useAppStore();
+      return store.esCreador;
     }
   },
   setup() {
@@ -58,18 +62,12 @@ export default {
         console.log('Datos de la sala:', store.sala);
         console.log('Usuarios en la sala:', store.usuariosJuego.users);
       });
-
-      socket.on('joinedRoom', (data) => {
-        esCreador.value = data.esCreador;
-      });
-
       socket.on('startGame', () => {
         this.$router.push({ name: 'Tablero' });
       });
     });
 
     return {
-      esCreador,
       iniciarPartida() {
         socket.emit('iniciarPartida', store.sala.id);
       },
