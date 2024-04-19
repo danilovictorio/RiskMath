@@ -43,6 +43,7 @@ export default {
         store.setUsuariosJuego(data.jugadores);
         console.log('Sala creada:', store.sala);
       });
+      
       socket.on('salas', (salas) => {
         console.log('Salas recibidas:', salas);
         if (store.sala) {
@@ -64,24 +65,18 @@ export default {
       });
     });
 
-      const iniciarPartida = async () => {
-      try {
+    return {
+      iniciarPartida() {
         socket.emit('iniciarPartida', store.sala.id, (response) => {
           if (response.success) {
             console.log(response.message);
-            router.push('/tablero');
+            this.$router.push({ name: 'TaulerView' });
           } else {
             console.error(response.message);
           }
-        });
-      } catch (error) {
-        console.error('Error al iniciar la partida:', error);
+      });
       }
-    };
-
-    return {
-      iniciarPartida,
-    };
   }
+}
 };
 </script>
