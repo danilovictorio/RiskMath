@@ -54,7 +54,7 @@ export default {
         }
       });
 
-      socket.emit('obtenerSalas');
+      //socket.emit('obtenerSalas');
 
       socket.on('usuarioUnidoSala', (data) => {
         store.setSala(data.sala);
@@ -82,4 +82,5 @@ export default {
       iniciarPartida,
     };
   },
+
 </script>
