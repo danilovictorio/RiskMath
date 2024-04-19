@@ -67,7 +67,7 @@ io.on('connection', (socket) => {
       console.log('Se ha unido a la sala con ID:', socket.id);
       socket.join(roomId);
 
-     
+
       io.to(roomId).emit('usuarioUnidoSala', {
         sala: room,
         usuarios: room.jugadores.map(id => ({ id, nombre: 'Usuario' + id }))
@@ -80,6 +80,20 @@ io.on('connection', (socket) => {
 
     } else {
       callback({ success: false, message: 'La sala está llena o no existe.' });
+    }
+  });
+  socket.on('iniciarPartida', (roomId, callback) => {
+    const room = rooms[roomId];
+    if (room) {
+      if (room.jugadores.length >= 2) {
+        // Inicia la partida
+        io.to(roomId).emit('startGame');
+        callback({ success: true, message: 'La partida ha comenzado.' });
+      } else {
+        callback({ success: false, message: 'No hay suficientes jugadores en la sala para iniciar la partida.' });
+      }
+    } else {
+      callback({ success: false, message: 'La sala no existe.' });
     }
   });
 

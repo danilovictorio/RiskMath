@@ -62,16 +62,24 @@ export default {
         console.log('Datos de la sala:', store.sala);
         console.log('Usuarios en la sala:', store.usuariosJuego.users);
       });
-      socket.on('startGame', () => {
-        this.$router.push({ name: 'Tablero' });
-      });
-    });
+
+      const iniciarPartida = async () => {
+      try {
+        socket.emit('iniciarPartida', store.sala.id, (response) => {
+          if (response.success) {
+            console.log(response.message);
+            router.push('/tablero');
+          } else {
+            console.error(response.message);
+          }
+        });
+      } catch (error) {
+        console.error('Error al iniciar la partida:', error);
+      }
+    };
 
     return {
-      iniciarPartida() {
-        socket.emit('iniciarPartida', store.sala.id);
-      },
+      iniciarPartida,
     };
   },
-};
 </script>
