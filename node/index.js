@@ -5,7 +5,6 @@ PUERTO DE PROD: 3123
 
 Substituir en la constante: port
 */
-
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
@@ -19,7 +18,6 @@ const port = 3123;
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    // origin: '*',
     methods: ['GET', 'POST'],
   },
 });
@@ -27,9 +25,10 @@ const io = new Server(server, {
 const rooms = {};
 const usuariosJuego = [];
 
-
 io.on('connection', (socket) => {
-  console.log("Se ha conectado alguien!! con id " + socket.id);
+  console.log("Se ha conectado alguien!! con id " + socket.id + socket);
+  var address = socket.handshake.address;
+  console.log('New connection from ' + address.address + ':' + address.port + address);
 
   socket.esMiTurno = false;
 
@@ -47,19 +46,19 @@ io.on('connection', (socket) => {
     console.log('todas las salas: ', rooms)
     const sala = rooms[roomId];
     socket.join(roomId);
-
-    // Emite evento 'salaCreada' con información de la sala y los jugadores
+    //Le envio SOLO AL CREADOR que se ha creado
     io.to(roomId).emit('salaCreada', {
       sala: sala,
       jugadores: sala.jugadores.map(id => ({ id, nombre: 'Usuario' + id }))
-
     });
   });
+
   socket.on('obtenerSalas', () => {
-    // Enviar datos de las salas al cliente
-    io.emit('salas', Object.values(rooms));
+    console.log('Evento obtenerSalas recibido');
+    const salas = Object.values(rooms);
+    socket.emit('salas', salas);
   });
-  
+
   socket.on('unirseSala', (roomId, callback) => {
     const room = rooms[roomId];
     if (room && room.jugadores.length < room.capacidad) {
@@ -69,11 +68,12 @@ io.on('connection', (socket) => {
       console.log('Se ha unido a la sala con ID:', socket.id);
       socket.join(roomId);
 
-      // Aquí es donde se emite el evento 'usuarioUnidoSala' con los datos de la sala y los usuarios
+     
       io.to(roomId).emit('usuarioUnidoSala', {
         sala: room,
         usuarios: room.jugadores.map(id => ({ id, nombre: 'Usuario' + id }))
       });
+
       // Envía al usuario la información de si es el creador de la sala
       callback({ success: true, message: 'Te has unido a la sala correctamente.' });
       console.log('Datos room:', room);
@@ -112,6 +112,8 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log("Se ha desconectado alguien!! con id " + socket.id);
+    //HAY QUE MIRARLO PORQUE PETA!
+    //REPASAR TODAS LAS SALAS Y SACARLO DE LAS SALAS QUE ESTE ESTE USUARIO
     const index = usuariosJuego.findIndex((user) => user.id === socket.id);
     if (index !== -1) {
       usuariosJuego.splice(index, 1);

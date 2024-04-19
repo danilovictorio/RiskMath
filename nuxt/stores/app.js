@@ -77,8 +77,5 @@ export const useAppStore = defineStore('app', {
     setSala(sala) {
       this.sala = sala;
     },
-    setUsuariosJuego(usuarios) {
-      this.usuariosJuego.users = usuarios;
-    },
   },
 })

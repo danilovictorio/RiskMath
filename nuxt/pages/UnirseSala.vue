@@ -24,8 +24,6 @@ export default {
     const unirseSala = () => {
       socket.emit('unirseSala', linkSala.value, (response) => {
         if (response.success) {
-          store.setSala(response.sala);
-          store.setUsuariosJuego(response.usuarios);
           router.push({ name: 'SalaEspera' });
         } else {
           console.error(response.message);
@@ -33,12 +31,19 @@ export default {
       });
     };
 
+    const usuarioUnidoSalaHandler = (data) => {
+      store.setSala(data.sala);
+      store.setUsuariosJuego(data.usuarios);
+      console.log('Datos de la sala:', store.sala);
+      console.log('Usuarios en la sala:', store.usuariosJuego.users);
+    };
+
     onMounted(() => {
-      socket.on('usuarioUnidoSala', (data) => {
-        store.setSala(data.sala);
-        store.setUsuariosJuego(data.usuarios);
-        console.log('Usuarios en la sala:', store.usuariosJuego.users);
-      });
+      socket.on('usuarioUnidoSala', usuarioUnidoSalaHandler);
+    });
+
+    onUnmounted(() => {
+      socket.off('usuarioUnidoSala', usuarioUnidoSalaHandler);
     });
 
     return {

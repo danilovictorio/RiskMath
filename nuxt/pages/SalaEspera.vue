@@ -13,37 +13,49 @@
 
 <script>
 // SalaEspera.vue
-// SalaEspera.vue
-import { onMounted, computed } from 'vue';
+import { onMounted, computed, ref } from 'vue';
 import { socket } from '@/utils/socket.js';
 import { useAppStore } from '../stores/app.js';
 
 export default {
-
+  computed: {
+    sala() {
+      let store = useAppStore();
+      return store.sala;
+    },
+    usuarios() {
+      let store = useAppStore();
+      return store.usuariosJuego.users;
+    }
+  },
   setup() {
     const store = useAppStore();
     const esCreador = ref(false);
 
     onMounted(() => {
-      socket.emit('obtenerSalas'); // Emitir solicitud de datos de las salas
-
-      socket.on('salas', (salas) => {
-        // Actualizar el estado de la tienda con las salas recibidas
-        store.setSalas(salas);
-        
-    
-        console.log('Salas recibidas:', salas);
-      });
       socket.on('salaCreada', (data) => {
         console.log('Datos recibidos:', data);
         store.setSala(data.sala);
         store.setUsuariosJuego(data.jugadores);
         console.log('Sala creada:', store.sala);
       });
+      socket.on('salas', (salas) => {
+        console.log('Salas recibidas:', salas);
+        if (store.sala) {
+          const sala = salas[store.sala.id];
+          if (sala) {
+            store.setSala(sala);
+            console.log('Sala guardada en Pinia:', store.sala);
+          }
+        }
+      });
+
+      socket.emit('obtenerSalas');
 
       socket.on('usuarioUnidoSala', (data) => {
         store.setSala(data.sala);
         store.setUsuariosJuego(data.usuarios);
+        console.log('Datos de la sala:', store.sala);
         console.log('Usuarios en la sala:', store.usuariosJuego.users);
       });
 
@@ -57,8 +69,6 @@ export default {
     });
 
     return {
-      sala: computed(() => store.sala),
-      usuarios: computed(() => store.usuariosJuego.users),
       esCreador,
       iniciarPartida() {
         socket.emit('iniciarPartida', store.sala.id);
