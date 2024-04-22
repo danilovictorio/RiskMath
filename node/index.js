@@ -93,38 +93,38 @@ io.on('connection', (socket) => {
     }
   });
 
-  
-    socket.on('peticion_jugar', (datos) => {
-      const room = rooms[datos.roomId];
-      if (room) {
-        const jugadores = room.jugadores.map(id => ({ id, nombre: 'Usuario' + id }));
-        socket.emit('jugadoresEnSala', jugadores);
+
+  socket.on('peticion_jugar', (datos, roomId) => {
+    const room = rooms[roomId];
+    if (room) {
+      const jugadores = room.jugadores.map(id => ({ id, nombre: 'Usuario' + id }));
+      socket.emit('jugadoresEnSala', jugadores);
+    } else {
+      socket.emit('error', { message: 'La sala no existe.' });
+    }
+    usuariosJuego.push({ id: socket.id, nombreUsuario: datos.nombreUsuario, estado: "", color: "" });
+    console.log('quiere jugar', datos.nombreUsuario);
+
+    io.to(roomId).emit("peticion_jugar_aceptada", datos);
+    io.to(roomId).emit('actualizacionUsuario', usuariosJuego);
+
+    if (usuariosJuego.length === 2) {
+      usuariosJuego[0].color = "green";
+      usuariosJuego[1].color = "blue";
+      // socket.emit('actualizarColor', usuariosJuego[0].color, usuariosJuego[1].color);
+      const primerTurno = Math.floor(Math.random() * usuariosJuego.length);
+      const jugadorInicial = usuariosJuego[primerTurno];
+      if (jugadorInicial.nombreUsuario == usuariosJuego[0].nombreUsuario) {
+        console.log('entro al primero');
+        io.emit("rellenarColor", usuariosJuego[1].color);
       } else {
-        socket.emit('error', { message: 'La sala no existe.' });
+        console.log('entro al segundo');
+        io.emit("rellenarColor", usuariosJuego[0].color);
       }
-      usuariosJuego.push({ id: socket.id, nombreUsuario: datos.nombreUsuario, estado: "", color: "" });
-      console.log('quiere jugar', datos.nombreUsuario);
-  
-      socket.emit("peticion_jugar_aceptada", datos);
-      io.emit('actualizacionUsuario', usuariosJuego);
-  
-      if (usuariosJuego.length === 2) {
-        usuariosJuego[0].color = "green";
-        usuariosJuego[1].color = "blue";
-        // socket.emit('actualizarColor', usuariosJuego[0].color, usuariosJuego[1].color);
-        const primerTurno = Math.floor(Math.random() * usuariosJuego.length);
-        const jugadorInicial = usuariosJuego[primerTurno];
-        if (jugadorInicial.nombreUsuario == usuariosJuego[0].nombreUsuario) {
-          console.log('entro al primero');
-          io.emit("rellenarColor", usuariosJuego[1].color);
-        } else {
-          console.log('entro al segundo');
-          io.emit("rellenarColor", usuariosJuego[0].color);
-        }
-        io.emit('cambiarPrimerTurno', { turno_de: jugadorInicial.nombreUsuario });
-      }
-    });
-  
+      io.emit('cambiarPrimerTurno', { turno_de: jugadorInicial.nombreUsuario });
+    }
+  });
+
 
   socket.on('disconnect', () => {
     console.log("Se ha desconectado alguien!! con id " + socket.id);
