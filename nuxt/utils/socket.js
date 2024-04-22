@@ -27,6 +27,7 @@ socket.on('startGame', () => {
   // Aquí puedes agregar código para manejar el inicio del juego
 });
 
+
 socket.on('salaCreada', (data) => {
   let store = useAppStore();
   console.log('Datos recibidos:', data);

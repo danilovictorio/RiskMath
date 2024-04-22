@@ -97,8 +97,15 @@ io.on('connection', (socket) => {
     }
   });
 
-  /*
+  
     socket.on('peticion_jugar', (datos) => {
+      const room = rooms[datos.roomId];
+      if (room) {
+        const jugadores = room.jugadores.map(id => ({ id, nombre: 'Usuario' + id }));
+        socket.emit('jugadoresEnSala', jugadores);
+      } else {
+        socket.emit('error', { message: 'La sala no existe.' });
+      }
       usuariosJuego.push({ id: socket.id, nombreUsuario: datos.nombreUsuario, estado: "", color: "" });
       console.log('quiere jugar', datos.nombreUsuario);
   
@@ -121,7 +128,7 @@ io.on('connection', (socket) => {
         io.emit('cambiarPrimerTurno', { turno_de: jugadorInicial.nombreUsuario });
       }
     });
-  */
+  
 
   socket.on('disconnect', () => {
     console.log("Se ha desconectado alguien!! con id " + socket.id);

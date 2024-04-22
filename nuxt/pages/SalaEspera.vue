@@ -38,12 +38,7 @@ export default {
 
     onMounted(() => {
       
-      
-      
-
-      socket.emit('obtenerSalas');
-
-      
+      socket.emit('obtenerSalas');      
     });
 
     return {
@@ -51,6 +46,7 @@ export default {
         socket.emit('iniciarPartida', store.sala.id, (response) => {
           if (response.success) {
             console.log(response.message);
+            socket.emit('peticion_jugar',store.sala.id);
             this.$router.push({ name: 'TaulerView' });
           } else {
             console.error(response.message);
