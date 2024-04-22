@@ -16,7 +16,6 @@
         </div>
         <button @click="crearSala">Crear sala</button>
         <button @click="unirseSala">Unirse a sala</button>
-        <button class="login-btn" @click="iniciarPartida">Iniciar Partida</button>
   
         <img src="../public/info_icon.png" @click="popupInfo" class="info-icon">
         <div class="superpuesto" id="superpuesto">
@@ -27,8 +26,6 @@
             dominar el món
             demostrant coneixements en unitats i conversions.</p>
         </div>
-        <h3 v-for="usuario in usuariosJuego" :key="usuario.id">{{ usuario.nombreUsuario }}</h3>
-        <p v-if="link">Enlace de la sala: {{ link }}</p>
       </div>
       <div class="contador" v-if="this.mostrarContador">
         CONTADOR:{{ this.countdown }}
@@ -44,7 +41,6 @@
     data() {
       return {
         nombreUsuario: "",
-        usuariosJuego: [],
         nombreEscrito: false,
         app: useAppStore(),
         user: "",
@@ -115,9 +111,13 @@
         superpuesto.classList.remove("mostrar");
       },
       crearSala() {
+        let store = useAppStore();
+        store.setNombre(this.nombreUsuario);
         this.$router.push({ name: 'CrearSala' });
       },
       unirseSala() {
+        let store = useAppStore();
+        store.setNombre(this.nombreUsuario);
         // Aquí necesitarías obtener el ID correcto de la sala
         this.$router.push({ name: 'UnirseSala' });
       },

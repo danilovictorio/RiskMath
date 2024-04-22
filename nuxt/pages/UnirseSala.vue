@@ -22,7 +22,8 @@ export default {
     const router = useRouter();
 
     const unirseSala = () => {
-      socket.emit('unirseSala', linkSala.value, (response) => {
+       const nombreJugador = store.nombre
+      socket.emit('unirseSala', linkSala.value, nombreJugador, (response) => {
         if (response.success) {
           router.push({ name: 'SalaEspera' });
         } else {

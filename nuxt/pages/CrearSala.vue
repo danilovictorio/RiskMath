@@ -31,7 +31,8 @@ export default {
         crearSala() {
             const storeApp = useAppStore();
             storeApp.esCreador = true;
-            socket.emit('crearSala', { nombreSala: this.nombreSala, capacidadSala: this.capacidadSala });
+            const nombreJugador = storeApp.nombre;
+            socket.emit('crearSala', { nombreSala: this.nombreSala, nombreJugador: nombreJugador, capacidadSala: this.capacidadSala });
             this.$router.push({ name: 'SalaEspera' });
         },
     },

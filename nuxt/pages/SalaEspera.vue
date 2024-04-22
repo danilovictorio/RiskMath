@@ -5,7 +5,7 @@
     <p>Código de la sala: {{ sala ? sala.id : 'Nombre de la sala no disponible' }}</p>
     <p>Usuarios en la sala:</p>
     <ul>
-      <li v-for="usuario in usuarios" :key="usuario.id">ID: {{ usuario ? usuario.id : "No hay usuairoid" }}</li>
+      <li v-for="usuario in usuarios" :key="usuario.nombre">{{ usuario ? usuario.nombre : "No hay usuario" }}</li>
     </ul>
     <button v-if="esCreador" @click="iniciarPartida">Iniciar partida</button>
   </div>

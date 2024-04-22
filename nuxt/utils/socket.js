@@ -31,8 +31,10 @@ socket.on('startGame', () => {
 socket.on('salaCreada', (data) => {
   let store = useAppStore();
   console.log('Datos recibidos:', data);
+  console.log('datos jugadores:', data.jugadores);
   store.setSala(data.sala);
   store.setUsuariosJuego(data.jugadores);
+  console.log('pinia jugsdfpor:', store.sala.jugadores[0]);
   console.log('Sala creada:', store.sala);
 });
 socket.on('salas', (salas) => {

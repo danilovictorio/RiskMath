@@ -38,7 +38,7 @@ io.on('connection', (socket) => {
       id: roomId,
       nombre: data.nombreSala,
       capacidad: data.capacidadSala,
-      jugadores: [socket.id],
+      jugadores: [data.nombreJugador],
     };
     console.log('Sala creada con ID:', roomId);
     console.log('Datos de la sala:', rooms[roomId]);
@@ -48,7 +48,7 @@ io.on('connection', (socket) => {
     //Le envio SOLO AL CREADOR que se ha creado
     io.to(roomId).emit('salaCreada', {
       sala: sala,
-      jugadores: sala.jugadores.map(id => ({ id, nombre: 'Usuario' + id }))
+      jugadores: sala.jugadores
     });
   });
 
@@ -58,26 +58,22 @@ io.on('connection', (socket) => {
     socket.emit('salas', salas);
   });
 
-  socket.on('unirseSala', (roomId, callback) => {
+  socket.on('unirseSala', (roomId, nombreJugador, callback) => {
     const room = rooms[roomId];
     if (room && room.jugadores.length < room.capacidad) {
-      if (!room.jugadores.includes(socket.id)) {
-        room.jugadores.push(socket.id);
-      }
+       if (!room.jugadores.includes(nombreJugador)) {
+      room.jugadores.push(nombreJugador);
+    }
       console.log('Se ha unido a la sala con ID:', socket.id);
       socket.join(roomId);
-
-
+  
       io.to(roomId).emit('usuarioUnidoSala', {
         sala: room,
-        usuarios: room.jugadores.map(id => ({ id, nombre: 'Usuario' + id }))
+        usuarios: room.jugadores
       });
-
-      // Envía al usuario la información de si es el creador de la sala
+  
       callback({ success: true, message: 'Te has unido a la sala correctamente.' });
       console.log('Datos room:', room);
-      // Emite el evento 'actualizarUsuarios' con la lista actualizada de usuarios
-
     } else {
       callback({ success: false, message: 'La sala está llena o no existe.' });
     }
