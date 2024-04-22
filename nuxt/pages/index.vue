@@ -64,7 +64,7 @@
             this.startCountdown();
           }
   
-          socket.emit('peticion_jugar', { nombreUsuario: this.nombreUsuario });
+          socket.emit('peticion_jugar', { nombreUsuario: this.nombreUsuario },roomId);
           this.nombreEscrito = true;
         } catch (error) {
           console.error('Error al iniciar la partida:', error);

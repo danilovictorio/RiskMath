@@ -37,8 +37,12 @@ export default {
     const esCreador = ref(false);
 
     onMounted(() => {
-      
-      socket.emit('obtenerSalas');      
+      socket.on('peticion_jugar_aceptada', (datos) => {
+        console.log('peticion_jugar_aceptada', datos);
+        this.$router.push({ name: 'TaulerView' });
+      });
+
+      socket.emit('obtenerSalas');
     });
 
     return {
@@ -46,14 +50,15 @@ export default {
         socket.emit('iniciarPartida', store.sala.id, (response) => {
           if (response.success) {
             console.log(response.message);
-            socket.emit('peticion_jugar',store.sala.id);
-            this.$router.push({ name: 'TaulerView' });
+            socket.emit('peticion_jugar', { nombreUsuario: 'Usuario' + socket.id }, store.sala.id);
           } else {
             console.error(response.message);
           }
-      });
+        });
       }
+
+
+    }
   }
-}
 };
 </script>
