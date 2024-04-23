@@ -9,7 +9,7 @@
  <template>
     <div class="container">
       <div class="login-container" v-if="!nombreEscrito">
-        <h2>Iniciar sesión</h2>
+        <h2>Risk Math</h2>
         <div class="input-container">
           <input v-model="nombreUsuario" />
           <label for="nombreUsuario">Nombre de usuario</label>
