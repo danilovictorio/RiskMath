@@ -99,9 +99,7 @@ io.on('connection', (socket) => {
     }
     
     console.log('quiere jugar', datos.nombreUsuario);
-
-    io.to(roomId).emit("peticion_jugar_aceptada", datos);
-
+  
     if (room && room.jugadores.length === 2) {
       const primerTurno = Math.floor(Math.random() * room.jugadores.length);
       const jugadorInicial = room.jugadores[primerTurno];
@@ -111,9 +109,10 @@ io.on('connection', (socket) => {
         const color = index === primerTurno ? "green" : "blue";
         room.jugadores[index] = { nombreUsuario: `Usuario${jugador}`, estado: "", color };
       });
-
-      io.emit("rellenarColor", room.jugadores.find(u => u.nombreUsuario !== jugadorInicial).color);
-      io.emit('cambiarPrimerTurno', { turno_de: jugadorInicial });
+  
+      io.to(roomId).emit("peticion_jugar_aceptada", datos);
+      io.to(roomId).emit("rellenarColor", room.jugadores.find(u => u.nombreUsuario !== jugadorInicial).color);
+      io.to(roomId).emit('cambiarPrimerTurno', { turno_de: jugadorInicial });
     }
   });
 
@@ -170,7 +169,7 @@ io.on('connection', (socket) => {
         }
       }
 
-      io.emit('comprobarColorActualMapa', { idPais: paisId, color: color, acertado: acertado, color0: usuario1.color, color1: usuario2.color });
+      io.to(roomId).emit('comprobarColorActualMapa', { idPais: paisId, color: color, acertado: acertado, color0: usuario1.color, color1: usuario2.color });
       console.log("On respuesta jugador :: cambiar turno a :: ", nextName);
       io.emit('cambiarTurno', { turno_de: nextName, usuarios: room.jugadores });
 
