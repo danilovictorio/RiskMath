@@ -26,31 +26,6 @@ const colores = ['green','blue'];
 socket.on('startGame', () => { 
   // Aquí puedes agregar código para manejar el inicio del juego
 });
-
-
-socket.on('salaCreada', (data) => {
-  let store = useAppStore();
-  console.log('Datos recibidos:', data);
-  store.setSala(data.sala);
-  store.setUsuariosJuego(data.jugadores);
-  console.log('Sala creada:', store.sala);
-});
-socket.on('salas', (salas) => {
-  let store = useAppStore();
-  console.log('Salas recibidas:', salas);
-  if (store.sala) {
-    const sala = salas[store.sala.id];
-    if (sala) {
-      store.setSala(sala);
-      console.log('Sala guardada en Pinia:', store.sala);
-    }
-  }
-})
-socket.on('usuarioUnidoSala', (data) => {
-  let store = useAppStore();
-  store.setSala(data.sala);
-  console.log('Datos de la sala DE UNIDO SALA:', store.sala);
-});
 socket.on('cambiarPrimerTurno', ({ turno_de, color }) => {
   console.log('Cambio de turno. ¿Es mi turno?', turno_de);
   const app= useAppStore();
@@ -58,22 +33,6 @@ socket.on('cambiarPrimerTurno', ({ turno_de, color }) => {
   app.setColor(color);
   
 });
-
-const usuarioUnidoSalaHandler = (data) => {
-  store.setSala(data.sala);
-  console.log('Datos de la sala:', store.sala);
-  console.log('Usuarios en la sala:', store.usuariosJuego.users);
-};
-
-onMounted(() => {
-  socket.on('usuarioUnidoSala', usuarioUnidoSalaHandler);
-});
-
-onUnmounted(() => {
-  socket.off('usuarioUnidoSala', usuarioUnidoSalaHandler);
-});
-
-
 socket.on('cambiarTurno', ({ turno_de, usuarios }) => {
   console.log('Cambio de turno. ¿Es mi turno?', turno_de);
   const app= useAppStore();
