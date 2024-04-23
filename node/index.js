@@ -25,9 +25,7 @@ const io = new Server(server, {
 const rooms = {};
 
 io.on('connection', (socket) => {
-  console.log("Se ha conectado alguien!! con id " + socket.id + socket);
-  var address = socket.handshake.address;
-  console.log('New connection from ' + address.address + ':' + address.port + address);
+  console.log("Se ha conectado alguien!! con id " + socket.id);
 
   socket.esMiTurno = false;
 
@@ -111,11 +109,10 @@ io.on('connection', (socket) => {
       
       room.jugadores.forEach((jugador, index) => {
         const color = index === primerTurno ? "green" : "blue";
-        const usuario = { id: socket.id, nombreUsuario: `Usuario${jugador}`, estado: "", color };
-        usuariosJuego.push(usuario);
+        room.jugadores[index] = { nombreUsuario: `Usuario${jugador}`, estado: "", color };
       });
 
-      io.emit("rellenarColor", usuariosJuego.find(u => u.nombreUsuario !== jugadorInicial).color);
+      io.emit("rellenarColor", room.jugadores.find(u => u.nombreUsuario !== jugadorInicial).color);
       io.emit('cambiarPrimerTurno', { turno_de: jugadorInicial });
     }
   });
@@ -146,11 +143,11 @@ io.on('connection', (socket) => {
     let nextName = "";
     let user = "";
 
-    const room = Object.values(rooms).find(r => r.jugadores.includes(userName));
+    const room = Object.values(rooms).find(r => r.jugadores.map(j => j.nombreUsuario).includes(userName));
 
     if (room) {
-      const usuario1 = usuariosJuego.find(u => u.nombreUsuario === room.jugadores[0]);
-      const usuario2 = usuariosJuego.find(u => u.nombreUsuario === room.jugadores[1]);
+      const usuario1 = room.jugadores.find(u => u.nombreUsuario === room.jugadores[0].nombreUsuario);
+      const usuario2 = room.jugadores.find(u => u.nombreUsuario === room.jugadores[1].nombreUsuario);
       if (userName === usuario1.nombreUsuario) {
         console.log('hola1');
         color = usuario1.color;
@@ -175,7 +172,7 @@ io.on('connection', (socket) => {
 
       io.emit('comprobarColorActualMapa', { idPais: paisId, color: color, acertado: acertado, color0: usuario1.color, color1: usuario2.color });
       console.log("On respuesta jugador :: cambiar turno a :: ", nextName);
-      io.emit('cambiarTurno', { turno_de: nextName, usuarios: usuariosJuego });
+      io.emit('cambiarTurno', { turno_de: nextName, usuarios: room.jugadores });
 
       //   const conquistasJugador1 = usuariosJuego[0].paisesConquistados.length;
       //   const conquistasJugador2 = usuariosJuego[1].paisesConquistados.length;

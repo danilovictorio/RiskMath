@@ -30,7 +30,6 @@ socket.on('salaCreada', (data) => {
   let store = useAppStore();
   console.log('Datos recibidos:', data);
   store.setSala(data.sala);
-  store.setUsuariosJuego(data.jugadores);
   console.log('Sala creada:', store.sala);
 });
 socket.on('salas', (salas) => {

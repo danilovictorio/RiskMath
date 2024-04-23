@@ -31,11 +31,16 @@ export default {
   setup() {
     const store = useAppStore();
     const esCreador = ref(false);
+    const router = useRouter();
+
+    const redirectToGame = () => {
+      router.push({ name: 'TaulerView' });
+    };
 
     onMounted(() => {
       socket.on('peticion_jugar_aceptada', (datos) => {
         console.log('peticion_jugar_aceptada', datos);
-        this.$router.push({ name: 'TaulerView' });
+        redirectToGame();
       });
 
       socket.emit('obtenerSalas');

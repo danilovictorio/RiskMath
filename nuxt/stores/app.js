@@ -26,9 +26,6 @@ export const useAppStore = defineStore('app', {
     setTurno( nombre ) {
       this.turnoDe.nombre=nombre;       
     },
-    setUsuariosJuego( usuarios ) {
-      this.usuariosJuego.users=usuarios;       
-    },
     setEstado(nuevoEstado){
       this.turnoDe.estado=nuevoEstado;
     },
