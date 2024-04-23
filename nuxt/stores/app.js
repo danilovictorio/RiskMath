@@ -17,9 +17,6 @@ export const useAppStore = defineStore('app', {
       capacidad: 0,
       jugadores: []
     },
-    usuariosJuego:{
-      users:[]
-    },
     nombre:'',
     paisesConquistados: 0,
     countries: {}, 

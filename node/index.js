@@ -48,7 +48,6 @@ io.on('connection', (socket) => {
     //Le envio SOLO AL CREADOR que se ha creado
     io.to(roomId).emit('salaCreada', {
       sala: sala,
-      jugadores: sala.jugadores
     });
   });
 
@@ -69,7 +68,6 @@ io.on('connection', (socket) => {
   
       io.to(roomId).emit('usuarioUnidoSala', {
         sala: room,
-        usuarios: room.jugadores
       });
   
       callback({ success: true, message: 'Te has unido a la sala correctamente.' });

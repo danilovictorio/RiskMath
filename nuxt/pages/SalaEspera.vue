@@ -5,7 +5,7 @@
     <p>Código de la sala: {{ sala ? sala.id : 'Nombre de la sala no disponible' }}</p>
     <p>Usuarios en la sala:</p>
     <ul>
-      <li v-for="usuario in usuarios" :key="usuario.nombre">{{ usuario ? usuario.nombre : "No hay usuario" }}</li>
+      <li v-for="(jugador, index) in sala.jugadores" :key="index">{{ jugador ? jugador : "No hay usuario" }}</li>
     </ul>
     <button v-if="esCreador" @click="iniciarPartida">Iniciar partida</button>
   </div>
@@ -22,10 +22,6 @@ export default {
     sala() {
       let store = useAppStore();
       return store.sala;
-    },
-    usuarios() {
-      let store = useAppStore();
-      return store.usuariosJuego.users;
     },
     esCreador() {
       let store = useAppStore();

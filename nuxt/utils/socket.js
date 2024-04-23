@@ -31,10 +31,8 @@ socket.on('startGame', () => {
 socket.on('salaCreada', (data) => {
   let store = useAppStore();
   console.log('Datos recibidos:', data);
-  console.log('datos jugadores:', data.jugadores);
   store.setSala(data.sala);
   store.setUsuariosJuego(data.jugadores);
-  console.log('pinia jugsdfpor:', store.sala.jugadores[0]);
   console.log('Sala creada:', store.sala);
 });
 socket.on('salas', (salas) => {
@@ -51,9 +49,7 @@ socket.on('salas', (salas) => {
 socket.on('usuarioUnidoSala', (data) => {
   let store = useAppStore();
   store.setSala(data.sala);
-  store.setUsuariosJuego(data.usuarios);
-  console.log('Datos de la sala:', store.sala);
-  console.log('Usuarios en la sala:', store.usuariosJuego.users);
+  console.log('Datos de la sala DE UNIDO SALA:', store.sala);
 });
 socket.on('cambiarPrimerTurno', ({ turno_de, color }) => {
   console.log('Cambio de turno. ¿Es mi turno?', turno_de);
@@ -65,7 +61,6 @@ socket.on('cambiarPrimerTurno', ({ turno_de, color }) => {
 
 const usuarioUnidoSalaHandler = (data) => {
   store.setSala(data.sala);
-  store.setUsuariosJuego(data.usuarios);
   console.log('Datos de la sala:', store.sala);
   console.log('Usuarios en la sala:', store.usuariosJuego.users);
 };
