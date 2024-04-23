@@ -245,7 +245,7 @@ img.info-icon {
   padding: 20px;
   backdrop-filter: blur(10px);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  background-color: beige;
   border-radius: 10px;
   border: 2px solid #52C8FA;
 }
@@ -255,7 +255,9 @@ img.info-icon {
   display: flex;
   height: 30px;
   width: 40px;
-  margin-left: 200px;
+  justify-content: center;
+  align-items: center;
+
 }
 
 .mostrar {
