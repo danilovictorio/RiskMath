@@ -107,11 +107,11 @@ io.on('connection', (socket) => {
       
       room.jugadores.forEach((jugador, index) => {
         const color = index === primerTurno ? "green" : "blue";
-        room.jugadores[index] = { nombreUsuario: `Usuario${jugador}`, estado: "", color };
+        room.jugadores[index] = { nombre: jugador, estado: "", color };
       });
   
       io.to(roomId).emit("peticion_jugar_aceptada", datos);
-      io.to(roomId).emit("rellenarColor", room.jugadores.find(u => u.nombreUsuario !== jugadorInicial).color);
+      io.to(roomId).emit("rellenarColor", room.jugadores.find(u => u.nombre !== jugadorInicial).color);
       io.to(roomId).emit('cambiarPrimerTurno', { turno_de: jugadorInicial });
     }
   });
