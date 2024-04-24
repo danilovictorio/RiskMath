@@ -49,11 +49,6 @@ socket.on('usuarioUnidoSala', (data) => {
   console.log('Datos de la sala DE UNIDO SALA:', store.sala);
 });
 
-socket.on('cambiarPrimerTurno', ({ turno_de, color }) => {
-  const appStore = useAppStore();
-  appStore.setTurno(turno_de);
-  appStore.setColor(color);
-});
 
 const usuarioUnidoSalaHandler = (data) => {
   store.setSala(data.sala);
@@ -67,6 +62,12 @@ onMounted(() => {
 
 onUnmounted(() => {
   socket.off('usuarioUnidoSala', usuarioUnidoSalaHandler);
+});
+
+socket.on('cambiarPrimerTurno', ({ turno_de, color }) => {
+  const appStore = useAppStore();
+  appStore.setTurno(turno_de);
+  appStore.setColor(color);
 });
 
 socket.on('cambiarTurno', ({ turno_de, usuarios }) => {
@@ -98,10 +99,11 @@ socket.on('finDelJuego', ({ ganador, empate }) => {
   }
 });
 
-socket.on('peticion_jugar_aceptada', (datos) => {
+socket.on('peticion_jugar_aceptada', (jugador) => {
   const appStore = useAppStore();
-  appStore.setTurno(datos);
-  console.log('Nos han aceptado la petición:', datos);
+  appStore.setTurno(jugador.nombre);
+  appStore.setColor(jugador.color);
+  console.log('Nos han aceptado la petición:', jugador);
 
 });
 socket.on('rellenarColor',(colorTurno)=>{

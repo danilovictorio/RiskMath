@@ -98,7 +98,7 @@ io.on('connection', (socket) => {
       socket.emit('error', { message: 'La sala no existe.' });
     }
 
-    console.log('quiere jugar', datos.nombreUsuario);
+    console.log('quiere jugar', datos);
 
     if (room && room.jugadores.length === 2) {
       const primerTurno = Math.floor(Math.random() * room.jugadores.length);

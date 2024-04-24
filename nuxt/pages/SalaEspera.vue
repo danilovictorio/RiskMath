@@ -42,8 +42,6 @@ export default {
         console.log('peticion_jugar_aceptada', datos);
         redirectToGame();
       });
-
-      socket.emit('obtenerSalas');
     });
 
     return {
@@ -51,7 +49,8 @@ export default {
         socket.emit('iniciarPartida', store.sala.id, (response) => {
           if (response.success) {
             console.log(response.message);
-            socket.emit('peticion_jugar', { nombreUsuario: 'Usuario' + socket.id }, store.sala.id);
+            console.log('jugadore pinia: ', store.sala.jugadores);
+            socket.emit('peticion_jugar', { nombreUsuario: store.sala.jugadores}, store.sala.id);
           } else {
             console.error(response.message);
           }
