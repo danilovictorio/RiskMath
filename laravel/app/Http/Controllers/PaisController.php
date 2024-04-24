@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Pais;  
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 
 class PaisController extends Controller
@@ -39,8 +40,13 @@ class PaisController extends Controller
     return response()->json(['message' => 'Ataque confirmado con éxito']);
     }
     public function propietariosPaises(Request $request) {
-        $arrayUsers = $request->arrayUsers;
+        $arrayUsers = $request->input('arrayUsers');
     
+        if (!is_array($arrayUsers)) {
+            throw new \Exception('El parámetro "arrayUsers" no es un array válido.');
+        }
+    
+        Log::info('Array de usuarios: ' . json_encode($arrayUsers));
         // Obtén un array plano de los usuarios
         $usuarios = array_column($arrayUsers, 'nombreUsuario');
     
@@ -49,12 +55,17 @@ class PaisController extends Controller
         $cantidadPaisesPorUsuario = [];
         $todosConquistados = 15;
         foreach ($arrayUsers as $usuario) {
-            $cantidadPaises = $paisesConquistados->where('ocupante', $usuario['nombreUsuario'])->count();
+            if (is_array($usuario)) {
+                $nombreUsuario = $usuario['nombreUsuario'];
+            } else {
+                $nombreUsuario = $usuario;
+            }
+            $cantidadPaises = $paisesConquistados->where('ocupante', $nombreUsuario)->count();
             if ($cantidadPaises === $todosConquistados) {
-                # code...
+                // Haz algo si el usuario ha conquistado todos los países
             }
             $cantidadPaisesPorUsuario[] = [
-                'nombre' => $usuario['nombreUsuario'],
+                'nombre' => $nombreUsuario,
                 'cantidad' => $cantidadPaises,
             ];
         }

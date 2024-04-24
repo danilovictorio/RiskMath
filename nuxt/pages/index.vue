@@ -53,7 +53,7 @@ export default {
   methods: {
     async iniciarPartida() {
       try {
-        await this.borrarOcupantes();
+        
         this.app.setNombre(this.nombreUsuario);
 
         if (this.usuariosJuego.length >= 2) {
