@@ -15,7 +15,7 @@ const URL = "http://localhost:3123";
 export const socket = io(URL);
 
 const colores = ['green','blue'];
-
+const appStore = useAppStore();
 // Emitir eventos para crear y unirse a salas
  
 //Deberías mover estos a funciones o métodos que puedas llamar en respuesta a acciones del usuario
@@ -48,12 +48,10 @@ socket.on('usuarioUnidoSala', (data) => {
   store.setSala(data.sala);
   console.log('Datos de la sala DE UNIDO SALA:', store.sala);
 });
+
 socket.on('cambiarPrimerTurno', ({ turno_de, color }) => {
-  console.log('Cambio de turno. ¿Es mi turno?', turno_de);
-  const app= useAppStore();
-  app.setTurno(turno_de);
-  app.setColor(color);
-  
+  appStore.setTurno(turno_de);
+  appStore.setColor(color);
 });
 
 const usuarioUnidoSalaHandler = (data) => {

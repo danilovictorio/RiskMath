@@ -213,7 +213,7 @@ export default {
     manejarClic(name, idPais, idUser) {
       this.paisId = name;
       let paisElement;
-
+      console.log(this.app.turnoDe.color)
       if (this.app.esMiturno()) {
         paisElement = document.getElementById(name);
         console.log(

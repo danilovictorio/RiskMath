@@ -57,16 +57,16 @@ io.on('connection', (socket) => {
   socket.on('unirseSala', (roomId, nombreJugador, callback) => {
     const room = rooms[roomId];
     if (room && room.jugadores.length < room.capacidad) {
-       if (!room.jugadores.includes(nombreJugador)) {
-      room.jugadores.push(nombreJugador);
-    }
+      if (!room.jugadores.includes(nombreJugador)) {
+        room.jugadores.push(nombreJugador);
+      }
       console.log('Se ha unido a la sala con ID:', socket.id);
       socket.join(roomId);
-  
+
       io.to(roomId).emit('usuarioUnidoSala', {
         sala: room,
       });
-  
+
       callback({ success: true, message: 'Te has unido a la sala correctamente.' });
       console.log('Datos room:', room);
     } else {
@@ -97,19 +97,22 @@ io.on('connection', (socket) => {
     } else {
       socket.emit('error', { message: 'La sala no existe.' });
     }
-    
+
     console.log('quiere jugar', datos.nombreUsuario);
-  
+
     if (room && room.jugadores.length === 2) {
       const primerTurno = Math.floor(Math.random() * room.jugadores.length);
       const jugadorInicial = room.jugadores[primerTurno];
       const siguienteTurno = room.jugadores[(primerTurno + 1) % room.jugadores.length];
-      
+      console.log("room", room);
+      console.log("room.jugadores", room.jugadores);
       room.jugadores.forEach((jugador, index) => {
         const color = index === primerTurno ? "green" : "blue";
         room.jugadores[index] = { nombre: jugador, estado: "", color };
+        let colorp = color;
+        console.log(room.jugadores[colorp]);
       });
-  
+
       io.to(roomId).emit("peticion_jugar_aceptada", datos);
       io.to(roomId).emit("rellenarColor", room.jugadores.find(u => u.nombre !== jugadorInicial).color);
       io.to(roomId).emit('cambiarPrimerTurno', { turno_de: jugadorInicial });
