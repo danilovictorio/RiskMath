@@ -1,10 +1,3 @@
-/*
-PUERTO DE LOCALHOST: 3123
-PUERTO DE PREPROD: 3184
-PUERTO DE PROD: 3123
-
-Substituir en la constante: port
-*/
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
@@ -23,6 +16,7 @@ const io = new Server(server, {
 });
 
 const rooms = {};
+const colores = ['green', 'blue']; // Define colores aquí
 
 io.on('connection', (socket) => {
   console.log("Se ha conectado alguien!! con id " + socket.id);
@@ -73,6 +67,7 @@ io.on('connection', (socket) => {
       callback({ success: false, message: 'La sala está llena o no existe.' });
     }
   });
+
   socket.on('iniciarPartida', (roomId, callback) => {
     const room = rooms[roomId];
     if (room) {
@@ -88,7 +83,6 @@ io.on('connection', (socket) => {
     }
   });
 
-
   socket.on('peticion_jugar', (datos, roomId) => {
     const room = rooms[roomId];
     if (room) {
@@ -97,28 +91,29 @@ io.on('connection', (socket) => {
     } else {
       socket.emit('error', { message: 'La sala no existe.' });
     }
-
+    
+    console.log('Datos recibidos en peticion_jugar:', datos);
     console.log('quiere jugar', datos.nombreUsuario);
-
+  
     if (room && room.jugadores.length === 2) {
       const primerTurno = Math.floor(Math.random() * room.jugadores.length);
       const jugadorInicial = room.jugadores[primerTurno];
       const siguienteTurno = room.jugadores[(primerTurno + 1) % room.jugadores.length];
+      
       console.log("room", room);
       console.log("room.jugadores", room.jugadores);
-      room.jugadores.forEach((jugador, index) => {
-        const color = index === primerTurno ? "green" : "blue";
-        room.jugadores[index] = { nombre: jugador, estado: "", color };
-        let colorp = color;
-        console.log(room.jugadores[colorp]);
+  
+      // Asignar colores a los jugadores
+      room.jugadores = room.jugadores.map((jugador, index) => {
+        const color = colores[index]; // Obtener el color correspondiente al índice
+        return { nombre: jugador, estado: "", color }; // Crear un nuevo objeto jugador con el color asignado
       });
-
+  
       io.to(roomId).emit("peticion_jugar_aceptada", datos);
       io.to(roomId).emit("rellenarColor", room.jugadores.find(u => u.nombre !== jugadorInicial).color);
       io.to(roomId).emit('cambiarPrimerTurno', { turno_de: jugadorInicial });
     }
   });
-
 
   socket.on('disconnect', () => {
     console.log("Se ha desconectado alguien!! con id " + socket.id);
@@ -139,54 +134,17 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('respuestaJugador', ({ userName, paisId, acertado }) => {
-
-    let color = "";
-    let nextName = "";
-    let user = "";
-
-    const room = Object.values(rooms).find(r => r.jugadores.map(j => j.nombreUsuario).includes(userName));
-
+  socket.on('respuestaJugador', ({ userName, paisId, acertado, roomId }) => {
+    const room = rooms[roomId];
     if (room) {
-      const usuario1 = room.jugadores.find(u => u.nombreUsuario === room.jugadores[0].nombreUsuario);
-      const usuario2 = room.jugadores.find(u => u.nombreUsuario === room.jugadores[1].nombreUsuario);
-      if (userName === usuario1.nombreUsuario) {
-        console.log('hola1');
-        color = usuario1.color;
-        nextName = usuario2.nombreUsuario;
-        user = usuario2;
-        if (acertado) {
-          console.log('hola2');
-          color = usuario2.color;
-        }
+      const usuario1 = room.jugadores[0];
+      const usuario2 = room.jugadores[1];
+  
+      // Cambiar el turno solo si el jugador ha fallado
+      if (!acertado) {
+        const nextName = userName === usuario1.nombreUsuario ? usuario2.nombreUsuario : usuario1.nombreUsuario;
+        io.emit('cambiarTurno', { turno_de: nextName, usuarios: room.jugadores });
       }
-
-      if (userName === usuario2.nombreUsuario) {
-        nextName = usuario1.nombreUsuario;
-        console.log('hsola3');
-        color = usuario2.color;
-        user = usuario1;
-        if (acertado) {
-          console.log('hola4');
-          color = usuario1.color;
-        }
-      }
-
-      io.to(roomId).emit('comprobarColorActualMapa', { idPais: paisId, color: color, acertado: acertado, color0: usuario1.color, color1: usuario2.color });
-      console.log("On respuesta jugador :: cambiar turno a :: ", nextName);
-      io.emit('cambiarTurno', { turno_de: nextName, usuarios: room.jugadores });
-
-      //   const conquistasJugador1 = usuariosJuego[0].paisesConquistados.length;
-      //   const conquistasJugador2 = usuariosJuego[1].paisesConquistados.length;
-      //   const totalPaises = 15;
-
-      // if (conquistasJugador1 === totalPaises) {
-      // io.emit('finDelJuego', { ganador: usuariosJuego[0].nombreUsuario });
-      // } else if (conquistasJugador2 === totalPaises) {
-      //   io.emit('finDelJuego', { ganador: usuariosJuego[1].nombreUsuario });
-      // } else if (conquistasJugador1 + conquistasJugador2 === totalPaises) {
-      //   io.emit('finDelJuego', { empate: true });
-      // }
     }
   });
 });

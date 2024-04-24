@@ -173,7 +173,7 @@ export default {
       this.duel.correctAnswer = correctAnswer;
       this.duel.attackedCountry = attackedCountry;
     },
-    
+
     answerDuel(answer, player) {
       if (answer === this.duel.correctAnswer) {
         // El jugador que respondió ganó el duelo
@@ -305,7 +305,6 @@ export default {
 
     //funció que valida si la resposta d'un usuari es la correcta
     validateResponse(questionId, selectedOption) {
-      /*if (this.nombreUsuario == this.app.usuario.nombre) {*/
       this.app.setEstado("Acabado");
       console.log("Pregunta ID:", questionId);
       const apiUrl = `${this.ruta}/api/verificar-respuesta`;
@@ -340,6 +339,7 @@ export default {
             userName: this.app.nombre,
             paisId: this.paisSeleccionado,
             acertado: this.resultadoPregunta,
+            roomId: this.app.sala.id, // Asegúrate de que `roomId` está disponible en `this.app`
           });
           this.app.setEstado("Respondiendo");
           this.mostrarPregunta = false;
@@ -347,10 +347,6 @@ export default {
         .catch((error) => {
           console.error("Error validating response:", error);
         });
-      /*} else {
-        this.esActivo = false;
-        return;*
-      }*/
     },
 
     //funció per confirmar atac

@@ -9,6 +9,7 @@
 // Importar el cliente Socket.io
 import { io } from "socket.io-client";
 import { useAppStore } from '../stores/app';
+import { onMounted, onUnmounted } from 'vue';
 
 const URL = "http://localhost:3123"; 
 
@@ -16,46 +17,42 @@ export const socket = io(URL);
 
 const colores = ['green','blue'];
 
-// Emitir eventos para crear y unirse a salas
- 
-//Deberías mover estos a funciones o métodos que puedas llamar en respuesta a acciones del usuario
-// socket.emit('createRoom', 2); // Crear una sala con capacidad para 2 jugadores
-// socket.emit('joinRoom', 'roomId'); // Unirse a la sala con el ID 'roomId'
-
-// Escuchar el evento 'startGame' para saber cuándo ha comenzado el juego
 socket.on('startGame', () => { 
   // Aquí puedes agregar código para manejar el inicio del juego
 });
+
 socket.on('salaCreada', (data) => {
   let store = useAppStore();
   console.log('Datos recibidos:', data);
   store.setSala(data.sala);
   console.log('Sala creada:', store.sala);
 });
+
 socket.on('salas', (salas) => {
   let store = useAppStore();
   console.log('Salas recibidas:', salas);
   if (store.sala) {
-    const sala = salas[store.sala.id];
+    const sala = salas.find(s => s.id === store.sala.id);
     if (sala) {
       store.setSala(sala);
       console.log('Sala guardada en Pinia:', store.sala);
     }
   }
-})
+});
+
 socket.on('usuarioUnidoSala', (data) => {
   let store = useAppStore();
   store.setSala(data.sala);
   console.log('Datos de la sala DE UNIDO SALA:', store.sala);
 });
 
-socket.on('cambiarPrimerTurno', ({ turno_de, color }) => {
+socket.on('cambiarPrimerTurno', ({ turno_de }) => {
   const appStore = useAppStore();
   appStore.setTurno(turno_de);
-  appStore.setColor(color);
 });
 
 const usuarioUnidoSalaHandler = (data) => {
+  let store = useAppStore();
   store.setSala(data.sala);
   console.log('Datos de la sala:', store.sala);
   console.log('Usuarios en la sala:', store.usuariosJuego.users);
@@ -71,21 +68,19 @@ onUnmounted(() => {
 
 socket.on('cambiarTurno', ({ turno_de, usuarios }) => {
   console.log('Cambio de turno. ¿Es mi turno?', turno_de);
-  const app= useAppStore();
-  app.setTurno(turno_de);
-  if (app.turnoDe.nombre===usuarios[0].nombreUsuario) {
-    console.log('entrandoooooo1')
-    app.setColor(usuarios[1].color);
-    console.log('así queda: ', app.getColor())
-  }else{
-    console.log("entrandooooooo2")
-    app.setColor(usuarios[0].color)
-    console.log('así queda: ', app.getColor())
+  const appStore = useAppStore();
+  appStore.setTurno(turno_de);
+  if (appStore.turnoDe.nombre === usuarios[0].nombreUsuario) {
+    console.log('entrandoooooo1');
+    appStore.setColor(usuarios[1].color);
+    console.log('así queda: ', appStore.getColor());
+  } else {
+    console.log("entrandooooooo2");
+    appStore.setColor(usuarios[0].color);
+    console.log('así queda: ', appStore.getColor());
   }
- 
-
-  
 });
+
 socket.on('finDelJuego', ({ ganador, empate }) => {
   const appStore = useAppStore();
 
@@ -102,45 +97,35 @@ socket.on('peticion_jugar_aceptada', (datos) => {
   const appStore = useAppStore();
   appStore.setTurno(datos);
   console.log('Nos han aceptado la petición:', datos);
-
 });
+
 socket.on('rellenarColor',(colorTurno)=>{
   const appStore = useAppStore();
   appStore.setColor(colorTurno);
-  console.log('1r color turno pinia actualizado',appStore.getColor())
+  console.log('1r color turno pinia actualizado',appStore.getColor());
 });
+
 socket.on('actualizacionUsuario', (datos) => {
   console.log('Han actualizado los usuarios', datos);
   const appStore = useAppStore();
   appStore.setUsuariosJuego(datos);
 });
+
 socket.on('actualizacionEstado', (datos) => {
   console.log('Han actualizado el estado', datos);
 });
-// socket.on('actualizarColor', (color1,color2) => {
-//   const appStore = useAppStore();
-//   appStore.setColor(color1);
-//   appStore.setColor(color2);
-//   console.log('Han actualizado el color', color1,color2);
-// });
-socket.on('comprobarColorActualMapa', ({ idPais, color, acertado,color0,color1 }) => {
+
+socket.on('comprobarColorActualMapa', ({ idPais, color, acertado }) => {
   const paisElement = document.getElementById(idPais);
   const appStore = useAppStore();
-  // if (appStore.turnoDe.color==color0) {
-  //   appStore.setColor(color1);
-  // }else{
-  //   appStore.setColor(color0);
-  // }
   if (paisElement) {
     if (acertado) {
       paisElement.style.fill = color;
     } else {
       const colorActual = paisElement.style.fill;
-
       if (colorActual !== color) {
         paisElement.style.fill = colorActual;
       }
-    
     }
   }
 });
