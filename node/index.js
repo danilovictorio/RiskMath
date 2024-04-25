@@ -30,6 +30,7 @@ io.on('connection', (socket) => {
       nombre: data.nombreSala,
       capacidad: data.capacidadSala,
       jugadores: [data.nombreJugador],
+      paisesConquistados: {}, 
     };
     console.log('Sala creada con ID:', roomId);
     console.log('Datos de la sala:', rooms[roomId]);
@@ -144,6 +145,9 @@ io.on('connection', (socket) => {
     
     const nextName = userName === usuario1.nombre ? usuario2.nombre : usuario1.nombre;
     io.to(roomId).emit('cambiarTurno', { turno_de: nextName, usuarios: room.jugadores });
+    room.paisesConquistados[paisId] = userName;
+    // Propagar el cambio a todos los clientes
+    io.to(roomId).emit('paisConquistado', { paisId, jugador: userName });
     console.log('Cambio de turno:', nextName);
   }else{
     console.log('Error jugadores sala.');
