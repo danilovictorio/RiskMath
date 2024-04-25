@@ -50,7 +50,6 @@ export default {
       iniciarPartida() {
         socket.emit('iniciarPartida', store.sala.id, (response) => {
           if (response.success) {
-            this.borrarOcupantes();
             console.log(response.message);
             socket.emit('peticion_jugar', { nombreUsuario: 'Usuario' + socket.id }, store.sala.id);
           } else {
@@ -58,27 +57,6 @@ export default {
           }
         });
       },
-      borrarOcupantes() {
-        try {
-          const response = fetch(`http://localhost:8000/api/borrar-ocupantes`, {
-            method: 'POST',
-          });
-
-          if (!response.ok) {
-            throw new Error(`Error en la solicitud: ${response.status}`);
-          }
-
-          const data = response.json();
-          console.log(data.message);
-
-          console.log("DATOS BORRADOS DE OCUPANTES");
-        } catch (error) {
-          console.error('Error al borrar ocupantes:', error);
-          throw error;
-        }
-      },
-
-
     }
   }
 };

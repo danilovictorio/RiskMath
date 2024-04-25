@@ -236,7 +236,7 @@ export default {
 
     //funció que serveix per obtenir el json de preguntes
     async propietariosPaises() {
-      console.log("propietariosPaises"+this.app.sala.jugadores);
+      console.log("propietariosPaises"+ " " +this.app.sala.jugadores);
       try {
         const response = await fetch(`${this.ruta}/api/propietarios-paises`, {
           method: "POST",
@@ -373,7 +373,7 @@ export default {
         console.log(result.message);
         this.propietariosPaises();
         console.log("Usuario: " + idUser, "Conquista Pais: " + paisId);
-        this.resultadoPregunta = false;
+        //this.resultadoPregunta = false;
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }

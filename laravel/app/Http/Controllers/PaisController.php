@@ -26,19 +26,20 @@ class PaisController extends Controller
     }
 
     public function confirmarAtaque(Request $request){
-    $idPais = $request->paisSeleccionado;
-    $pais = Pais::find($idPais);
+        $idPais = $request->paisSeleccionado;
+        $pais = Pais::find($idPais);
 
-    if (!$pais) {
-        return response()->json(['error' => 'País no encontrado'], 404);
+        if (!$pais) {
+            return response()->json(['error' => 'País no encontrado'], 404);
+        }
+
+        $idUser = $request->idUser;
+        $pais->ocupante = $idUser;
+        $pais->save();
+
+        return response()->json(['message' => 'Ataque confirmado con éxito']);
     }
 
-    $idUser = $request->idUser;
-    $pais->ocupante = $idUser;
-    $pais->save();
-
-    return response()->json(['message' => 'Ataque confirmado con éxito']);
-    }
     public function propietariosPaises(Request $request) {
         $arrayUsers = $request->input('arrayUsers');
     
@@ -50,7 +51,8 @@ class PaisController extends Controller
         // Obtén un array plano de los usuarios
         $usuarios = array_column($arrayUsers, 'nombreUsuario');
     
-        $paisesConquistados = Pais::whereIn('ocupante', $usuarios)->get();
+        Log::info('Usuarios: ' . json_encode($usuarios));
+        $paisesConquistados = Pais::whereIn('ocupante', $arrayUsers)->get();
     
         $cantidadPaisesPorUsuario = [];
         $todosConquistados = 15;

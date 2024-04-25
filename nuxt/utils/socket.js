@@ -49,6 +49,7 @@ socket.on('usuarioUnidoSala', (data) => {
 socket.on('cambiarPrimerTurno', ({ turno_de }) => {
   const appStore = useAppStore();
   appStore.setTurno(turno_de);
+  console.log('Cambio PRIMER de turno. ¿Es mi turno?', turno_de);
 });
 
 const usuarioUnidoSalaHandler = (data) => {
@@ -70,7 +71,7 @@ socket.on('cambiarTurno', ({ turno_de, usuarios }) => {
   console.log('Cambio de turno. ¿Es mi turno?', turno_de);
   const appStore = useAppStore();
   appStore.setTurno(turno_de);
-  if (appStore.turnoDe.nombre === usuarios[0].nombreUsuario) {
+  if (appStore.turnoDe.nombre === usuarios[0].nombre) {
     console.log('entrandoooooo1');
     appStore.setColor(usuarios[1].color);
     console.log('así queda: ', appStore.getColor());
