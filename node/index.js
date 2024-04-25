@@ -106,12 +106,12 @@ io.on('connection', (socket) => {
   
       // Asignar colores a los jugadores
       room.jugadores = room.jugadores.map((jugador, index) => {
-        const color = colores[index]; // Obtener el color correspondiente al índice
+        const color = index === 0 ? 'green' : 'blue'; // Asignar el color "green" al primer jugador y "blue" al segundo
         return { nombre: jugador, estado: "", color }; // Crear un nuevo objeto jugador con el color asignado
       });
   
       io.to(roomId).emit("peticion_jugar_aceptada", datos);
-      io.to(roomId).emit("rellenarColor", room.jugadores.find(u => u.nombre !== jugadorInicial).color);
+      io.to(roomId).emit("rellenarColor", room.jugadores.find(u => u.nombre == jugadorInicial).color);
       io.to(roomId).emit('cambiarPrimerTurno', { turno_de: jugadorInicial });
     }
   });

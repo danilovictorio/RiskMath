@@ -73,11 +73,11 @@ socket.on('cambiarTurno', ({ turno_de, usuarios }) => {
   appStore.setTurno(turno_de);
   if (appStore.turnoDe.nombre === usuarios[0].nombre) {
     console.log('entrandoooooo1');
-    appStore.setColor(usuarios[1].color);
+    appStore.setColor(usuarios[0].color);
     console.log('así queda: ', appStore.getColor());
   } else {
     console.log("entrandooooooo2");
-    appStore.setColor(usuarios[0].color);
+    appStore.setColor(usuarios[1].color);
     console.log('así queda: ', appStore.getColor());
   }
 });
