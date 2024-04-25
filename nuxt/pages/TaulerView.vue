@@ -211,6 +211,7 @@ export default {
       // Esto dependerá de cómo estés representando los países en tu vista
     },
     manejarClic(name, idPais, idUser) {
+      
       this.paisId = name;
       let paisElement;
       console.log(this.app.turnoDe.color)
@@ -373,7 +374,7 @@ export default {
         console.log(result.message);
         this.propietariosPaises();
         console.log("Usuario: " + idUser, "Conquista Pais: " + paisId);
-        //this.resultadoPregunta = false;
+       // this.resultadoPregunta = false;
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }

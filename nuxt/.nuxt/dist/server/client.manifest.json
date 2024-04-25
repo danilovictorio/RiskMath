@@ -7,12 +7,20 @@
     "module": true,
     "resourceType": "script"
   },
+<<<<<<< HEAD
   "C:/Users/Argo/Desktop/trfinal/tr2-MultipliCAT-G7/nuxt/node_modules/nuxt/dist/app/entry.js": {
+=======
+  "C:/Users/Argo/Desktop/tr-final-este/tr2-MultipliCAT-G7/nuxt/node_modules/nuxt/dist/app/entry.js": {
+>>>>>>> 0b85cc560cfc4c2243eea4ad32e06f7527d8acf1
     "resourceType": "script",
     "module": true,
     "prefetch": true,
     "preload": true,
     "isEntry": true,
+<<<<<<< HEAD
     "file": "C:/Users/Argo/Desktop/trfinal/tr2-MultipliCAT-G7/nuxt/node_modules/nuxt/dist/app/entry.js"
+=======
+    "file": "C:/Users/Argo/Desktop/tr-final-este/tr2-MultipliCAT-G7/nuxt/node_modules/nuxt/dist/app/entry.js"
+>>>>>>> 0b85cc560cfc4c2243eea4ad32e06f7527d8acf1
   }
 }
