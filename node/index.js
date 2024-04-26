@@ -30,7 +30,7 @@ io.on('connection', (socket) => {
       nombre: data.nombreSala,
       capacidad: data.capacidadSala,
       jugadores: [data.nombreJugador],
-      paisesConquistados: {}, 
+      paisesConquistados: {},
     };
     console.log('Sala creada con ID:', roomId);
     console.log('Datos de la sala:', rooms[roomId]);
@@ -92,25 +92,25 @@ io.on('connection', (socket) => {
     } else {
       socket.emit('error', { message: 'La sala no existe.' });
     }
-    
+
     console.log('Datos recibidos en peticion_jugar:', datos);
     console.log('quiere jugar', datos.nombreUsuario);
-  
+
     if (room && room.jugadores.length === 2) {
       const primerTurno = Math.floor(Math.random() * room.jugadores.length);
       const jugadorInicial = room.jugadores[primerTurno];
       const siguienteTurno = room.jugadores[(primerTurno + 1) % room.jugadores.length];
-      
+
       console.log("room", room);
       console.log("room.jugadores", room.jugadores);
       console.log("jugadorInicial", jugadorInicial);
-  
+
       // Asignar colores a los jugadores
       room.jugadores = room.jugadores.map((jugador, index) => {
         const color = index === 0 ? 'green' : 'blue'; // Asignar el color "green" al primer jugador y "blue" al segundo
         return { nombre: jugador, estado: "", color }; // Crear un nuevo objeto jugador con el color asignado
       });
-  
+
       io.to(roomId).emit("peticion_jugar_aceptada", datos);
       io.to(roomId).emit("rellenarColor", room.jugadores.find(u => u.nombre == jugadorInicial).color);
       io.to(roomId).emit('cambiarPrimerTurno', { turno_de: jugadorInicial });
@@ -138,23 +138,41 @@ io.on('connection', (socket) => {
 
   socket.on('respuestaJugador', ({ userName, paisId, acertado, roomId }) => {
     const room = rooms[roomId];
-  if (room && room.jugadores && room.jugadores.length >= 2) {
-    const usuario1 = room.jugadores[0];
-    const usuario2 = room.jugadores[1];
-    console.log('Room jugadores:', usuario1, usuario2);
-    if (acertado) {
-      room.paisesConquistados[paisId] = userName;
-      console.log('Paises conquistados:', room.paisesConquistados);
-      // Propagar el cambio a todos los clientes
-      io.to(roomId).emit('respuestaCorrecta', { paisId, jugador: userName });
+    if (room && room.jugadores && room.jugadores.length >= 2) {
+      const usuario1 = room.jugadores[0];
+      const usuario2 = room.jugadores[1];
+      console.log('Room jugadores:', usuario1, usuario2);
+      if (acertado) {
+        room.paisesConquistados[paisId] = userName;
+        // Propagar el cambio a todos los clientes
+        io.to(roomId).emit('respuestaCorrecta', { paisId, jugador: userName });
+      }
+      const nextName = userName === usuario1.nombre ? usuario2.nombre : usuario1.nombre;
+      io.to(roomId).emit('cambiarTurno', { turno_de: nextName, usuarios: room.jugadores });
+
+      console.log('Cambio de turno:', nextName);
+    } else {
+      console.log('Error jugadores sala.');
     }
-    const nextName = userName === usuario1.nombre ? usuario2.nombre : usuario1.nombre;
-    io.to(roomId).emit('cambiarTurno', { turno_de: nextName, usuarios: room.jugadores });
-   
-    console.log('Cambio de turno:', nextName);
-  }else{
-    console.log('Error jugadores sala.');
-  }
+  });
+
+  socket.on('contadorPaises', ({roomId }) => {
+    const room = rooms[roomId];
+    let recuentoPaises = {};
+
+    for (let usuario of Object.values(room.paisesConquistados)) {
+      if (usuario in recuentoPaises) {
+        recuentoPaises[usuario]++;
+      } else {
+        recuentoPaises[usuario] = 1;
+      }
+    }
+    let usuarioConMasPaises = Object.keys(recuentoPaises).reduce((a, b) => recuentoPaises[a] > recuentoPaises[b] ? a : b);
+    console.log('Paises conquistados:', room.paisesConquistados);
+    // Propagar el cambio a todos los clientes
+    io.to(roomId).emit('paisesConquistados', { paisesConquistados: room.paisesConquistados, usuarioGanador: usuarioConMasPaises });
+
+
   });
 });
 

@@ -3,11 +3,13 @@ import { io } from "socket.io-client";
 import { useAppStore } from '../stores/app';
 import { onMounted, onUnmounted } from 'vue';
 
+
 const URL = "http://localhost:3123"; 
 
 export const socket = io(URL);
 
 const colores = ['green','blue'];
+
 
 socket.on('startGame', () => { 
   // Aquí puedes agregar código para manejar el inicio del juego
@@ -85,6 +87,8 @@ socket.on('respuestaCorrecta', ({ paisId, jugador }) => {
     paisElement.style.fill = color;
   }
 });
+
+
 
 socket.on('finDelJuego', ({ ganador, empate }) => {
   const appStore = useAppStore();

@@ -16,76 +16,23 @@
  </template>
  
  <script>
- import { socket } from "@/utils/socket.js";
- import { useAppStore } from "../stores/app";
- 
- export default {
-   data() {
-     return {
-       nombreUsuario: "",
-       usuariosJuego: [],
-       nombreEscrito: false,
-       app: useAppStore(),
-       user: "",
-       ganador: "",
-       ruta: "http://localhost:8000",
-     };
-   },
-   methods: {
-     async iniciarPartida() {
-       try {
-         await this.borrarOcupantes(); // Espera a que se complete borrarOcupantes
-         this.app.setNombre(this.nombreUsuario);
-         socket.emit("peticion_jugar", { nombreUsuario: this.nombreUsuario });
-         this.nombreEscrito = true;
-       } catch (error) {
-         console.error("Error al iniciar la partida:", error);
-       }
-     },
-     async borrarOcupantes() {
-       try {
-         // Realiza una solicitud al servidor para borrar los ocupantes
-         const response = await fetch(`${this.ruta}/api/borrar-ocupantes`, {
-           method: "POST", // O el método que estés utilizando en tu controlador
-         });
- 
-         if (!response.ok) {
-           throw new Error(`Error en la solicitud: ${response.status}`);
-         }
- 
-         const data = await response.json();
-         console.log(data.message);
-         // Puedes realizar acciones adicionales después de borrar los ocupantes si es necesario
-         console.log("DATOS BORRADOS DE OCUPANTES");
-       } catch (error) {
-         console.error("Error al borrar ocupantes:", error);
-         throw error; // Puedes propagar el error para manejarlo en el bloque catch de iniciarPartida
-       }
-     },
-     popupInfo() {
-       var superpuesto = document.getElementById("superpuesto");
-       superpuesto.classList.add("mostrar");
-     },
-     popoffInfo() {
-       var superpuesto = document.getElementById("superpuesto");
-       superpuesto.classList.remove("mostrar");
-     },
-   },
- 
-   mounted() {
-     socket.on("actualizacionUsuario", (usuarios) => {
-       console.log("Usuarios actualizados:", usuarios);
-       this.usuariosJuego = usuarios;
-       if (this.usuariosJuego.length >= 2) {
-         console.log("Redireccionando a TaulerView...");
-         this.$router.push({ name: "TaulerView" });
-       }
-     });
- 
-     this.ganador = this.$route.params.usuarioGanador;
-   },
- };
- </script>
+import { socket } from "@/utils/socket.js";
+import { useAppStore } from "../stores/app";
+
+export default {
+  data() {
+    return {
+      nombreUsuario: "",
+      usuariosJuego: [],
+      nombreEscrito: false,
+      app: useAppStore(),
+      user: "",
+      ganador: useAppStore().jugadorGanador, // Aquí se obtiene el nombre del ganador desde el store
+      ruta: "http://localhost:8000",
+    };
+  },
+};
+</script>
  
  <style lang="css" scoped>
  .container {

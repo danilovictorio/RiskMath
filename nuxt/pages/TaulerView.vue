@@ -124,27 +124,18 @@
     </div>
 
   </div>
-  <div v-if="duel.inProgress" class="duel-modal">
-    <p>{{ duel.question }}</p>
-    <button @click="answerDuel(true)">Verdadero</button>
-    <button @click="answerDuel(false)">Falso</button>
-  </div>
 </template>
 
 
 <script>
 import { socket } from '@/utils/socket.js';
 import { useAppStore } from '../stores/app';
+import { useRouter } from 'vue-router';
+
 
 export default {
   data() {
     return {
-      duel: {
-        inProgress: false,
-        question: '',
-        correctAnswer: null,
-        attackedCountry: null,
-      },
       paises: [],
       preguntas: [],
       pregunta: {},
@@ -169,13 +160,13 @@ export default {
   },
   methods: {
     manejarClic(name, idPais, idUser) {
-      
+
       this.paisId = name;
       let paisElement;
       console.log(this.app.turnoDe.color)
       if (this.app.esMiturno()) {
         paisElement = document.getElementById(name);
-       console.log(
+        console.log(
           "paisElement.style.fill:",
           paisElement.style.fill,
           "app.turnode.color:",
@@ -193,60 +184,12 @@ export default {
       }
     },
 
-    //funció que serveix per obtenir el json de preguntes
     async propietariosPaises() {
-      console.log("propietariosPaises"+ " " +this.app.sala.jugadores);
-      /*
-      try {
-        const response = await fetch(`${this.ruta}/api/propietarios-paises`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            arrayUsers: this.app.sala.jugadores,
-          }),
-        });
+      console.log("propietariosPaises" + " " + this.app.sala.jugadores);
 
-        if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
-        }
-
-        const result = await response.json();
-        const cantidadPaisesPorUsuario = result.ocupantes;
-
-        let usuarioConMasPaises = "";
-        let maxCantidadPaises = 0;
-
-        cantidadPaisesPorUsuario.forEach((usuarioInfo) => {
-          const usuario = usuarioInfo.nombre;
-          const cantidadPaises = usuarioInfo.cantidad;
-          console.log(`${usuario} tiene ${cantidadPaises} países conquistados`);
-
-          if (cantidadPaises > maxCantidadPaises) {
-            maxCantidadPaises = cantidadPaises;
-            usuarioConMasPaises = usuario;
-          }
-        });
-
-        console.log(result.message);
-
-       
-*/
-        
-        if (this.contadorPaises == 15) {
-          console.log("¡Todos los países han sido conquistados!");
-
-          this.$router.push({
-            name: "PartidaFinalitzada",
-            params: { usuarioGanador: usuarioConMasPaises },
-          });
-
-        } else {
-          console.log("Aún no se han conquistado todos los países.");
-        }
-    
-
+      socket.emit("contadorPaises", {
+        roomId: this.app.sala.id,
+      });
     },
 
     //funció per obtenir el json de paisos
@@ -332,7 +275,7 @@ export default {
         console.log(result.message);
         this.propietariosPaises();
         console.log("Usuario: " + idUser, "Conquista Pais: " + paisId);
-       
+        this.comprovarFinal();
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }
@@ -343,32 +286,18 @@ export default {
     },
 
     //funció per a comprovar el final del joc
-    async comprovarFinal(idUser) {
-      try {
-        const response = await fetch(`${this.ruta}/api/final-confirmado`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            idUser: idUser
-          }),
-        });
-        if (response.ok) {
-          const data = await response.json();
-          if (data.acabat) {
-            console.log('JOC ACABAT!!');
-            return data.acabat;
-          } else {
-            console.log('Continua jugant');
-            return data.acabat;
-          }
+    async comprovarFinal() {
+      socket.on('paisesConquistados', ({ paisesConquistados, usuarioGanador }) => {
+        this.app.jugadorGanador = usuarioGanador;
+        if (Object.keys(paisesConquistados).length == 15) {
+          console.log("¡Todos los países han sido conquistados!");
+
+          this.$router.push({name: 'PaginaFinalitzada'});
         } else {
-          console.error('Error al obtener la respuesta del servidor');
+          console.log("Aún no se han conquistado todos los países.");
         }
-      } catch (error) {
-        console.error('Error en la solicitud:', error);
-      }
+
+      });
     },
 
     //funció enviar atac a server

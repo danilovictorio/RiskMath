@@ -21,6 +21,7 @@ export const useAppStore = defineStore('app', {
     paisesConquistados: 0,
     countries: {}, 
     players: {}, 
+    jugadorGanador: null,
   }),
   actions: {
     setTurno( nombre ) {
