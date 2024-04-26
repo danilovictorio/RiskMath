@@ -142,12 +142,15 @@ io.on('connection', (socket) => {
     const usuario1 = room.jugadores[0];
     const usuario2 = room.jugadores[1];
     console.log('Room jugadores:', usuario1, usuario2);
-    
+    if (acertado) {
+      room.paisesConquistados[paisId] = userName;
+      console.log('Paises conquistados:', room.paisesConquistados);
+      // Propagar el cambio a todos los clientes
+      io.to(roomId).emit('respuestaCorrecta', { paisId, jugador: userName });
+    }
     const nextName = userName === usuario1.nombre ? usuario2.nombre : usuario1.nombre;
     io.to(roomId).emit('cambiarTurno', { turno_de: nextName, usuarios: room.jugadores });
-    room.paisesConquistados[paisId] = userName;
-    // Propagar el cambio a todos los clientes
-    io.to(roomId).emit('paisConquistado', { paisId, jugador: userName });
+   
     console.log('Cambio de turno:', nextName);
   }else{
     console.log('Error jugadores sala.');

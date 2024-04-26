@@ -1,11 +1,3 @@
-/* 
-  RUTAS PARA EXPORTAR SOCKETS
-  En LOCAL : http://localhost:3123
-  En PREPRODUCCIÓN : http://preprod.tr2g724.daw.inspedralbes.cat:3184
-  En PRODUCCIÓN : http://tr2g724.daw.inspedralbes.cat:3123
-
-  sustituir valor en variable constante:  URL
-*/
 // Importar el cliente Socket.io
 import { io } from "socket.io-client";
 import { useAppStore } from '../stores/app';
@@ -81,19 +73,18 @@ socket.on('cambiarTurno', ({ turno_de, usuarios }) => {
     console.log('así queda: ', appStore.getColor());
   }
 });
-// En el cliente
-socket.on('paisConquistado', ({ paisId, jugador }) => {
+
+socket.on('respuestaCorrecta', ({ paisId, jugador }) => {
+  console.log(`¡${jugador} ha conquistado ${paisId}!`);
   // Actualizar el color del país conquistado en la interfaz de usuario
   // Encuentra el elemento del país en tu vista y cámbiale el color según el jugador que lo conquistó
   const paisElement = document.getElementById(paisId);
   if (paisElement) {
-    // Cambiar el color del país según el jugador que lo conquistó
-    // Puedes usar un objeto que mapee los nombres de los jugadores a los colores que has definido
-    const color = colores[jugadores.findIndex(jugador => jugador.nombre === jugador)];
+    const appStore = useAppStore();
+    const color = appStore.getColor();
     paisElement.style.fill = color;
   }
 });
-
 
 socket.on('finDelJuego', ({ ganador, empate }) => {
   const appStore = useAppStore();
@@ -127,19 +118,4 @@ socket.on('actualizacionUsuario', (datos) => {
 
 socket.on('actualizacionEstado', (datos) => {
   console.log('Han actualizado el estado', datos);
-});
-
-socket.on('comprobarColorActualMapa', ({ idPais, color, acertado }) => {
-  const paisElement = document.getElementById(idPais);
-  const appStore = useAppStore();
-  if (paisElement) {
-    if (acertado) {
-      paisElement.style.fill = color;
-    } else {
-      const colorActual = paisElement.style.fill;
-      if (colorActual !== color) {
-        paisElement.style.fill = colorActual;
-      }
-    }
-  }
 });

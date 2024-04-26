@@ -158,7 +158,8 @@ export default {
       esActivo: true,
       resultadoPregunta: false,
       miTurno: false,
-      ruta: 'http://localhost:8000'
+      ruta: 'http://localhost:8000',
+      contadorPaises: 0,
     };
   }, computed: {
     deberiaMostrarContenido() {
@@ -167,49 +168,6 @@ export default {
 
   },
   methods: {
-    startDuel(question, correctAnswer, attackedCountry) {
-      this.duel.inProgress = true;
-      this.duel.question = question;
-      this.duel.correctAnswer = correctAnswer;
-      this.duel.attackedCountry = attackedCountry;
-    },
-
-    answerDuel(answer, player) {
-      if (answer === this.duel.correctAnswer) {
-        // El jugador que respondió ganó el duelo
-        // Asigna el país atacado al jugador que ganó
-        this.assignCountryToPlayer(this.duel.attackedCountry, player);
-      } else {
-        // El jugador que respondió perdió el duelo
-        // Si el segundo jugador responde correctamente, asigna el país a él
-        if (this.secondPlayerAnswer === this.duel.correctAnswer) {
-          this.assignCountryToPlayer(this.duel.attackedCountry, this.secondPlayer);
-        } else {
-          // Si ambos jugadores fallan, el país vuelve a su color original
-          this.resetCountryColor(this.duel.attackedCountry);
-        }
-      }
-      // Independientemente del resultado, el duelo ha terminado
-      this.duel.inProgress = false;
-    },
-    assignCountryToPlayer(country, player) {
-      // Asigna el país al jugador
-      this.countries[country] = player;
-
-      // Cambia el color del país para representar al nuevo propietario
-      this.changeCountryColor(country, this.players[player].color);
-    },
-    resetCountryColor(country) {
-      // Restablece el país a un estado neutral
-      this.countries[country] = null;
-
-      // Cambia el color del país a un color neutral
-      this.changeCountryColor(country, 'grey');
-    },
-    changeCountryColor(country, color) {
-      // Aquí va tu código para cambiar el color del país en la vista
-      // Esto dependerá de cómo estés representando los países en tu vista
-    },
     manejarClic(name, idPais, idUser) {
       
       this.paisId = name;
@@ -217,7 +175,7 @@ export default {
       console.log(this.app.turnoDe.color)
       if (this.app.esMiturno()) {
         paisElement = document.getElementById(name);
-        console.log(
+       console.log(
           "paisElement.style.fill:",
           paisElement.style.fill,
           "app.turnode.color:",
@@ -238,6 +196,7 @@ export default {
     //funció que serveix per obtenir el json de preguntes
     async propietariosPaises() {
       console.log("propietariosPaises"+ " " +this.app.sala.jugadores);
+      /*
       try {
         const response = await fetch(`${this.ruta}/api/propietarios-paises`, {
           method: "POST",
@@ -272,12 +231,10 @@ export default {
 
         console.log(result.message);
 
-        const todosConquistadosResponse = await fetch(
-          `${this.ruta}/api/todos-paises-conquistados`
-        );
-        const todosConquistadosResult = await todosConquistadosResponse.json();
-
-        if (todosConquistadosResult.todosConquistados) {
+       
+*/
+        
+        if (this.contadorPaises == 15) {
           console.log("¡Todos los países han sido conquistados!");
 
           this.$router.push({
@@ -288,9 +245,8 @@ export default {
         } else {
           console.log("Aún no se han conquistado todos los países.");
         }
-      } catch (error) {
-        console.error("Error en la solicitud:", error);
-      }
+    
+
     },
 
     //funció per obtenir el json de paisos
@@ -331,6 +287,7 @@ export default {
             if (this.app.nombre == this.app.turnoDe.nombre) {
               this.app.paisesConquistados++;
             }
+            this.contadorPaises++;
           } else {
             console.log("La respuesta es falsa");
             this.resultadoPregunta = false;
@@ -345,6 +302,7 @@ export default {
           });
           this.app.setEstado("Respondiendo");
           this.mostrarPregunta = false;
+          this.resultadoPregunta = false;
         })
         .catch((error) => {
           console.error("Error validating response:", error);
@@ -374,7 +332,7 @@ export default {
         console.log(result.message);
         this.propietariosPaises();
         console.log("Usuario: " + idUser, "Conquista Pais: " + paisId);
-       // this.resultadoPregunta = false;
+       
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }
