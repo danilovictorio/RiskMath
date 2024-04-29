@@ -24,21 +24,16 @@ export default {
             nombreSala: '',
             capacidadSala: 2,
             link: '',
-            esCreador: false,
             codigoSala: '',
         };
     },
     methods: {
         crearSala() {
             const storeApp = useAppStore();
-
-            socket.emit('crearSala', { nombreSala: this.nombreSala, capacidadSala: this.capacidadSala });
-            socket.on('roomCreated', (roomId) => {
-                console.log('Sala creada, con ID:', roomId);
-                storeApp.codigoSala = roomId; // Accede a roomId directamente
-                this.$router.push({ name: 'SalaEspera', params: { id: roomId } });
-                this.esCreador = true; // Establece esCreador a true
-            });
+            storeApp.esCreador = true;
+            const nombreJugador = storeApp.nombre;
+            socket.emit('crearSala', { nombreSala: this.nombreSala, nombreJugador: nombreJugador, capacidadSala: this.capacidadSala });
+            this.$router.push({ name: 'SalaEspera' });
         },
     },
 };

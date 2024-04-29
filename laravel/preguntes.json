@@ -4,279 +4,31 @@
       "opciones": {
         "a": "35 ml",
         "b": "350 ml",
-        "c": "3500 ml",
+        "c": "verdadera",
         "d": "0.35 ml"
       },
       "respuesta_correcta": "c"
     },
     {
-      "pregunta": "Si se tienen 150 centímetros y se desea expresar esta medida en metros, ¿cuántos metros son?",
+      "pregunta": "¿Cuántos mililitros hay en 3.5 litros?",
       "opciones": {
-        "a": "15 m",
-        "b": "1.5 m",
-        "c": "0.015 m",
-        "d": "0.15 m"
-      },
-      "respuesta_correcta": "b"
-    },
-    {
-      "pregunta": "¿Cuántos kilogramos hay en 2400 gramos?",
-      "opciones": {
-        "a": "24 kg",
-        "b": "2.4 kg",
-        "c": "240 kg",
-        "d": "0.24 kg"
-      },
-      "respuesta_correcta": "b"
-    },
-    {
-      "pregunta": "Si se tienen 8000 milímetros y se quiere expresar esta medida en metros, ¿cuántos metros son?",
-      "opciones": {
-        "a": "0.8 m",
-        "b": "8 m",
-        "c": "80 m",
-        "d": "800 m"
-      },
-      "respuesta_correcta": "a"
-    },
-    {
-      "pregunta": "¿Cuántos gramos hay en 3.2 kilogramos?",
-      "opciones": {
-        "a": "32 g",
-        "b": "320 g",
-        "c": "3200 g",
-        "d": "0.32 g"
+        "a": "35 ml",
+        "b": "350 ml",
+        "c": "verdadera",
+        "d": "0.35 ml"
       },
       "respuesta_correcta": "c"
     },
     {
-      "pregunta": "Si se tienen 9000 centímetros y se desea expresar esta medida en metros, ¿cuántos metros son?",
+      "pregunta": "¿Cuántos mililitros hay en 3.5 litros?",
       "opciones": {
-        "a": "90 m",
-        "b": "0.09 m",
-        "c": "9 m",
-        "d": "900 m"
-      },
-      "respuesta_correcta": "a"
-    },
-    {
-      "pregunta": "¿Cuántos litros hay en 2500 centilitros?",
-      "opciones": {
-        "a": "25 L",
-        "b": "2.5 L",
-        "c": "0.25 L",
-        "d": "250 L"
-      },
-      "respuesta_correcta": "b"
-    },
-    {
-      "pregunta": "Si se tienen 480 metros y se desea expresar esta medida en kilómetros, ¿cuántos kilómetros son?",
-      "opciones": {
-        "a": "4.8 km",
-        "b": "48 km",
-        "c": "0.48 km",
-        "d": "4800 km"
-      },
-      "respuesta_correcta": "a"
-    },
-    {
-      "pregunta": "¿Cuántos centímetros hay en 2.7 metros?",
-      "opciones": {
-        "a": "270 cm",
-        "b": "2.7 cm",
-        "c": "27 cm",
-        "d": "0.027 cm"
-      },
-      "respuesta_correcta": "a"
-    },
-    {
-      "pregunta": "Si se tienen 3500 miligramos y se desea expresar esta medida en gramos, ¿cuántos gramos son?",
-      "opciones": {
-        "a": "3.5 g",
-        "b": "35 g",
-        "c": "0.35 g",
-        "d": "350 g"
+        "a": "35 ml",
+        "b": "350 ml",
+        "c": "verdadera",
+        "d": "0.35 ml"
       },
       "respuesta_correcta": "c"
-    },
-    {
-      "pregunta": "¿Cuántos centímetros hay en 3 metros?",
-      "opciones": {
-        "a": "30 cm",
-        "b": "300 cm",
-        "c": "0.3 cm",
-        "d": "0.03 cm"
-      },
-      "respuesta_correcta": "b"
-    },
-    {
-      "pregunta": "Si se tienen 5000 gramos y se desea expresar esta medida en kilogramos, ¿cuántos kilogramos son?",
-      "opciones": {
-        "a": "5 kg",
-        "b": "50 kg",
-        "c": "0.05 kg",
-        "d": "500 kg"
-      },
-      "respuesta_correcta": "a"
-    },
-    {
-      "pregunta": "¿Cuántos milímetros hay en 0.8 metros?",
-      "opciones": {
-        "a": "80 mm",
-        "b": "800 mm",
-        "c": "8 mm",
-        "d": "0.008 mm"
-      },
-      "respuesta_correcta": "b"
-    },
-    {
-      "pregunta": "Si se tienen 750 litros y se quiere expresar esta medida en decilitros, ¿cuántos decilitros son?",
-      "opciones": {
-        "a": "7500 dl",
-        "b": "75 dl",
-        "c": "7.5 dl",
-        "d": "0.75 dl"
-      },
-      "respuesta_correcta": "a"
-    },
-    {
-      "pregunta": "¿Cuántos metros hay en 5 kilómetros y medio?",
-      "opciones": {
-        "a": "5000.5 m",
-        "b": "5500 m",
-        "c": "55 m",
-        "d": "0.55 m"
-      },
-      "respuesta_correcta": "b"
-    },
-    {
-      "pregunta": "Si se tienen 1200 gramos y se desea expresar esta medida en kilogramos, ¿cuántos kilogramos son?",
-      "opciones": {
-        "a": "12 kg",
-        "b": "1.2 kg",
-        "c": "120 kg",
-        "d": "0.12 kg"
-      },
-      "respuesta_correcta": "b"
-    },
-    {
-      "pregunta": "¿Cuántos centímetros hay en 2.5 metros?",
-      "opciones": {
-        "a": "2500 cm",
-        "b": "25 cm",
-        "c": "0.025 cm",
-        "d": "0.25 cm"
-      },
-      "respuesta_correcta": "a"
-    },
-    {
-      "pregunta": "Si se tienen 3000 mililitros y se quiere expresar esta medida en litros, ¿cuántos litros son?",
-      "opciones": {
-        "a": "30 L",
-        "b": "3 L",
-        "c": "0.3 L",
-        "d": "0.03 L"
-      },
-      "respuesta_correcta": "b"
-    },
-    {
-      "pregunta": "¿Cuántos gramos hay en 2.5 kilogramos?",
-      "opciones": {
-        "a": "250 g",
-        "b": "25 g",
-        "c": "2500 g",
-        "d": "0.25 g"
-      },
-      "respuesta_correcta": "c"
-    },
-    {
-      "pregunta": "Si se tienen 4800 milímetros y se desea expresar esta medida en metros, ¿cuántos metros son?",
-      "opciones": {
-        "a": "0.48 m",
-        "b": "480 m",
-        "c": "4.8 m",
-        "d": "48 m"
-      },
-      "respuesta_correcta": "a"
-    },
-    {
-      "pregunta": "Si se tienen 350 centímetros y se desea expresar esta medida en metros, ¿cuántos metros son?",
-      "opciones": {
-        "a": "3.5 m",
-        "b": "0.035 m",
-        "c": "0.35 m",
-        "d": "35 m"
-      },
-      "respuesta_correcta": "a"
-    },
-    {
-      "pregunta": "¿Cuántos mililitros hay en 2.5 litros?",
-      "opciones": {
-        "a": "250 ml",
-        "b": "25 ml",
-        "c": "2500 ml",
-        "d": "0.25 ml"
-      },
-      "respuesta_correcta": "c"
-    },
-    {
-      "pregunta": "Si se tienen 4800 metros y se quiere expresar esta medida en kilómetros, ¿cuántos kilómetros son?",
-      "opciones": {
-        "a": "4.8 km",
-        "b": "0.048 km",
-        "c": "48 km",
-        "d": "480 km"
-      },
-      "respuesta_correcta": "a"
-    },
-    {
-      "pregunta": "¿Cuántos gramos equivalen a 1.2 kilogramos?",
-      "opciones": {
-        "a": "12 g",
-        "b": "120 g",
-        "c": "1200 g",
-        "d": "0.12 g"
-      },
-      "respuesta_correcta": "b"
-    },
-    {
-      "pregunta": "Si se tienen 750 mililitros y se desea expresar esta medida en litros, ¿cuántos litros son?",
-      "opciones": {
-        "a": "75 L",
-        "b": "0.75 L",
-        "c": "7.5 L",
-        "d": "0.0075 L"
-      },
-      "respuesta_correcta": "b"
-    },
-    {
-      "pregunta": "¿Cuántos metros hay en 4 kilómetros?",
-      "opciones": {
-        "a": "0.004 m",
-        "b": "40 m",
-        "c": "4000 m",
-        "d": "40000 m"
-      },
-      "respuesta_correcta": "c"
-    },
-    {
-      "pregunta": "Si se tienen 980 gramos y se quiere expresar esta medida en kilogramos, ¿cuántos kilogramos son?",
-      "opciones": {
-        "a": "0.98 kg",
-        "b": "98 kg",
-        "c": "9.8 kg",
-        "d": "0.098 kg"
-      },
-      "respuesta_correcta": "a"
-    },
-    {
-      "pregunta": "¿Cuántos milímetros hay en 3 metros y medio?",
-      "opciones": {
-        "a": "3500 mm",
-        "b": "35 mm",
-        "c": "350 mm",
-        "d": "3.5 mm"
-      },
-      "respuesta_correcta": "a"
     }
+ 
+    
   ]

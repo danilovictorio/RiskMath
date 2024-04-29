@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Pais;  
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 
 class PaisController extends Controller
@@ -25,36 +26,48 @@ class PaisController extends Controller
     }
 
     public function confirmarAtaque(Request $request){
-    $idPais = $request->paisSeleccionado;
-    $pais = Pais::find($idPais);
+        $idPais = $request->paisSeleccionado;
+        $pais = Pais::find($idPais);
 
-    if (!$pais) {
-        return response()->json(['error' => 'País no encontrado'], 404);
+        if (!$pais) {
+            return response()->json(['error' => 'País no encontrado'], 404);
+        }
+
+        $idUser = $request->idUser;
+        $pais->ocupante = $idUser;
+        $pais->save();
+
+        return response()->json(['message' => 'Ataque confirmado con éxito']);
     }
 
-    $idUser = $request->idUser;
-    $pais->ocupante = $idUser;
-    $pais->save();
-
-    return response()->json(['message' => 'Ataque confirmado con éxito']);
-    }
     public function propietariosPaises(Request $request) {
-        $arrayUsers = $request->arrayUsers;
+        $arrayUsers = $request->input('arrayUsers');
     
+        if (!is_array($arrayUsers)) {
+            throw new \Exception('El parámetro "arrayUsers" no es un array válido.');
+        }
+    
+        Log::info('Array de usuarios: ' . json_encode($arrayUsers));
         // Obtén un array plano de los usuarios
         $usuarios = array_column($arrayUsers, 'nombreUsuario');
     
-        $paisesConquistados = Pais::whereIn('ocupante', $usuarios)->get();
+        Log::info('Usuarios: ' . json_encode($usuarios));
+        $paisesConquistados = Pais::whereIn('ocupante', $arrayUsers)->get();
     
         $cantidadPaisesPorUsuario = [];
         $todosConquistados = 15;
         foreach ($arrayUsers as $usuario) {
-            $cantidadPaises = $paisesConquistados->where('ocupante', $usuario['nombreUsuario'])->count();
+            if (is_array($usuario)) {
+                $nombreUsuario = $usuario['nombreUsuario'];
+            } else {
+                $nombreUsuario = $usuario;
+            }
+            $cantidadPaises = $paisesConquistados->where('ocupante', $nombreUsuario)->count();
             if ($cantidadPaises === $todosConquistados) {
-                # code...
+                // Haz algo si el usuario ha conquistado todos los países
             }
             $cantidadPaisesPorUsuario[] = [
-                'nombre' => $usuario['nombreUsuario'],
+                'nombre' => $nombreUsuario,
                 'cantidad' => $cantidadPaises,
             ];
         }
