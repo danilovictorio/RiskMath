@@ -1,8 +1,6 @@
 <!-- RUTAS PARA FETCH A LARAVEL
   En LOCAL : http://localhost:8000
-  En PREPRODUCCIÓN : http://preprod.tr2g724.daw.inspedralbes.cat/laravel/public
-  En PRODUCCIÓN : http://tr2g724.daw.inspedralbes.cat/laravel/public
-
+  En PRODUCCIÓN : http://trfinal.a17danvicfer.daw.inspedralbes.cat/laravel/public
   sustituir valor en variable global:  ruta
  -->
 
@@ -149,7 +147,7 @@ export default {
       esActivo: true,
       resultadoPregunta: false,
       miTurno: false,
-      ruta: 'http://localhost:8000',
+      ruta: 'http://trfinal.a17danvicfer.daw.inspedralbes.cat/laravel/public',
       contadorPaises: 0,
     };
   }, computed: {
