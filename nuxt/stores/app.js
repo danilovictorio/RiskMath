@@ -10,23 +10,22 @@ export const useAppStore = defineStore('app', {
       ganador: null,
       colorActual: ""   
     },
-    codigoSala: [],
-    //ARRAY DE USUARIOS
-    usuariosJuego:{
-      users:[]
+    esCreador: false,
+    sala: {
+      id: '',
+      nombre: '',
+      capacidad: 0,
+      jugadores: []
     },
     nombre:'',
     paisesConquistados: 0,
-    // Agregamos los nuevos objetos aquí
-    countries: {}, // Mapea los nombres de los países a los jugadores que los poseen
-    players: {}, // Mapea los nombres de los jugadores a los colores que representan
+    countries: {}, 
+    players: {}, 
+    jugadorGanador: null,
   }),
   actions: {
     setTurno( nombre ) {
       this.turnoDe.nombre=nombre;       
-    },
-    setUsuariosJuego( usuarios ) {
-      this.usuariosJuego.users=usuarios;       
     },
     setEstado(nuevoEstado){
       this.turnoDe.estado=nuevoEstado;
@@ -69,6 +68,9 @@ export const useAppStore = defineStore('app', {
     setPlayerColor(player, color) {
       // Asigna un color a un jugador
       this.players[player] = color;
+    },
+    setSala(sala) {
+      this.sala = sala;
     },
   },
 })

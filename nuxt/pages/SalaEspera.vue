@@ -1,46 +1,63 @@
 <template>
   <div>
     <h1>Sala de espera</h1>
-    <p>Código de la sala: {{ codigoSala }}</p>
+    <h3>{{ sala ? sala.nombre : 'Nombre de la sala no disponible' }}</h3>
+    <p>Código de la sala: {{ sala ? sala.id : 'Nombre de la sala no disponible' }}</p>
+    <p>Usuarios en la sala:</p>
     <ul>
-      <li v-for="usuario in usuarios" :key="usuario.id">{{ usuario.nombre }}</li>
+      <li v-for="(jugador, index) in sala.jugadores" :key="index">{{ jugador ? jugador : "No hay usuario" }}</li>
     </ul>
     <button v-if="esCreador" @click="iniciarPartida">Iniciar partida</button>
   </div>
 </template>
 
 <script>
+// SalaEspera.vue
+import { onMounted, computed, ref } from 'vue';
 import { socket } from '@/utils/socket.js';
-import { useAppStore } from '../stores/app';
+import { useAppStore } from '../stores/app.js';
+
 export default {
-
-  data() {
-    return {
-      usuarios: [],
-      esCreador: false,
-      codigoSala: '', // Añade una propiedad para el código de la sala
-    };
-  },
-  methods: {
-    iniciarPartida() {
-      socket.emit('iniciarPartida', this.$route.params.id);
+  computed: {
+    sala() {
+      let store = useAppStore();
+      return store.sala;
     },
+    esCreador() {
+      let store = useAppStore();
+      return store.esCreador;
+    }
   },
-  mounted() {
-    const storeApp = useAppStore();
-    this.codigoSala = storeApp.codigoSala; // Establece el código de la sala al montar el componente
+  setup() {
+    const store = useAppStore();
+    const esCreador = ref(false);
+    const router = useRouter();
 
-    socket.on('usuarioUnido', (usuario) => { 
-      this.usuarios.push(usuario);
+    const redirectToGame = () => {
+      router.push({ name: 'TaulerView' });
+    };
+
+    onMounted(() => {
+      socket.on('peticion_jugar_aceptada', (datos) => {
+        console.log('peticion_jugar_aceptada', datos);
+        redirectToGame();
+      });
+
+      socket.emit('obtenerSalas');
     });
 
-    socket.on('joinedRoom', (data) => {
-      this.esCreador = data.esCreador;
-    });
-
-    socket.on('startGame', () => {
-      this.$router.push({ name: 'Tablero' });
-    });
-  },
+    return {
+      iniciarPartida() {
+        socket.emit('iniciarPartida', store.sala.id, (response) => {
+          if (response.success) {
+            console.log(response.message);
+            socket.emit('peticion_jugar', { nombreUsuario: 'Usuario' + socket.id }, store.sala.id);
+          } else {
+            console.error(response.message);
+          }
+        });
+      },
+    }
+  }
 };
 </script>

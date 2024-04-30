@@ -11,25 +11,33 @@
 
 <script>
 import { socket } from '@/utils/socket.js';
+import { ref, onMounted } from 'vue';
+import { useAppStore } from '../stores/app.js';
+import { useRouter } from 'vue-router';
 
 export default {
-  data() {
-    return {
-      linkSala: '',
-    };
-  },
-  methods: {
-    unirseSala() {
-      const roomId = this.linkSala.split('/').pop();
-      socket.emit('unirseSala', roomId, (response) => {
+  setup() {
+    const linkSala = ref('');
+    const store = useAppStore();
+    const router = useRouter();
+
+    const unirseSala = () => {
+       const nombreJugador = store.nombre
+      socket.emit('unirseSala', linkSala.value, nombreJugador, (response) => {
         if (response.success) {
-          this.$router.push({ name: 'SalaEspera', params: { id: roomId } });
+          router.push({ name: 'SalaEspera' });
         } else {
-          // Manejar errores o mostrar un mensaje de error
           console.error(response.message);
         }
       });
-    },
+    };
+
+   
+
+    return {
+      linkSala,
+      unirseSala,
+    };
   },
 };
 </script>
