@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  laravel:
+    image: php:8.1-fpm
+    container_name: Laravel
+    working_dir: /var/www
+    volumes:
+      - ./laravel:/var/www
+    command: >
+      bash -c "apt-get update && apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev zip unzip git  libonig-dev libxml2-dev && docker-php-ext-install pdo pdo_mysql gd && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && composer install && cp /var/www/.env.example /var/www/.env  && php artisan key:generate && php artisan migrate:refresh --seed && php artisan serve --host=0.0.0.0 --port=8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  nuxt-app:
+    image: node:18-bullseye
+    container_name: Nuxt
+    working_dir: /app
+    volumes:
+      - ./nuxt:/app
+    command: bash -c "pwd && ls -la && echo 'INI' && npm install && npm run dev"
+    ports:
+      - "3000:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+  db:
+    image: mysql:8.2.0
+    container_name: Mysql_DB
+    volumes:
+      - db-data2:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: risk
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    ports:
+      - "3307:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: PhpMyAdmin
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+  node-sockets:
+    image: node:14 
+    container_name: NodeSockets
+    working_dir: /app 
+    volumes:
+      - ./node:/app 
+    ports:
+      - "3123:3123"
+    command: bash -c "npm install && node index.js"
+
+volumes:
+  db-data2:

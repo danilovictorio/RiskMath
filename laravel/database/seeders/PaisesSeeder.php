@@ -16,7 +16,7 @@ class PaisesSeeder extends Seeder
     public function run()
     {
         // Utiliza base_path para obtener la ruta completa
-        $jsonPath = base_path('../laravel/mapa.json');
+        $jsonPath = base_path('mapa.json');
 
         // Verifica si el archivo existe
         if (file_exists($jsonPath)) {
