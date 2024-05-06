@@ -13,6 +13,7 @@
     "@pinia/nuxt": "^0.5.1",
     "express": "^4.19.2",
     "nanoid": "^5.0.7",
+    "normalize.css": "^8.0.1",
     "nuxt": "^3.11.2",
     "pinia": "^2.1.7",
     "socket.io": "^4.7.5",
