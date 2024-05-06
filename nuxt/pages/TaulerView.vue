@@ -1,8 +1,6 @@
 <!-- RUTAS PARA FETCH A LARAVEL
   En LOCAL : http://localhost:8000
-  En PREPRODUCCIÓN : http://preprod.tr2g724.daw.inspedralbes.cat/laravel/public
-  En PRODUCCIÓN : http://tr2g724.daw.inspedralbes.cat/laravel/public
-
+  En PRODUCCIÓN : http://trfinal.a17danvicfer.daw.inspedralbes.cat/laravel/public
   sustituir valor en variable global:  ruta
  -->
 
@@ -132,6 +130,8 @@ import { socket } from '@/utils/socket.js';
 import { useAppStore } from '../stores/app';
 import { useRouter } from 'vue-router';
 
+import { useRouter } from 'vue-router';
+
 
 export default {
   data() {
@@ -161,8 +161,10 @@ export default {
   methods: {
     manejarClic(name, idPais, idUser) {
 
+
       this.paisId = name;
       let paisElement;
+      console.log(this.app.turnoDe.color)
       console.log(this.app.turnoDe.color)
       if (this.app.esMiturno()) {
         paisElement = document.getElementById(name);

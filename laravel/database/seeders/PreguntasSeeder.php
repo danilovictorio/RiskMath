@@ -10,7 +10,7 @@ class PreguntasSeeder extends Seeder
 {
     public function run()
     {
-        $preguntasJson = file_get_contents('../laravel/preguntes.json');
+        $preguntasJson = file_get_contents('preguntes.json');
         $preguntas = json_decode($preguntasJson, true);
         foreach ($preguntas as $preguntaData) {
             Pregunta::create([
