@@ -22,6 +22,7 @@
       </div>
     </div>
 
+
     <div class="preguntaResposta_container" v-if="deberiaMostrarContenido">
       <div class="pregunta_container" v-if="mostrarPregunta">
         <div class="pregunta">
@@ -128,6 +129,7 @@
 <script>
 import { socket } from '@/utils/socket.js';
 import { useAppStore } from '../stores/app';
+import tinycolor from 'tinycolor2';
 export default {
   data() {
     return {
@@ -148,37 +150,58 @@ export default {
       contadorPaises: 0,
     };
   }, computed: {
+    
     deberiaMostrarContenido() {
       return this.app.nombre === this.app.turnoDe.nombre;
     }
-
+    
   },
   methods: {
     manejarClic(name, idPais, idUser) {
-
-
       this.paisId = name;
-      let paisElement;
-      console.log(this.app.turnoDe.color)
-      console.log(this.app.turnoDe.color)
-      if (this.app.esMiturno()) {
-        paisElement = document.getElementById(name);
-        console.log(
-          "paisElement.style.fill:",
-          paisElement.style.fill,
-          "app.turnode.color:",
-          this.app.turnoDe.color
-        );
-        if (paisElement.style.fill === this.app.turnoDe.color) {
-          console.log("pais ya conquistado");
-        } else {
-          this.enviarAtac(idPais, name, idUser);
+    let paisElement = document.getElementById(name);
+    let fillColor = paisElement.getAttribute('style'); // Obtener fill attribute
+    let colorName = '';
+    
+    if (fillColor) {
+        const match = fillColor.match(/fill:\s*([\w]+)/); // Buscar el patrón "fill: color"
+        if (match && match.length > 1) {
+            colorName = match[1]; // Obtener el nombre del color
         }
+    } else {
+        // Si el fill no está definido en el atributo style, intenta obtenerlo del atributo fill
+        fillColor = paisElement.getAttribute('fill');
+    }
+    
+    const turnoColorHex = tinycolor(this.app.turnoDe.color).toHex(); // Convertir a hexadecimal
+    const turnoColorRGB = tinycolor(this.app.turnoDe.color).toRgbString();
+    console.log("fillColor", fillColor);
+    console.log("colorName", colorName);
+    console.log("turnoColorHex", turnoColorHex);
+    console.log("turnoColorRGB", turnoColorRGB);
+    console.log(this.app.turnoDe.color);
+    
+    if (this.app.esMiturno()) {
+        if (colorName === this.app.turnoDe.color || fillColor === turnoColorHex || fillColor === turnoColorRGB) {
+            console.log("El país ya está conquistado por ti.");
+        } else if (fillColor === '#ffffff' || fillColor === 'rgb(255, 255, 255)') { // Color blanco
+            console.log("El país no está conquistado.");
+            this.enviarAtac(idPais, name, idUser);
+        } else {
+            console.log("El país ya está conquistado por otro jugador.");
+            this.enviarDuelo(idPais, name, idUser);
+        }
+    } else {
+        console.log("No es tu turno.");
+    }
+}
+,
 
-        //console.log("paisElement: ", paisElement);
-      } else {
-        console.log("no es TU TURNO");
-      }
+    enviarDuelo(name, pais, idUser) {
+      console.log("Enviar duelo", name, pais, idUser);
+      this.paisSeleccionado = pais;
+      this.mostrarPregunta = true;
+      this.obtenerPregunta();
     },
 
     async propietariosPaises() {
