@@ -88,7 +88,12 @@ socket.on('respuestaCorrecta', ({ paisId, jugador }) => {
   }
 });
 
+socket.on('mostrarPreguntaDuelo', () => {
+  let store = useAppStore(); 
+  verdaderoOFalso = true;
+  store.setPreguntasDuelo(verdaderoOFalso); 
 
+});
 
 socket.on('finDelJuego', ({ ganador, empate }) => {
   const appStore = useAppStore();

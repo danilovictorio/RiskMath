@@ -83,6 +83,16 @@ io.on('connection', (socket) => {
       callback({ success: false, message: 'La sala no existe.' });
     }
   });
+  socket.on('iniciarDuelo', (roomId) => {
+
+    const room = rooms[roomId];
+
+ 
+        io.to(roomId).emit('mostrarPreguntaDuelo');
+
+   
+});
+
 
   socket.on('peticion_jugar', (datos, roomId) => {
     const room = rooms[roomId];
