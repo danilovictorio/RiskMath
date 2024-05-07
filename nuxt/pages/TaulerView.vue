@@ -153,7 +153,7 @@ export default {
   }, computed: {
 
     deberiaMostrarContenido() {
-      if(this.app.getPreguntasDuelo==true){
+      if(this.app.getPreguntasDuelo()==true){
         this.pregDuelo=true;
       }
       return this.app.nombre === this.app.turnoDe.nombre;
@@ -204,7 +204,7 @@ export default {
     enviarDuelo() {
       console.log("Enviar duelo");
       // Enviar solicitud al servidor para iniciar el duelo
-      this.$socket.emit('iniciarDuelo',{
+      socket.emit('iniciarDuelo',{
           roomId: this.app.sala.id
       });
     },
