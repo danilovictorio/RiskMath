@@ -68,29 +68,9 @@ io.on('connection', (socket) => {
       callback({ success: false, message: 'La sala está llena o no existe.' });
     }
   });
-
-  socket.on('iniciarPartida', (roomId, callback) => {
-    const room = rooms[roomId];
-    if (room) {
-      if (room.jugadores.length >= 2) {
-        // Inicia la partida
-        io.to(roomId).emit('startGame');
-        callback({ success: true, message: 'La partida ha comenzado.' });
-      } else {
-        callback({ success: false, message: 'No hay suficientes jugadores en la sala para iniciar la partida.' });
-      }
-    } else {
-      callback({ success: false, message: 'La sala no existe.' });
-    }
-  });
   socket.on('iniciarDuelo', (roomId) => {
-
     const room = rooms[roomId];
-
- 
-        io.to(roomId).emit('mostrarPreguntaDuelo');
-
-   
+    io.to(roomId).emit('mostrarPreguntaDuelo');
 });
 
 
@@ -145,6 +125,10 @@ io.on('connection', (socket) => {
       }
     }
   });
+  socket.on('enviarPreguntas', ({ roomId }) => {
+    io.to(roomId).emit('mostrarPreguntas');
+  });
+  
 
   socket.on('respuestaJugador', ({ userName, paisId, acertado, roomId }) => {
     const room = rooms[roomId];
@@ -166,7 +150,7 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('contadorPaises', ({roomId }) => {
+  socket.on('contadorPaises', ({ roomId }) => {
     const room = rooms[roomId];
     let recuentoPaises = {};
 

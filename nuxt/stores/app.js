@@ -22,7 +22,7 @@ export const useAppStore = defineStore('app', {
     countries: {}, 
     players: {}, 
     jugadorGanador: null,
-    preguntasDuelo: false,
+    mostrarPreguntas: false,
 
   }),
   actions: {
@@ -74,11 +74,11 @@ export const useAppStore = defineStore('app', {
     setSala(sala) {
       this.sala = sala;
     },
-    setPreguntasDuelo(verdaderoOFalso){
-      this.preguntasDuelo = verdaderoOFalso;
+    setMostrarPreguntas(verdaderoOFalso){
+      this.mostrarPreguntas = verdaderoOFalso;
     },
-    getPreguntasDuelo(){
-      return this.preguntasDuelo;
+    getMostrarPreguntas(){
+      return this.mostrarPreguntas;
     }
   },
 })

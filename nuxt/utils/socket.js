@@ -8,13 +8,6 @@ const URL = "http://tr3cine.a17danvicfer.daw.inspedralbes.cat:3123";
 
 export const socket = io(URL);
 
-const colores = ['green','blue'];
-
-
-socket.on('startGame', () => { 
-  // Aquí puedes agregar código para manejar el inicio del juego
-});
-
 socket.on('salaCreada', (data) => {
   let store = useAppStore();
   console.log('Datos recibidos:', data);
@@ -87,12 +80,17 @@ socket.on('respuestaCorrecta', ({ paisId, jugador }) => {
     paisElement.style.fill = color;
   }
 });
+socket.on('mostrarPreguntas', () => {
+  const appStore = useAppStore();
+  appStore.setMostrarPreguntas(true);
+  console.log('Mostrar preguntas:', appStore.mostrarPreguntas);
+});
 
 socket.on('mostrarPreguntaDuelo', () => {
   let store = useAppStore(); 
-  verdaderoOFalso = true;
+  let verdaderoOFalso = true;
   store.setPreguntasDuelo(verdaderoOFalso); 
-
+  console.log('socketPReguntasDuelo', store.preguntasDuelo);
 });
 
 socket.on('finDelJuego', ({ ganador, empate }) => {
