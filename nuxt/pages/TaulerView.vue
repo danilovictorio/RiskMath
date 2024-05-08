@@ -5,7 +5,7 @@
  -->
 
 
- <template>
+<template>
   <div class="container">
 
     <div class="torn_container" v-if="!esTrunoJugador">
@@ -31,17 +31,21 @@
         </div>
       </div>
 
-      <div class="respostes" v-if="this.app.getMostrarPreguntas()">
-        <button class="btn_respostes btn_resposta1" @click="validateResponse(pregunta.id, 'a')" v-if="pregunta" :disabled="!esMiTurnoDeResponder">
+      <div class="respostes">
+        <button class="btn_respostes btn_resposta1" @click="validateResponse(pregunta.id, 'a')" v-if="pregunta"
+          :disabled="!esMiTurnoDeResponder">
           <h3>Respuesta A:</h3> {{ pregunta.respuesta_a }}
         </button>
-        <button class="btn_respostes btn_resposta2" @click="validateResponse(pregunta.id, 'b')" v-if="pregunta" :disabled="!esMiTurnoDeResponder">
+        <button class="btn_respostes btn_resposta2" @click="validateResponse(pregunta.id, 'b')" v-if="pregunta"
+          :disabled="!esMiTurnoDeResponder">
           <h3>Respuesta B:</h3> {{ pregunta.respuesta_b }}
         </button>
-        <button class="btn_respostes btn_resposta3" @click="validateResponse(pregunta.id, 'c')" v-if="pregunta" :disabled="!esMiTurnoDeResponder">
+        <button class="btn_respostes btn_resposta3" @click="validateResponse(pregunta.id, 'c')" v-if="pregunta"
+          :disabled="!esMiTurnoDeResponder">
           <h3>Respuesta C:</h3> {{ pregunta.respuesta_c }}
         </button>
-        <button class="btn_respostes btn_resposta4" @click="validateResponse(pregunta.id, 'd')" v-if="pregunta" :disabled="!esMiTurnoDeResponder">
+        <button class="btn_respostes btn_resposta4" @click="validateResponse(pregunta.id, 'd')" v-if="pregunta"
+          :disabled="!esMiTurnoDeResponder">
           <h3>Respuesta D:</h3> {{ pregunta.respuesta_d }}
         </button>
       </div>
@@ -202,8 +206,8 @@ export default {
     enviarDuelo() {
       console.log("Enviar duelo");
       // Enviar solicitud al servidor para iniciar el duelo
-      socket.emit('iniciarDuelo',{
-          roomId: this.app.sala.id
+      socket.emit('iniciarDuelo', {
+        roomId: this.app.sala.id
       });
     },
 
@@ -315,7 +319,7 @@ export default {
         if (Object.keys(paisesConquistados).length == 15) {
           console.log("¡Todos los países han sido conquistados!");
 
-          this.$router.push({name: 'PaginaFinalitzada'});
+          this.$router.push({ name: 'PaginaFinalitzada' });
         } else {
           console.log("Aún no se han conquistado todos los países.");
         }
@@ -323,6 +327,7 @@ export default {
       });
     },
 
+    //funció enviar atac a server
     //funció enviar atac a server
     async enviarAtac(name, paisId, idUser) {
       //if (this.usuario == this.app.usuario.nombre) {
@@ -356,13 +361,18 @@ export default {
           respuesta_d: data.pregunta.respuesta_d,
         };
 
-        this.mostrar = 1;
+        // Emitir el evento al servidor con los datos de las preguntas y respuestas y el roomId
+        socket.emit('preguntasYRespuestas', {
+          preguntasYRespuestas: this.pregunta,
+          roomId: this.app.sala.id
+        });
+
         this.paisSeleccionado = paisId;
         this.app.setEstado("Respondiendo");
         //this.app.setMostrarPreguntas(true);
         this.esMiTurnoDeResponder = true; // Hacer que sea el turno del jugador actual
         this.enviarPreguntasAlOtroJugador();
-        console.log("TaulerView MostrarPreguntas"+ this.app.getMostrarPreguntas());
+        console.log("TaulerView MostrarPreguntas" + this.app.getMostrarPreguntas());
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }

@@ -21,7 +21,12 @@ socket.on('salaCreada', (data) => {
   store.setSala(data.sala);
   console.log('Sala creada:', store.sala);
 });
-
+socket.on('preguntasYRespuestas', (preguntasYRespuestas) => {
+  const appStore = useAppStore();
+  // Aquí puedes actualizar tu estado de la aplicación con las preguntas y respuestas recibidas
+  // Por ejemplo, si tienes un método en tu store para establecer las preguntas y respuestas:
+  appStore.setPreguntasYRespuestas(preguntasYRespuestas);
+});
 socket.on('salas', (salas) => {
   let store = useAppStore();
   console.log('Salas recibidas:', salas);
