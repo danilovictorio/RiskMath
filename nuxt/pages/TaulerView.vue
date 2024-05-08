@@ -7,7 +7,8 @@
 
  <template>
   <div class="container">
-
+    <div class="container">
+  <div v-if="!this.app.duelo">
     <div class="torn_container" v-if="!esTrunoJugador">
       <div class="torn">
         <h3>Torn de :</h3>
@@ -22,6 +23,12 @@
         <h2>AL ATAC!!!!</h2>
       </div>
     </div>
+  </div>
+  <div v-else>
+    <h2>Duelo iniciado</h2>
+  </div>
+</div>
+
 
 
     <div class="preguntaResposta_container">
@@ -32,16 +39,16 @@
       </div>
 
       <div class="respostes" v-if="this.app.getMostrarPreguntas()">
-        <button class="btn_respostes btn_resposta1" @click="validateResponse(this.app.pregunta.id, 'a')" v-if="this.app.pregunta" :disabled="!esTrunoJugador">
+        <button class="btn_respostes btn_resposta1" @click="validateResponse(this.app.pregunta.id, 'a')" v-if="this.app.pregunta" :disabled="!esTrunoJugador && !this.app.duelo">
           <h3>Respuesta A:</h3> {{ this.app.pregunta.respuesta_a }}
         </button>
-        <button class="btn_respostes btn_resposta2" @click="validateResponse(this.app.pregunta.id, 'b')" v-if="this.app.pregunta" :disabled="!esTrunoJugador">
+        <button class="btn_respostes btn_resposta2" @click="validateResponse(this.app.pregunta.id, 'b')" v-if="this.app.pregunta" :disabled="!esTrunoJugador && !this.app.duelo">
           <h3>Respuesta B:</h3> {{ this.app.pregunta.respuesta_b }}
         </button>
-        <button class="btn_respostes btn_resposta3" @click="validateResponse(this.app.pregunta.id, 'c')" v-if="this.app.pregunta" :disabled="!esTrunoJugador">
+        <button class="btn_respostes btn_resposta3" @click="validateResponse(this.app.pregunta.id, 'c')" v-if="this.app.pregunta" :disabled="!esTrunoJugador && !this.app.duelo">
           <h3>Respuesta C:</h3> {{ this.app.pregunta.respuesta_c }}
         </button>
-        <button class="btn_respostes btn_resposta4" @click="validateResponse(this.app.pregunta.id, 'd')" v-if="this.app.pregunta" :disabled="!esTrunoJugador">
+        <button class="btn_respostes btn_resposta4" @click="validateResponse(this.app.pregunta.id, 'd')" v-if="this.app.pregunta" :disabled="!esTrunoJugador && !this.app.duelo">
           <h3>Respuesta D:</h3> {{ this.app.pregunta.respuesta_d }}
         </button>
       </div>

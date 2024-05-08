@@ -23,6 +23,7 @@ export const useAppStore = defineStore('app', {
     countries: {}, 
     players: {}, 
     jugadorGanador: null,
+    duelo: false,
     mostrarPreguntas: false,
   }),
   actions: {
@@ -85,6 +86,12 @@ export const useAppStore = defineStore('app', {
     },
     getPreguntas(){
       return this.pregunta;
+    },
+    setDuelo(duelo){
+      this.duelo = duelo;
+    },
+    getDuelo(){
+      return this.duelo;
     }
   },
 })
