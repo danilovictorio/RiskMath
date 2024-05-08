@@ -368,7 +368,11 @@ export default {
       }
     },
     enviarPreguntasAlOtroJugador() {
-      socket.emit('enviarPreguntas', { roomId: this.app.sala.id });
+      socket.emit('enviarPreguntas', { roomId: this.app.sala.id, preguntas: this.pregunta });
+      socket.on('preguntasParaOtroJugador', (preguntas) => {
+      this.preguntas = preguntas;
+      console.log('Preguntas recibidas del otro jugador:', preguntas);
+    });
     },
   },
   async mounted() {
