@@ -3,6 +3,7 @@ import cors from 'cors';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { nanoid } from 'nanoid';
+import { Console } from 'console';
 
 const app = express();
 app.use(cors());
@@ -134,6 +135,11 @@ io.on('connection', (socket) => {
         }
       }
     }
+  });
+
+  socket.on('enviarPreguntas', ({ roomId }) => {
+    console.log('Evento enviarPreguntas recibido');
+    io.to(roomId).emit('mostrarPreguntas');
   });
 
   socket.on('respuestaJugador', ({ userName, paisId, acertado, roomId }) => {
