@@ -4,7 +4,7 @@ import { useAppStore } from '../stores/app';
 import { onMounted, onUnmounted } from 'vue';
 
 
-const URL = "http://tr3cine.a17danvicfer.daw.inspedralbes.cat:3123"; 
+const URL = "http://localhost:3123"; 
 
 export const socket = io(URL);
 
