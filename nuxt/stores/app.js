@@ -17,6 +17,7 @@ export const useAppStore = defineStore('app', {
       capacidad: 0,
       jugadores: []
     },
+    pregunta: {},
     nombre:'',
     paisesConquistados: 0,
     countries: {}, 
@@ -78,6 +79,12 @@ export const useAppStore = defineStore('app', {
     },
     getMostrarPreguntas(){
       return this.mostrarPreguntas;
+    },
+    setPreguntas(pregunta){
+      this.pregunta = pregunta;
+    },
+    getPreguntas(){
+      return this.pregunta;
     }
   },
 })
