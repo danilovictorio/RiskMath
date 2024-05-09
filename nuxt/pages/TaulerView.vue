@@ -3,8 +3,6 @@
   En PRODUCCIÓN : http://trfinal.a17danvicfer.daw.inspedralbes.cat/laravel/public
   sustituir valor en variable global:  ruta
  -->
-
-
  <template>
   <div class="container">
 
@@ -192,19 +190,54 @@ export default {
           this.enviarAtac(idPais, name, idUser);
         } else {
           console.log("El país ya está conquistado por otro jugador.");
-          this.enviarDuelo();
+          this.enviarDuelo(idPais, name, idUser);
         }
       } else {
         console.log("No es tu turno.");
       }
     },
 
-    enviarDuelo() {
+    async enviarDuelo(name, paisId, idUser) {
       console.log("Enviar duelo");
-      // Enviar solicitud al servidor para iniciar el duelo
-      socket.emit('iniciarDuelo',{
-          roomId: this.app.sala.id
-      });
+      this.app.setEstado("Atacando");
+      try {
+        const response = await fetch(`${this.ruta}/api/enviar-atac`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: name,
+            idUser: idUser,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error en la solicitud: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Respuesta del servidor:", data);
+
+        this.pregunta = {
+          id: data.pregunta.id,
+          pregunta: data.pregunta.pregunta,
+          respuesta_a: data.pregunta.respuesta_a,
+          respuesta_b: data.pregunta.respuesta_b,
+          respuesta_c: data.pregunta.respuesta_c,
+          respuesta_d: data.pregunta.respuesta_d,
+        };
+
+        this.mostrar = 1;
+        this.paisSeleccionado = paisId;
+        this.app.setEstado("Respondiendo");
+        //this.app.setMostrarPreguntas(true);
+        this.esMiTurnoDeResponder = true; // Hacer que sea el turno del jugador actual
+        this.enviarPreguntasAlOtroJugador();
+        console.log("TaulerView MostrarPreguntas"+ this.app.getMostrarPreguntas());
+      } catch (error) {
+        console.error("Error en la solicitud:", error);
+      }
     },
 
     async propietariosPaises() {
