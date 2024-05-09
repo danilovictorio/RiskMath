@@ -76,14 +76,10 @@ socket.on('cambiarTurno', ({ turno_de, usuarios }) => {
   }
 });
 
-socket.on('respuestaCorrecta', ({ paisId, jugador }) => {
-  console.log(`¡${jugador} ha conquistado ${paisId}!`);
-  // Actualizar el color del país conquistado en la interfaz de usuario
-  // Encuentra el elemento del país en tu vista y cámbiale el color según el jugador que lo conquistó
+socket.on('respuestaCorrecta', ({ paisId, jugador, color }) => {
+  console.log(`¡${jugador} ha conquistado ${paisId}! con color ${color}`);
   const paisElement = document.getElementById(paisId);
   if (paisElement) {
-    const appStore = useAppStore();
-    const color = appStore.getColor();
     paisElement.style.fill = color;
   }
 });

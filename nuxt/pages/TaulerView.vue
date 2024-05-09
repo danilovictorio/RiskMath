@@ -6,6 +6,7 @@
         <div class="torn">
           <h3>Torn de :</h3>
           <h2>{{ app.turnoDe.nombre }}</h2>
+          <h2>Color : {{ app.turnoDe.color }}</h2>
           <h3>Espera el teu torn</h3>
         </div>
       </div>
@@ -13,13 +14,14 @@
         <div class="torn">
           <h3>Torn de :</h3>
           <h2>{{ app.turnoDe.nombre }}</h2>
+          <h2> Color : {{ app.turnoDe.color }}</h2>
           <h2>AL ATAC!!!!</h2>
         </div>
       </div>
     </div>
     <div v-else>
-      <h2>DUELO INICIADO</h2>
-    </div>jock
+      <h1>DUELO INICIADO</h1>
+    </div>
 
     <div class="preguntaResposta_container">
       <div class="pregunta_container" v-if="app.getMostrarPreguntas()">
@@ -456,29 +458,20 @@ export default {
 .torn {
   border-radius: 20px;
   backdrop-filter: blur(8px);
-  /* Reduce el valor para un efecto de desenfoque más sutil */
   width: 250px;
   height: 150px;
-  /* Aumenta la altura para dar más espacio al contenido */
   padding: 20px;
   text-align: center;
   color: #fff;
-  /* Cambiado a blanco para mejorar la legibilidad del texto */
   background-color: rgba(1, 5, 63, 0.7);
-  /* Fondo semi-transparente para resaltar */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  /* Sombra suave para resaltar el contorno */
 }
 
-/* Estilo adicional para el mensaje de "AL ATAC!!!!" */
 .torn h2:last-child {
   color: #ff4500;
-  /* Color naranja para destacar el mensaje de ataque */
   font-size: 24px;
-  /* Tamaño de fuente más grande para el mensaje especial */
 }
 
-/* Estilo adicional para mejorar el espaciado entre los elementos de texto */
 .torn h3 {
   margin-bottom: 10px;
 }
@@ -488,7 +481,7 @@ export default {
   margin: 20px;
   border-radius: 20px;
   text-align: center;
-  backdrop-filter: blur(100px);
+  backdrop-filter: blur(10px); /* Reduced blur for better readability */
   color: #fff;
 }
 
@@ -528,11 +521,11 @@ export default {
   padding: 40px;
   font-size: 1em;
   border: none;
-  background-color: lightblue;
+  background-color: #007bff; /* Changed to a more vibrant blue */
 }
 
 .btn_respostes:hover {
-  background-color: #00339a;
+  background-color: #0056b3; /* Darker blue on hover */
   color: #fff;
 }
 
