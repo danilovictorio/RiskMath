@@ -1,9 +1,3 @@
-<!-- RUTAS PARA FETCH A LARAVEL
-  En LOCAL : http://localhost:8000
-  En PRODUCCIÓN : http://trfinal.a17danvicfer.daw.inspedralbes.cat/laravel/public
-  sustituir valor en variable global:  ruta
- -->
-
 
 <template>
   <div class="container">
@@ -27,26 +21,22 @@
     <div class="preguntaResposta_container">
       <div class="pregunta_container" v-if="this.app.getMostrarPreguntas()">
         <div class="pregunta">
-          <h2>{{ pregunta ? pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
+          <h2>{{ this.app.pregunta ? this.app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
         </div>
       </div>
 
-      <div class="respostes">
-        <button class="btn_respostes btn_resposta1" @click="validateResponse(pregunta.id, 'a')" v-if="pregunta"
-          :disabled="!esMiTurnoDeResponder">
-          <h3>Respuesta A:</h3> {{ pregunta.respuesta_a }}
+      <div class="respostes" v-if="this.app.getMostrarPreguntas()">
+        <button class="btn_respostes btn_resposta1" @click="validateResponse(this.app.pregunta.id, 'a')" v-if="this.app.pregunta" :disabled="!esTrunoJugador">
+          <h3>Respuesta A:</h3> {{ this.app.pregunta.respuesta_a }}
         </button>
-        <button class="btn_respostes btn_resposta2" @click="validateResponse(pregunta.id, 'b')" v-if="pregunta"
-          :disabled="!esMiTurnoDeResponder">
-          <h3>Respuesta B:</h3> {{ pregunta.respuesta_b }}
+        <button class="btn_respostes btn_resposta2" @click="validateResponse(this.app.pregunta.id, 'b')" v-if="this.app.pregunta" :disabled="!esTrunoJugador">
+          <h3>Respuesta B:</h3> {{ this.app.pregunta.respuesta_b }}
         </button>
-        <button class="btn_respostes btn_resposta3" @click="validateResponse(pregunta.id, 'c')" v-if="pregunta"
-          :disabled="!esMiTurnoDeResponder">
-          <h3>Respuesta C:</h3> {{ pregunta.respuesta_c }}
+        <button class="btn_respostes btn_resposta3" @click="validateResponse(this.app.pregunta.id, 'c')" v-if="this.app.pregunta" :disabled="!esTrunoJugador">
+          <h3>Respuesta C:</h3> {{ this.app.pregunta.respuesta_c }}
         </button>
-        <button class="btn_respostes btn_resposta4" @click="validateResponse(pregunta.id, 'd')" v-if="pregunta"
-          :disabled="!esMiTurnoDeResponder">
-          <h3>Respuesta D:</h3> {{ pregunta.respuesta_d }}
+        <button class="btn_respostes btn_resposta4" @click="validateResponse(this.app.pregunta.id, 'd')" v-if="this.app.pregunta" :disabled="!esTrunoJugador">
+          <h3>Respuesta D:</h3> {{ this.app.pregunta.respuesta_d }}
         </button>
       </div>
     </div>
@@ -271,7 +261,7 @@ export default {
             roomId: this.app.sala.id, // Asegúrate de que `roomId` está disponible en `this.app`
           });
           this.app.setEstado("Respondiendo");
-          this.mostrarPregunta = false;
+          socket.emit('OcultarPreguntas', { roomId: this.app.sala.id});
           this.resultadoPregunta = false;
         })
         .catch((error) => {
@@ -369,16 +359,12 @@ export default {
 
         this.paisSeleccionado = paisId;
         this.app.setEstado("Respondiendo");
-        //this.app.setMostrarPreguntas(true);
-        this.esMiTurnoDeResponder = true; // Hacer que sea el turno del jugador actual
-        this.enviarPreguntasAlOtroJugador();
-        console.log("TaulerView MostrarPreguntas" + this.app.getMostrarPreguntas());
+        
+        socket.emit('enviarPreguntas', { roomId: this.app.sala.id, preguntas: this.pregunta });
+        console.log("TaulerView MostrarPreguntas"+ this.app.getMostrarPreguntas());
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }
-    },
-    enviarPreguntasAlOtroJugador() {
-      socket.emit('enviarPreguntas', { roomId: this.app.sala.id });
     },
   },
   async mounted() {
