@@ -1,52 +1,46 @@
-<!-- RUTAS PARA FETCH A LARAVEL
-  En LOCAL : http://localhost:8000
-  En PRODUCCIÓN : http://trfinal.a17danvicfer.daw.inspedralbes.cat/laravel/public
-  sustituir valor en variable global:  ruta
- -->
-
 
 <template>
   <div class="container">
-
-    <div class="torn_container" v-if="!esTrunoJugador">
-      <div class="torn">
-        <h3>Torn de :</h3>
-        <h2>{{ this.app.turnoDe.nombre }}</h2>
-        <h3>Espera el teu torn</h3>
-      </div>
-    </div>
-    <div class="torn_container" v-if="esTrunoJugador">
-      <div class="torn">
-        <h3>Torn de :</h3>
-        <h2>{{ this.app.turnoDe.nombre }}</h2>
-        <h2>AL ATAC!!!!</h2>
-      </div>
-    </div>
-
-
-    <div class="preguntaResposta_container">
-      <div class="pregunta_container" v-if="this.app.getMostrarPreguntas()">
-        <div class="pregunta">
-          <h2>{{ pregunta ? pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
+    <div v-if="!app.duelo">
+      <div class="torn_container" v-if="!esTrunoJugador">
+        <div class="torn">
+          <h3>Torn de :</h3>
+          <h2>{{ app.turnoDe.nombre }}</h2>
+          <h2>Color : {{ app.turnoDe.color }}</h2>
+          <h3>Espera el teu torn</h3>
         </div>
       </div>
+      <div class="torn_container" v-if="esTrunoJugador">
+        <div class="torn">
+          <h3>Torn de :</h3>
+          <h2>{{ app.turnoDe.nombre }}</h2>
+          <h2> Color : {{ app.turnoDe.color }}</h2>
+          <h2>AL ATAC!!!!</h2>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <h1>DUELO INICIADO</h1>
+    </div>
 
-      <div class="respostes">
-        <button class="btn_respostes btn_resposta1" @click="validateResponse(pregunta.id, 'a')" v-if="pregunta"
-          :disabled="!esMiTurnoDeResponder">
-          <h3>Respuesta A:</h3> {{ pregunta.respuesta_a }}
+    <div class="preguntaResposta_container">
+      <div class="pregunta_container" v-if="app.getMostrarPreguntas()">
+        <div class="pregunta">
+          <h2>{{ app.pregunta ? app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
+        </div>
+      </div>
+      <div class="respostes" v-if="app.getMostrarPreguntas()">
+        <button class="btn_respostes btn_resposta1" @click="validateResponse(app.pregunta.id, 'a')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+          <h3>Respuesta A:</h3> {{ app.pregunta.respuesta_a }}
         </button>
-        <button class="btn_respostes btn_resposta2" @click="validateResponse(pregunta.id, 'b')" v-if="pregunta"
-          :disabled="!esMiTurnoDeResponder">
-          <h3>Respuesta B:</h3> {{ pregunta.respuesta_b }}
+        <button class="btn_respostes btn_resposta2" @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+          <h3>Respuesta B:</h3> {{ app.pregunta.respuesta_b }}
         </button>
-        <button class="btn_respostes btn_resposta3" @click="validateResponse(pregunta.id, 'c')" v-if="pregunta"
-          :disabled="!esMiTurnoDeResponder">
-          <h3>Respuesta C:</h3> {{ pregunta.respuesta_c }}
+        <button class="btn_respostes btn_resposta3" @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+          <h3>Respuesta C:</h3> {{ app.pregunta.respuesta_c }}
         </button>
-        <button class="btn_respostes btn_resposta4" @click="validateResponse(pregunta.id, 'd')" v-if="pregunta"
-          :disabled="!esMiTurnoDeResponder">
-          <h3>Respuesta D:</h3> {{ pregunta.respuesta_d }}
+        <button class="btn_respostes btn_resposta4" @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+          <h3>Respuesta D:</h3> {{ app.pregunta.respuesta_d }}
         </button>
       </div>
     </div>
@@ -196,19 +190,53 @@ export default {
           this.enviarAtac(idPais, name, idUser);
         } else {
           console.log("El país ya está conquistado por otro jugador.");
-          this.enviarDuelo();
+          this.enviarDuelo(idPais, name, idUser);
         }
       } else {
         console.log("No es tu turno.");
       }
     },
 
-    enviarDuelo() {
+    async enviarDuelo(name, paisId, idUser) {
       console.log("Enviar duelo");
-      // Enviar solicitud al servidor para iniciar el duelo
-      socket.emit('iniciarDuelo', {
-        roomId: this.app.sala.id
-      });
+      this.app.setEstado("Atacando");
+      try {
+        const response = await fetch(`${this.ruta}/api/enviar-atac`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: name,
+            idUser: idUser,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error en la solicitud: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Respuesta del servidor:", data);
+
+        this.pregunta = {
+          id: data.pregunta.id,
+          pregunta: data.pregunta.pregunta,
+          respuesta_a: data.pregunta.respuesta_a,
+          respuesta_b: data.pregunta.respuesta_b,
+          respuesta_c: data.pregunta.respuesta_c,
+          respuesta_d: data.pregunta.respuesta_d,
+        };
+
+        this.mostrar = 1;
+        this.paisSeleccionado = paisId;
+        this.app.setEstado("Respondiendo");
+        
+        socket.emit('enviarDuelo', { roomId: this.app.sala.id, preguntas: this.pregunta });
+        console.log("TaulerView MostrarPreguntasDUELO"+ this.app.getMostrarPreguntas());
+      } catch (error) {
+        console.error("Error en la solicitud:", error);
+      }
     },
 
     async propietariosPaises() {
@@ -271,7 +299,11 @@ export default {
             roomId: this.app.sala.id, // Asegúrate de que `roomId` está disponible en `this.app`
           });
           this.app.setEstado("Respondiendo");
-          this.mostrarPregunta = false;
+          socket.emit('OcultarPreguntas', { roomId: this.app.sala.id});
+          if(this.app.duelo){
+            socket.emit('dueloTerminado', {roomId: this.app.sala.id})
+        
+          }
           this.resultadoPregunta = false;
         })
         .catch((error) => {
@@ -369,16 +401,12 @@ export default {
 
         this.paisSeleccionado = paisId;
         this.app.setEstado("Respondiendo");
-        //this.app.setMostrarPreguntas(true);
-        this.esMiTurnoDeResponder = true; // Hacer que sea el turno del jugador actual
-        this.enviarPreguntasAlOtroJugador();
-        console.log("TaulerView MostrarPreguntas" + this.app.getMostrarPreguntas());
+        
+        socket.emit('enviarPreguntas', { roomId: this.app.sala.id, preguntas: this.pregunta });
+        console.log("TaulerView MostrarPreguntas"+ this.app.getMostrarPreguntas());
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }
-    },
-    enviarPreguntasAlOtroJugador() {
-      socket.emit('enviarPreguntas', { roomId: this.app.sala.id });
     },
   },
   async mounted() {
@@ -436,29 +464,20 @@ export default {
 .torn {
   border-radius: 20px;
   backdrop-filter: blur(8px);
-  /* Reduce el valor para un efecto de desenfoque más sutil */
   width: 250px;
   height: 150px;
-  /* Aumenta la altura para dar más espacio al contenido */
   padding: 20px;
   text-align: center;
   color: #fff;
-  /* Cambiado a blanco para mejorar la legibilidad del texto */
   background-color: rgba(1, 5, 63, 0.7);
-  /* Fondo semi-transparente para resaltar */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  /* Sombra suave para resaltar el contorno */
 }
 
-/* Estilo adicional para el mensaje de "AL ATAC!!!!" */
 .torn h2:last-child {
   color: #ff4500;
-  /* Color naranja para destacar el mensaje de ataque */
   font-size: 24px;
-  /* Tamaño de fuente más grande para el mensaje especial */
 }
 
-/* Estilo adicional para mejorar el espaciado entre los elementos de texto */
 .torn h3 {
   margin-bottom: 10px;
 }
@@ -468,7 +487,7 @@ export default {
   margin: 20px;
   border-radius: 20px;
   text-align: center;
-  backdrop-filter: blur(100px);
+  backdrop-filter: blur(10px); /* Reduced blur for better readability */
   color: #fff;
 }
 
@@ -508,11 +527,11 @@ export default {
   padding: 40px;
   font-size: 1em;
   border: none;
-  background-color: lightblue;
+  background-color: #007bff; /* Changed to a more vibrant blue */
 }
 
 .btn_respostes:hover {
-  background-color: #00339a;
+  background-color: #0056b3; /* Darker blue on hover */
   color: #fff;
 }
 
