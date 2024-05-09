@@ -140,9 +140,14 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('enviarPreguntas', ({ roomId }) => {
+  socket.on('enviarPreguntas', ({ roomId , preguntas}) => {
     console.log('Evento enviarPreguntas recibido');
-    io.to(roomId).emit('mostrarPreguntas');
+    io.to(roomId).emit('mostrarPreguntas', preguntas);
+  });
+
+  socket.on('OcultarPreguntas', ({ roomId}) => {
+    console.log('Evento OcultarPreguntas recibido');
+    io.to(roomId).emit('ocultarPreguntas');
   });
 
   socket.on('respuestaJugador', ({ userName, paisId, acertado, roomId }) => {

@@ -93,10 +93,17 @@ socket.on('respuestaCorrecta', ({ paisId, jugador }) => {
   }
 });
 
-socket.on('mostrarPreguntas', () => {
+socket.on('mostrarPreguntas', (preguntas) => {
   const appStore = useAppStore();
   appStore.setMostrarPreguntas(true);
+  appStore.setPreguntas(preguntas);
   console.log('Mostrar preguntas SOCKETCLIENT:', appStore.mostrarPreguntas);
+});
+
+socket.on('ocultarPreguntas', () => {
+  const appStore = useAppStore();
+  appStore.setMostrarPreguntas(false);
+  console.log('Ocultar preguntas SOCKETCLIENT:', appStore.mostrarPreguntas);
 });
 
 socket.on('finDelJuego', ({ ganador, empate }) => {
