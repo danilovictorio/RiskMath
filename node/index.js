@@ -163,8 +163,8 @@ io.on('connection', (socket) => {
       console.log('Room jugadores:', usuario1, usuario2);
       if (acertado) {
         room.paisesConquistados[paisId] = userName;
-        // Propagar el cambio a todos los clientes
-        io.to(roomId).emit('respuestaCorrecta', { paisId, jugador: userName });
+        const color = userName === usuario1.nombre ? usuario1.color : usuario2.color;
+        io.to(roomId).emit('respuestaCorrecta', { paisId, jugador: userName, color});
       }
       const nextName = userName === usuario1.nombre ? usuario2.nombre : usuario1.nombre;
       io.to(roomId).emit('cambiarTurno', { turno_de: nextName, usuarios: room.jugadores });
