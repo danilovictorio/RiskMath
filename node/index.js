@@ -3,6 +3,7 @@ import cors from 'cors';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { nanoid } from 'nanoid';
+import { Console } from 'console';
 
 const app = express();
 app.use(cors());
@@ -22,6 +23,9 @@ io.on('connection', (socket) => {
   console.log("Se ha conectado alguien!! con id " + socket.id);
 
   socket.esMiTurno = false;
+  socket.on('preguntasYRespuestas', ({ preguntasYRespuestas, roomId }) => {
+    io.to(roomId).emit('preguntasYRespuestas', preguntasYRespuestas);
+  });
 
   socket.on('crearSala', (data) => {
     const roomId = nanoid(6);
@@ -136,6 +140,11 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('enviarPreguntas', ({ roomId }) => {
+    console.log('Evento enviarPreguntas recibido');
+    io.to(roomId).emit('mostrarPreguntas');
+  });
+
   socket.on('respuestaJugador', ({ userName, paisId, acertado, roomId }) => {
     const room = rooms[roomId];
     if (room && room.jugadores && room.jugadores.length >= 2) {
@@ -156,7 +165,7 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('contadorPaises', ({roomId }) => {
+  socket.on('contadorPaises', ({ roomId }) => {
     const room = rooms[roomId];
     let recuentoPaises = {};
 

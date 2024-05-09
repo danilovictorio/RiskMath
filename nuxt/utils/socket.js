@@ -4,7 +4,7 @@ import { useAppStore } from '../stores/app';
 import { onMounted, onUnmounted } from 'vue';
 
 
-const URL = "http://tr3cine.a17danvicfer.daw.inspedralbes.cat:3123"; 
+const URL = "http://localhost:3123"; 
 
 export const socket = io(URL);
 
@@ -21,7 +21,12 @@ socket.on('salaCreada', (data) => {
   store.setSala(data.sala);
   console.log('Sala creada:', store.sala);
 });
-
+socket.on('preguntasYRespuestas', (preguntasYRespuestas) => {
+  const appStore = useAppStore();
+  // Aquí puedes actualizar tu estado de la aplicación con las preguntas y respuestas recibidas
+  // Por ejemplo, si tienes un método en tu store para establecer las preguntas y respuestas:
+  appStore.setPreguntasYRespuestas(preguntasYRespuestas);
+});
 socket.on('salas', (salas) => {
   let store = useAppStore();
   console.log('Salas recibidas:', salas);
@@ -88,7 +93,11 @@ socket.on('respuestaCorrecta', ({ paisId, jugador }) => {
   }
 });
 
-
+socket.on('mostrarPreguntas', () => {
+  const appStore = useAppStore();
+  appStore.setMostrarPreguntas(true);
+  console.log('Mostrar preguntas SOCKETCLIENT:', appStore.mostrarPreguntas);
+});
 
 socket.on('finDelJuego', ({ ganador, empate }) => {
   const appStore = useAppStore();

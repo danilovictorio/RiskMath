@@ -4,17 +4,18 @@
   sustituir valor en variable global:  ruta
  -->
 
+
 <template>
   <div class="container">
 
-    <div class="torn_container" v-if="!deberiaMostrarContenido">
+    <div class="torn_container" v-if="!esTrunoJugador">
       <div class="torn">
         <h3>Torn de :</h3>
         <h2>{{ this.app.turnoDe.nombre }}</h2>
         <h3>Espera el teu torn</h3>
       </div>
     </div>
-    <div class="torn_container" v-if="deberiaMostrarContenido">
+    <div class="torn_container" v-if="esTrunoJugador">
       <div class="torn">
         <h3>Torn de :</h3>
         <h2>{{ this.app.turnoDe.nombre }}</h2>
@@ -22,24 +23,29 @@
       </div>
     </div>
 
-    <div class="preguntaResposta_container" v-if="deberiaMostrarContenido">
-      <div class="pregunta_container" v-if="mostrarPregunta">
+
+    <div class="preguntaResposta_container">
+      <div class="pregunta_container" v-if="this.app.getMostrarPreguntas()">
         <div class="pregunta">
           <h2>{{ pregunta ? pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
         </div>
       </div>
 
-      <div class="respostes" v-if="mostrarPregunta">
-        <button class="btn_respostes btn_resposta1" @click="validateResponse(pregunta.id, 'a')" v-if="pregunta">
+      <div class="respostes">
+        <button class="btn_respostes btn_resposta1" @click="validateResponse(pregunta.id, 'a')" v-if="pregunta"
+          :disabled="!esMiTurnoDeResponder">
           <h3>Respuesta A:</h3> {{ pregunta.respuesta_a }}
         </button>
-        <button class="btn_respostes btn_resposta2" @click="validateResponse(pregunta.id, 'b')" v-if="pregunta">
+        <button class="btn_respostes btn_resposta2" @click="validateResponse(pregunta.id, 'b')" v-if="pregunta"
+          :disabled="!esMiTurnoDeResponder">
           <h3>Respuesta B:</h3> {{ pregunta.respuesta_b }}
         </button>
-        <button class="btn_respostes btn_resposta3" @click="validateResponse(pregunta.id, 'c')" v-if="pregunta">
+        <button class="btn_respostes btn_resposta3" @click="validateResponse(pregunta.id, 'c')" v-if="pregunta"
+          :disabled="!esMiTurnoDeResponder">
           <h3>Respuesta C:</h3> {{ pregunta.respuesta_c }}
         </button>
-        <button class="btn_respostes btn_resposta4" @click="validateResponse(pregunta.id, 'd')" v-if="pregunta">
+        <button class="btn_respostes btn_resposta4" @click="validateResponse(pregunta.id, 'd')" v-if="pregunta"
+          :disabled="!esMiTurnoDeResponder">
           <h3>Respuesta D:</h3> {{ pregunta.respuesta_d }}
         </button>
       </div>
@@ -128,9 +134,7 @@
 <script>
 import { socket } from '@/utils/socket.js';
 import { useAppStore } from '../stores/app';
-import { useRouter } from 'vue-router';
-
-
+import tinycolor from 'tinycolor2';
 export default {
   data() {
     return {
@@ -147,39 +151,64 @@ export default {
       esActivo: true,
       resultadoPregunta: false,
       miTurno: false,
-      ruta: 'http://trfinal.a17danvicfer.daw.inspedralbes.cat/laravel/public',
+      ruta: 'http://localhost:8000',
       contadorPaises: 0,
+      pregDuelo: false,
+      esMiTurnoDeResponder: false,
     };
   }, computed: {
-    deberiaMostrarContenido() {
+
+    esTrunoJugador() {
       return this.app.nombre === this.app.turnoDe.nombre;
     }
 
   },
   methods: {
     manejarClic(name, idPais, idUser) {
-
       this.paisId = name;
-      let paisElement;
-      console.log(this.app.turnoDe.color)
-      if (this.app.esMiturno()) {
-        paisElement = document.getElementById(name);
-        console.log(
-          "paisElement.style.fill:",
-          paisElement.style.fill,
-          "app.turnode.color:",
-          this.app.turnoDe.color
-        );
-        if (paisElement.style.fill === this.app.turnoDe.color) {
-          console.log("pais ya conquistado");
-        } else {
-          this.enviarAtac(idPais, name, idUser);
-        }
+      let paisElement = document.getElementById(name);
+      let fillColor = paisElement.getAttribute('style'); // Obtener fill attribute
+      let colorName = '';
 
-        //console.log("paisElement: ", paisElement);
+      if (fillColor) {
+        const match = fillColor.match(/fill:\s*([\w]+)/); // Buscar el patrón "fill: color"
+        if (match && match.length > 1) {
+          colorName = match[1]; // Obtener el nombre del color
+        }
       } else {
-        console.log("no es TU TURNO");
+        // Si el fill no está definido en el atributo style, intenta obtenerlo del atributo fill
+        fillColor = paisElement.getAttribute('fill');
       }
+
+      const turnoColorHex = tinycolor(this.app.turnoDe.color).toHex(); // Convertir a hexadecimal
+      const turnoColorRGB = tinycolor(this.app.turnoDe.color).toRgbString();
+      console.log("fillColor", fillColor);
+      console.log("colorName", colorName);
+      console.log("turnoColorHex", turnoColorHex);
+      console.log("turnoColorRGB", turnoColorRGB);
+      console.log(this.app.turnoDe.color);
+
+      if (this.app.esMiturno()) {
+        if (colorName === this.app.turnoDe.color || fillColor === turnoColorHex || fillColor === turnoColorRGB) {
+          console.log("El país ya está conquistado por ti.");
+        } else if (fillColor === '#ffffff' || fillColor === 'rgb(255, 255, 255)') { // Color blanco
+          console.log("El país no está conquistado.");
+          this.enviarAtac(idPais, name, idUser);
+        } else {
+          console.log("El país ya está conquistado por otro jugador.");
+          this.enviarDuelo();
+        }
+      } else {
+        console.log("No es tu turno.");
+      }
+    },
+
+    enviarDuelo() {
+      console.log("Enviar duelo");
+      // Enviar solicitud al servidor para iniciar el duelo
+      socket.emit('iniciarDuelo', {
+        roomId: this.app.sala.id
+      });
     },
 
     async propietariosPaises() {
@@ -290,7 +319,7 @@ export default {
         if (Object.keys(paisesConquistados).length == 15) {
           console.log("¡Todos los países han sido conquistados!");
 
-          this.$router.push({name: 'PaginaFinalitzada'});
+          this.$router.push({ name: 'PaginaFinalitzada' });
         } else {
           console.log("Aún no se han conquistado todos los países.");
         }
@@ -298,6 +327,7 @@ export default {
       });
     },
 
+    //funció enviar atac a server
     //funció enviar atac a server
     async enviarAtac(name, paisId, idUser) {
       //if (this.usuario == this.app.usuario.nombre) {
@@ -331,17 +361,24 @@ export default {
           respuesta_d: data.pregunta.respuesta_d,
         };
 
-        this.mostrar = 1;
+        // Emitir el evento al servidor con los datos de las preguntas y respuestas y el roomId
+        socket.emit('preguntasYRespuestas', {
+          preguntasYRespuestas: this.pregunta,
+          roomId: this.app.sala.id
+        });
+
         this.paisSeleccionado = paisId;
         this.app.setEstado("Respondiendo");
-        this.mostrarPregunta = true;
+        //this.app.setMostrarPreguntas(true);
+        this.esMiTurnoDeResponder = true; // Hacer que sea el turno del jugador actual
+        this.enviarPreguntasAlOtroJugador();
+        console.log("TaulerView MostrarPreguntas" + this.app.getMostrarPreguntas());
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }
-      //} else {
-      // this.esActivo = false;
-      //return;
-      //}
+    },
+    enviarPreguntasAlOtroJugador() {
+      socket.emit('enviarPreguntas', { roomId: this.app.sala.id });
     },
   },
   async mounted() {
