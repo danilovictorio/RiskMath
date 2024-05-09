@@ -17,11 +17,13 @@ export const useAppStore = defineStore('app', {
       capacidad: 0,
       jugadores: []
     },
+    pregunta: {},
     nombre:'',
     paisesConquistados: 0,
     countries: {}, 
     players: {}, 
     jugadorGanador: null,
+    duelo: false,
     mostrarPreguntas: false,
   }),
   actions: {
@@ -78,6 +80,18 @@ export const useAppStore = defineStore('app', {
     },
     getMostrarPreguntas(){
       return this.mostrarPreguntas;
+    },
+    setPreguntas(pregunta){
+      this.pregunta = pregunta;
+    },
+    getPreguntas(){
+      return this.pregunta;
+    },
+    setDuelo(duelo){
+      this.duelo = duelo;
+    },
+    getDuelo(){
+      return this.duelo;
     }
   },
 })
