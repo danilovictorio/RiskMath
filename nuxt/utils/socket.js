@@ -95,10 +95,23 @@ socket.on('mostrarPreguntas', (preguntas) => {
   console.log('Mostrar preguntas SOCKETCLIENT:', appStore.mostrarPreguntas);
 });
 
+socket.on('mostrarPreguntasDuelo', (preguntas) => {
+  const appStore = useAppStore();
+  appStore.setMostrarPreguntas(true);
+  appStore.setPreguntas(preguntas);
+  appStore.setDuelo(true);
+  console.log('Mostrar preguntas duelo SOCKETCLIENT:', appStore.mostrarPreguntas);
+});
+
 socket.on('ocultarPreguntas', () => {
   const appStore = useAppStore();
   appStore.setMostrarPreguntas(false);
   console.log('Ocultar preguntas SOCKETCLIENT:', appStore.mostrarPreguntas);
+});
+socket.on('dueloAcabado', () => {
+  const appStore = useAppStore();
+  appStore.setDuelo(false);
+  console.log('Duelo preguntas terminado SOCKETCLIENT:', appStore.mostrarPreguntas);
 });
 
 socket.on('finDelJuego', ({ ganador, empate }) => {

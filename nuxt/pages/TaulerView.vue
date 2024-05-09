@@ -1,42 +1,44 @@
 
 <template>
   <div class="container">
-
-    <div class="torn_container" v-if="!esTrunoJugador">
-      <div class="torn">
-        <h3>Torn de :</h3>
-        <h2>{{ this.app.turnoDe.nombre }}</h2>
-        <h3>Espera el teu torn</h3>
-      </div>
-    </div>
-    <div class="torn_container" v-if="esTrunoJugador">
-      <div class="torn">
-        <h3>Torn de :</h3>
-        <h2>{{ this.app.turnoDe.nombre }}</h2>
-        <h2>AL ATAC!!!!</h2>
-      </div>
-    </div>
-
-
-    <div class="preguntaResposta_container">
-      <div class="pregunta_container" v-if="this.app.getMostrarPreguntas()">
-        <div class="pregunta">
-          <h2>{{ this.app.pregunta ? this.app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
+    <div v-if="!app.duelo">
+      <div class="torn_container" v-if="!esTrunoJugador">
+        <div class="torn">
+          <h3>Torn de :</h3>
+          <h2>{{ app.turnoDe.nombre }}</h2>
+          <h3>Espera el teu torn</h3>
         </div>
       </div>
+      <div class="torn_container" v-if="esTrunoJugador">
+        <div class="torn">
+          <h3>Torn de :</h3>
+          <h2>{{ app.turnoDe.nombre }}</h2>
+          <h2>AL ATAC!!!!</h2>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <h2>DUELO INICIADO</h2>
+    </div>jock
 
-      <div class="respostes" v-if="this.app.getMostrarPreguntas()">
-        <button class="btn_respostes btn_resposta1" @click="validateResponse(this.app.pregunta.id, 'a')" v-if="this.app.pregunta" :disabled="!esTrunoJugador">
-          <h3>Respuesta A:</h3> {{ this.app.pregunta.respuesta_a }}
+    <div class="preguntaResposta_container">
+      <div class="pregunta_container" v-if="app.getMostrarPreguntas()">
+        <div class="pregunta">
+          <h2>{{ app.pregunta ? app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
+        </div>
+      </div>
+      <div class="respostes" v-if="app.getMostrarPreguntas()">
+        <button class="btn_respostes btn_resposta1" @click="validateResponse(app.pregunta.id, 'a')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+          <h3>Respuesta A:</h3> {{ app.pregunta.respuesta_a }}
         </button>
-        <button class="btn_respostes btn_resposta2" @click="validateResponse(this.app.pregunta.id, 'b')" v-if="this.app.pregunta" :disabled="!esTrunoJugador">
-          <h3>Respuesta B:</h3> {{ this.app.pregunta.respuesta_b }}
+        <button class="btn_respostes btn_resposta2" @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+          <h3>Respuesta B:</h3> {{ app.pregunta.respuesta_b }}
         </button>
-        <button class="btn_respostes btn_resposta3" @click="validateResponse(this.app.pregunta.id, 'c')" v-if="this.app.pregunta" :disabled="!esTrunoJugador">
-          <h3>Respuesta C:</h3> {{ this.app.pregunta.respuesta_c }}
+        <button class="btn_respostes btn_resposta3" @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+          <h3>Respuesta C:</h3> {{ app.pregunta.respuesta_c }}
         </button>
-        <button class="btn_respostes btn_resposta4" @click="validateResponse(this.app.pregunta.id, 'd')" v-if="this.app.pregunta" :disabled="!esTrunoJugador">
-          <h3>Respuesta D:</h3> {{ this.app.pregunta.respuesta_d }}
+        <button class="btn_respostes btn_resposta4" @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+          <h3>Respuesta D:</h3> {{ app.pregunta.respuesta_d }}
         </button>
       </div>
     </div>
@@ -186,19 +188,53 @@ export default {
           this.enviarAtac(idPais, name, idUser);
         } else {
           console.log("El país ya está conquistado por otro jugador.");
-          this.enviarDuelo();
+          this.enviarDuelo(idPais, name, idUser);
         }
       } else {
         console.log("No es tu turno.");
       }
     },
 
-    enviarDuelo() {
+    async enviarDuelo(name, paisId, idUser) {
       console.log("Enviar duelo");
-      // Enviar solicitud al servidor para iniciar el duelo
-      socket.emit('iniciarDuelo',{
-          roomId: this.app.sala.id
-      });
+      this.app.setEstado("Atacando");
+      try {
+        const response = await fetch(`${this.ruta}/api/enviar-atac`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: name,
+            idUser: idUser,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error en la solicitud: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Respuesta del servidor:", data);
+
+        this.pregunta = {
+          id: data.pregunta.id,
+          pregunta: data.pregunta.pregunta,
+          respuesta_a: data.pregunta.respuesta_a,
+          respuesta_b: data.pregunta.respuesta_b,
+          respuesta_c: data.pregunta.respuesta_c,
+          respuesta_d: data.pregunta.respuesta_d,
+        };
+
+        this.mostrar = 1;
+        this.paisSeleccionado = paisId;
+        this.app.setEstado("Respondiendo");
+        
+        socket.emit('enviarDuelo', { roomId: this.app.sala.id, preguntas: this.pregunta });
+        console.log("TaulerView MostrarPreguntasDUELO"+ this.app.getMostrarPreguntas());
+      } catch (error) {
+        console.error("Error en la solicitud:", error);
+      }
     },
 
     async propietariosPaises() {
@@ -262,6 +298,10 @@ export default {
           });
           this.app.setEstado("Respondiendo");
           socket.emit('OcultarPreguntas', { roomId: this.app.sala.id});
+          if(this.app.duelo){
+            socket.emit('dueloTerminado', {roomId: this.app.sala.id})
+        
+          }
           this.resultadoPregunta = false;
         })
         .catch((error) => {

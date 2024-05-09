@@ -141,10 +141,18 @@ io.on('connection', (socket) => {
     console.log('Evento enviarPreguntas recibido');
     io.to(roomId).emit('mostrarPreguntas', preguntas);
   });
+  socket.on('enviarDuelo', ({ roomId , preguntas}) => {
+    console.log('Evento enviarPreguntas recibido');
+    io.to(roomId).emit('mostrarPreguntasDuelo', preguntas);
+  });
 
   socket.on('OcultarPreguntas', ({ roomId}) => {
     console.log('Evento OcultarPreguntas recibido');
     io.to(roomId).emit('ocultarPreguntas');
+  });
+  socket.on('dueloTerminado', ({ roomId}) => {
+    console.log('Evento DueloTerminado recibido');
+    io.to(roomId).emit('dueloAcabado');
   });
 
   socket.on('respuestaJugador', ({ userName, paisId, acertado, roomId }) => {
