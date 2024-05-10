@@ -15,6 +15,12 @@ socket.on('startGame', () => {
   // Aquí puedes agregar código para manejar el inicio del juego
 });
 
+socket.on('contrincanteRespuesta', (questionId) => {
+  const appStore = useAppStore();
+  appStore.setRespuestaContrincante(questionId);
+  console.log('Respuesta contrincante:', questionId);
+});
+
 socket.on('salaCreada', (data) => {
   let store = useAppStore();
   console.log('Datos recibidos:', data);

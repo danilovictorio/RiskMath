@@ -22,6 +22,11 @@ const colores = ['green', 'blue']; // Define colores aquí
 io.on('connection', (socket) => {
   console.log("Se ha conectado alguien!! con id " + socket.id);
 
+  socket.on('contrincanteVerRespuesta', (questionId,roomId) => {
+
+    io.to(roomId).emit('contrincanteRespuesta', questionId);
+  
+  });
   socket.esMiTurno = false;
   socket.on('preguntasYRespuestas', ({ preguntasYRespuestas, roomId }) => {
     io.to(roomId).emit('preguntasYRespuestas', preguntasYRespuestas);
