@@ -2,30 +2,32 @@
   <div class="grid grid-cols-2 items-center justify-center w-screen h-screen bg-center bg-cover object-cover"
     style="grid-template-areas: 'mapa torn' 'mapa preguntesiRespostes' 'mapa preguntesiRespostes'; background-image: url('/mar.gif');">
 
-    <div class="flex items-center justify-center p-5" v-if="!esTrunoJugador" style="grid-area: torn;">
-      <div class="w-64 h-36 p-5 text-center text-white rounded-lg shadow-md"
-        style="backdrop-filter: blur(8px); background-color: rgba(1, 5, 63, 0.7);">
-        <h3 class="mb-2">Torn de :</h3>
-        <h2>{{ this.app.turnoDe.nombre }}</h2>
-        <h3>Espera el teu torn</h3>
-      </div>
+    <div class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-64 h-36" v-if="!esTrunoJugador" style="grid-area: torn;">
+  <div class="text-center text-white">
+    <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
+    <div class="p-2 bg-white bg-opacity-20 rounded-md">
+      <h2 class="text-2xl font-bold text-indigo-300">{{ this.app.turnoDe.nombre }}</h2>
     </div>
-    <div class="flex items-center justify-center p-5" v-if="esTrunoJugador" style="grid-area: torn;">
-      <div class="w-64 h-36 p-5 text-center text-white rounded-lg shadow-md"
-        style="backdrop-filter: blur(8px); background-color: rgba(1, 5, 63, 0.7);">
-        <h3 class="mb-2">Torn de :</h3>
-        <h2>{{ this.app.turnoDe.nombre }}</h2>
-        <h2 class="text-2xl text-orange-500">AL ATAC!!!!</h2>
-      </div>
+    <h3 class="text-lg font-light">ESPERA EL TEU TORN</h3>
+  </div>
+</div>
+<div class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-64 h-36" v-if="esTrunoJugador" style="grid-area: torn;">
+  <div class="text-center text-white">
+    <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
+    <div class="p-2 bg-white bg-opacity-20 rounded-md">
+      <h2 class="text-2xl font-bold text-indigo-300">{{ this.app.turnoDe.nombre }}</h2>
     </div>
+    <h2 class="text-2xl text-yellow-300 font-bold">ATACA!!!</h2>
+  </div>
+</div>
 
-    <div class="flex flex-col justify-between items-center bg-white bg-opacity-25 backdrop-blur-lg rounded-lg p-5 m-5" style="grid-area: preguntesiRespostes;">
-  <div class="text-center text-white" v-if="this.app.getMostrarPreguntas()">
+    <div class="flex flex-col justify-between items-center bg-white bg-opacity-5 backdrop-blur-lg rounded-lg m-5" id="preg" style="grid-area: preguntesiRespostes;">
+  <div class="text-center text-white" id="cont-preg" v-if="this.app.getMostrarPreguntas()">
     <h2 class="text-2xl font-semibold">{{ this.app.pregunta ? this.app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
   </div>
 
 
-  <div class="grid gap-8 m-5" v-if="this.app.getMostrarPreguntas()"
+  <div class="grid gap-8 m-5" id="cont-res" v-if="this.app.getMostrarPreguntas()"
   style="grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; grid-template-areas: 'btn_resposta1 btn_resposta2' 'btn_resposta3 btn_resposta4';">
   <button class="button" @click="validateResponse(this.app.pregunta.id, 'a')" v-if="this.app.pregunta" :disabled="!esTrunoJugador"
     style="grid-area: btn_resposta1;">
@@ -387,6 +389,24 @@ export default {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+}
+#preg{
+margin-left: 20%;
+margin-right: 20%;
+padding-bottom: 5%;
+padding-left: 5%;
+padding-right: 5%;
+border-radius: 10%;
+}
+#cont-preg{
+  margin-top: 5%;
+  margin-bottom: 5%;
+  margin-left: auto;
+  margin-right: auto;
+}
+#cont-res{
+  
+
 }
 .button {
   padding: 2rem;
