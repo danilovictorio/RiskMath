@@ -231,8 +231,7 @@ export default {
     //funció que valida si la resposta d'un usuari es la correcta
     validateResponse(questionId, selectedOption) {
       this.app.setEstado("Acabado");
-      console.log("Pregufgnta ID:", questionId, "rroomid", this.app.sala.id);
-      console.log("romid", this.app.sala.id);
+      console.log("Pregufgnta ID:", questionId, "roomid", this.app.sala.id);
       socket.emit('contrincanteVerRespuesta', { questionId: questionId, roomId: this.app.sala.id});
       const apiUrl = `${this.ruta}/api/verificar-respuesta`;
       const requestData = {

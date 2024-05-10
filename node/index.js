@@ -22,15 +22,15 @@ const colores = ['green', 'blue']; // Define colores aquí
 io.on('connection', (socket) => {
   console.log("Se ha conectado alguien!! con id " + socket.id);
 
-  socket.on('contrincanteVerRespuesta', (questionId,roomId) => {
+  // Server side
 
-    io.to(roomId).emit('contrincanteRespuesta', questionId);
-  
+  socket.on('contrincanteVerRespuesta', (data) => {
+    // Broadcast to all clients in the room
+    socket.to(data.roomId).emit('updateRespuesta', data);
   });
+
   socket.esMiTurno = false;
-  socket.on('preguntasYRespuestas', ({ preguntasYRespuestas, roomId }) => {
-    io.to(roomId).emit('preguntasYRespuestas', preguntasYRespuestas);
-  });
+
 
   socket.on('crearSala', (data) => {
     const roomId = nanoid(6);

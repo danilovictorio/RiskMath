@@ -15,11 +15,7 @@ socket.on('startGame', () => {
   // Aquí puedes agregar código para manejar el inicio del juego
 });
 
-socket.on('contrincanteRespuesta', (questionId) => {
-  const appStore = useAppStore();
-  appStore.setRespuestaContrincante(questionId);
-  console.log('Respuesta contrincante:', questionId);
-});
+
 
 socket.on('salaCreada', (data) => {
   let store = useAppStore();
@@ -71,7 +67,17 @@ onMounted(() => {
 onUnmounted(() => {
   socket.off('usuarioUnidoSala', usuarioUnidoSalaHandler);
 });
-
+socket.on('contrincante', (questionId) => {
+  let appStore = useAppStore();
+  appStore.setRespuestaContrincante(questionId);
+  console.log('Respuesta contrincante:', questionId);
+});
+// Client side
+socket.on('updateRespuesta', (data) => {
+  // Update idRespuestaActual in the pinia store
+  let appStore = useAppStore();
+  appStore.setRespuestaContrincante(data.questionId);
+});
 socket.on('cambiarTurno', ({ turno_de, usuarios }) => {
   console.log('Cambio de turno. ¿Es mi turno?', turno_de);
   const appStore = useAppStore();
