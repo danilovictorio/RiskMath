@@ -293,10 +293,11 @@ export default {
           console.log("paises conquistados", this.app.paisesConquistados);
 
           socket.emit("respuestaJugador", {
+            turnoDe: this.app.turnoDe.nombre,
             userName: this.app.nombre,
             paisId: this.paisSeleccionado,
             acertado: this.resultadoPregunta,
-            roomId: this.app.sala.id, // Asegúrate de que `roomId` está disponible en `this.app`
+            roomId: this.app.sala.id,
           });
           this.app.setEstado("Respondiendo");
           socket.emit('OcultarPreguntas', { roomId: this.app.sala.id});

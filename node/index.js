@@ -158,7 +158,7 @@ io.on('connection', (socket) => {
     io.to(roomId).emit('dueloAcabado');
   });
 
-  socket.on('respuestaJugador', ({ userName, paisId, acertado, roomId }) => {
+  socket.on('respuestaJugador', ({ turnoDe, userName, paisId, acertado, roomId }) => {
     const room = rooms[roomId];
     if (room && room.jugadores && room.jugadores.length >= 2) {
       const usuario1 = room.jugadores[0];
@@ -169,33 +169,40 @@ io.on('connection', (socket) => {
         const color = userName === usuario1.nombre ? usuario1.color : usuario2.color;
         io.to(roomId).emit('respuestaCorrecta', { paisId, jugador: userName, color});
       }
-      const nextName = userName === usuario1.nombre ? usuario2.nombre : usuario1.nombre;
-      io.to(roomId).emit('cambiarTurno', { turno_de: nextName, usuarios: room.jugadores });
-
-      console.log('Cambio de turno:', nextName);
+      console.log('Turno de:', turnoDe, 'Usuario:', userName);
+      if (turnoDe === userName) {
+        const nextName = userName === usuario1.nombre ? usuario2.nombre : usuario1.nombre;
+        io.to(roomId).emit('cambiarTurno', { turno_de: nextName, usuarios: room.jugadores });
+        console.log('Cambio de turno:', nextName);
+      } else {
+        io.to(roomId).emit('cambiarTurno', { turno_de: userName, usuarios: room.jugadores });
+      }
     } else {
       console.log('Error jugadores sala.');
     }
-  });
+  });  
 
   socket.on('contadorPaises', ({ roomId }) => {
     const room = rooms[roomId];
-    let recuentoPaises = {};
-
-    for (let usuario of Object.values(room.paisesConquistados)) {
-      if (usuario in recuentoPaises) {
-        recuentoPaises[usuario]++;
-      } else {
-        recuentoPaises[usuario] = 1;
+    if (room && room.paisesConquistados) { // Verifica si room existe y tiene la propiedad paisesConquistados
+      let recuentoPaises = {};
+  
+      for (let usuario of Object.values(room.paisesConquistados)) {
+        if (usuario in recuentoPaises) {
+          recuentoPaises[usuario]++;
+        } else {
+          recuentoPaises[usuario] = 1;
+        }
       }
+      let usuarioConMasPaises = Object.keys(recuentoPaises).reduce((a, b) => recuentoPaises[a] > recuentoPaises[b] ? a : b);
+      console.log('Paises conquistados:', room.paisesConquistados);
+      // Propagar el cambio a todos los clientes
+      io.to(roomId).emit('paisesConquistados', { paisesConquistados: room.paisesConquistados, usuarioGanador: usuarioConMasPaises });
+    } else {
+      console.log('La sala no existe o no tiene paisesConquistados definido.');
     }
-    let usuarioConMasPaises = Object.keys(recuentoPaises).reduce((a, b) => recuentoPaises[a] > recuentoPaises[b] ? a : b);
-    console.log('Paises conquistados:', room.paisesConquistados);
-    // Propagar el cambio a todos los clientes
-    io.to(roomId).emit('paisesConquistados', { paisesConquistados: room.paisesConquistados, usuarioGanador: usuarioConMasPaises });
-
-
   });
+  
 });
 
 server.listen(port, () => {
