@@ -8,25 +8,13 @@ const URL = "http://localhost:3123";
 
 export const socket = io(URL);
 
-const colores = ['green','blue'];
-
-
-socket.on('startGame', () => { 
-  // Aquí puedes agregar código para manejar el inicio del juego
-});
-
 socket.on('salaCreada', (data) => {
   let store = useAppStore();
   console.log('Datos recibidos:', data);
   store.setSala(data.sala);
   console.log('Sala creada:', store.sala);
 });
-socket.on('preguntasYRespuestas', (preguntasYRespuestas) => {
-  const appStore = useAppStore();
-  // Aquí puedes actualizar tu estado de la aplicación con las preguntas y respuestas recibidas
-  // Por ejemplo, si tienes un método en tu store para establecer las preguntas y respuestas:
-  appStore.setPreguntasYRespuestas(preguntasYRespuestas);
-});
+
 socket.on('salas', (salas) => {
   let store = useAppStore();
   console.log('Salas recibidas:', salas);
@@ -120,10 +108,10 @@ socket.on('finDelJuego', ({ ganador, empate }) => {
 
   if (ganador) {
     console.log(`¡${ganador} es el ganador!`);
-    appStore.setGanador(ganador); // Agrega un método en tu store para almacenar el ganador
+    appStore.setGanador(ganador); 
   } else if (empate) {
     console.log('¡El juego ha terminado en empate!');
-    appStore.setGanador(null); // Puedes manejar el empate según tus necesidades
+    appStore.setGanador(null);
   }
 });
 

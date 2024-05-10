@@ -27,9 +27,6 @@
           demostrant coneixements en unitats i conversions.</p>
       </div>
     </div>
-    <div class="contador" v-if="this.mostrarContador">
-      CONTADOR:{{ this.countdown }}
-    </div>
   </div>
 </template>
 
@@ -51,57 +48,6 @@ export default {
     };
   },
   methods: {
-    async iniciarPartida() {
-      try {
-        
-        this.app.setNombre(this.nombreUsuario);
-
-        if (this.usuariosJuego.length >= 2) {
-          this.startCountdown();
-        }
-
-        socket.emit('peticion_jugar', { nombreUsuario: this.nombreUsuario }, roomId);
-        this.nombreEscrito = true;
-      } catch (error) {
-        console.error('Error al iniciar la partida:', error);
-      }
-    },
-    async startCountdown() {
-      this.mostrarContador = true;
-      this.countdown = 3;
-
-      const timer = setInterval(() => {
-        this.countdown--;
-
-        console.log(this.countdown);
-        if (this.countdown === 0) {
-
-          clearInterval(timer);
-
-          this.$router.push({ name: 'TaulerView' });
-        }
-      }, 1000);
-    },
-    async borrarOcupantes() {
-      try {
-
-        const response = await fetch(`${this.ruta}/api/borrar-ocupantes`, {
-          method: 'POST',
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log(data.message);
-
-        console.log("DATOS BORRADOS DE OCUPANTES");
-      } catch (error) {
-        console.error('Error al borrar ocupantes:', error);
-        throw error;
-      }
-    },
     popupInfo() {
       var superpuesto = document.getElementById("superpuesto");
       superpuesto.classList.add("mostrar");
@@ -128,15 +74,6 @@ export default {
         this.$router.push({ name: 'UnirseSala' });
       }
     },
-  },
-  mounted() {
-    socket.on('actualizacionUsuario', (usuarios) => {
-      console.log('Usuarios actualizados:', usuarios);
-      this.usuariosJuego = usuarios;
-      if (this.usuariosJuego.length >= 2) {
-        this.startCountdown();
-      }
-    });
   },
 };
 </script>
