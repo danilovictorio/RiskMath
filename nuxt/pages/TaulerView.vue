@@ -1,30 +1,7 @@
 <template>
-
-  <div class="container">
-    <div v-if="!app.duelo">
-      <div class="torn_container" v-if="!esTrunoJugador">
-        <div class="torn">
-          <h3>Torn de :</h3>
-          <h2>{{ app.turnoDe.nombre }}</h2>
-          <h2>Color : {{ app.turnoDe.color }}</h2>
-          <h3>Espera el teu torn</h3>
-        </div>
-      </div>
-      <div class="torn_container" v-if="esTrunoJugador">
-        <div class="torn">
-          <h3>Torn de :</h3>
-          <h2>{{ app.turnoDe.nombre }}</h2>
-          <h2> Color : {{ app.turnoDe.color }}</h2>
-          <h2>AL ATAC!!!!</h2>
-        </div>
-      </div>
-    </div>
-    <div v-else>
-      <h1>DUELO INICIADO</h1>
-    </div>
   <div class="grid grid-cols-2 items-center justify-center w-screen h-screen bg-center bg-cover object-cover"
     style="grid-template-areas: 'mapa torn' 'mapa preguntesiRespostes' 'mapa preguntesiRespostes'; background-image: url('/mar.gif');">
-
+    <div v-if="!app.duelo">
     <div class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-64 h-36" v-if="!esTrunoJugador" style="grid-area: torn;">
   <div class="text-center text-white">
     <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
@@ -43,12 +20,14 @@
     <h2 class="text-2xl text-yellow-300 font-bold">ATACA!!!</h2>
   </div>
 </div>
-
+<div v-else>
+      <h1>DUELO INICIADO</h1>
+    </div>
     <div class="flex flex-col justify-between items-center bg-white bg-opacity-5 backdrop-blur-lg rounded-lg m-5" id="preg" style="grid-area: preguntesiRespostes;">
   <div class="text-center text-white" id="cont-preg" v-if="this.app.getMostrarPreguntas()">
     <h2 class="text-2xl font-semibold">{{ this.app.pregunta ? this.app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
   </div>
-
+    </div>
 
 
   <div class="grid gap-8 m-5" id="cont-res" v-if="this.app.getMostrarPreguntas()"
@@ -153,6 +132,7 @@
 
 
 <script>
+import { obtenerPaises, enviarAtac } from '../services/communicationManager.js';
 import { socket } from '@/utils/socket.js';
 import { useAppStore } from '../stores/app';
 import tinycolor from 'tinycolor2';
@@ -227,25 +207,7 @@ export default {
     async enviarDuelo(name, paisId, idUser) {
       console.log("Enviar duelo");
       this.app.setEstado("Atacando");
-      try {
-        const response = await fetch(`${this.ruta}/api/enviar-atac`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: name,
-            idUser: idUser,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log("Respuesta del servidor:", data);
-
+      enviarAtac(name, idUser).then((data) => {
         this.pregunta = {
           id: data.pregunta.id,
           pregunta: data.pregunta.pregunta,
@@ -254,16 +216,15 @@ export default {
           respuesta_c: data.pregunta.respuesta_c,
           respuesta_d: data.pregunta.respuesta_d,
         };
-
+        }).catch((error) => {
+                console.error(error);
+        });
         this.mostrar = 1;
         this.paisSeleccionado = paisId;
         this.app.setEstado("Respondiendo");
         
         socket.emit('enviarDuelo', { roomId: this.app.sala.id, preguntas: this.pregunta });
         console.log("TaulerView MostrarPreguntasDUELO"+ this.app.getMostrarPreguntas());
-      } catch (error) {
-        console.error("Error en la solicitud:", error);
-      }
     },
 
     async propietariosPaises() {
@@ -277,13 +238,12 @@ export default {
     //funció per obtenir el json de paisos
     async obtenerDatosPaises() {
       try {
-        const response = await fetch(`${this.ruta}/api/paises`);
-        const data = await response.json();
-        this.paises = data.paises;
-        console.log(data);
-      } catch (error) {
-        console.error("Error al obtener datos de países:", error);
-      }
+        const paises = await obtenerPaises();
+        this.paises = paises;
+        console.log("Paises obtenidos:", paises);
+        } catch (error) {
+            console.error("Error al obtener datos de países:", error);
+        }
     },
 
     //funció que valida si la resposta d'un usuari es la correcta
@@ -371,10 +331,6 @@ export default {
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }
-      /* } else {
-        this.esActivo = false;
-        return;
-      }*/
     },
 
     //funció per a comprovar el final del joc
@@ -393,30 +349,10 @@ export default {
     },
 
     //funció enviar atac a server
-    //funció enviar atac a server
     async enviarAtac(name, paisId, idUser) {
-      //if (this.usuario == this.app.usuario.nombre) {
 
       this.app.setEstado("Atacando");
-      try {
-        const response = await fetch(`${this.ruta}/api/enviar-atac`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: name,
-            idUser: idUser,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log("Respuesta del servidor:", data);
-
+      enviarAtac(name, idUser).then((data) => {
         this.pregunta = {
           id: data.pregunta.id,
           pregunta: data.pregunta.pregunta,
@@ -425,6 +361,9 @@ export default {
           respuesta_c: data.pregunta.respuesta_c,
           respuesta_d: data.pregunta.respuesta_d,
         };
+            }).catch((error) => {
+                console.error(error);
+            });
 
         // Emitir el evento al servidor con los datos de las preguntas y respuestas y el roomId
         socket.emit('preguntasYRespuestas', {
@@ -436,10 +375,7 @@ export default {
         this.app.setEstado("Respondiendo");
 
         socket.emit('enviarPreguntas', { roomId: this.app.sala.id, preguntas: this.pregunta });
-        console.log("TaulerView MostrarPreguntas" + this.app.getMostrarPreguntas());
-      } catch (error) {
-        console.error("Error en la solicitud:", error);
-      }
+        console.log("TaulerView MostrarPreguntas"+ this.app.getMostrarPreguntas());
     },
   },
   async mounted() {
@@ -472,10 +408,7 @@ border-radius: 10%;
   margin-left: auto;
   margin-right: auto;
 }
-#cont-res{
-  
 
-}
 .button {
   padding: 2rem;
   text-align: center;

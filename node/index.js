@@ -17,20 +17,14 @@ const io = new Server(server, {
 });
 
 const rooms = {};
-const colores = ['green', 'blue']; // Define colores aquí
 
 io.on('connection', (socket) => {
   console.log("Se ha conectado alguien!! con id " + socket.id);
 
-  // Server side
-
-  socket.on('contrincanteVerRespuesta', (data) => {
-    // Broadcast to all clients in the room
-    socket.to(data.roomId).emit('updateRespuesta', data);
-  });
-
   socket.esMiTurno = false;
-
+  socket.on('preguntasYRespuestas', ({ preguntasYRespuestas, roomId }) => {
+    io.to(roomId).emit('preguntasYRespuestas', preguntasYRespuestas);
+  });
 
   socket.on('crearSala', (data) => {
     const roomId = nanoid(6);
@@ -117,7 +111,7 @@ io.on('connection', (socket) => {
       // Asignar colores a los jugadores
       room.jugadores = room.jugadores.map((jugador, index) => {
         const color = index === 0 ? 'green' : 'blue'; // Asignar el color "green" al primer jugador y "blue" al segundo
-        return { nombre: jugador, estado: "", color }; // Crear un nuevo objeto jugador con el color asignado
+        return { nombre: jugador, estado: "", color }; 
       });
 
       io.to(roomId).emit("peticion_jugar_aceptada", datos);
@@ -128,9 +122,6 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log("Se ha desconectado alguien!! con id " + socket.id);
-    //HAY QUE MIRARLO PORQUE PETA!
-    //REPASAR TODAS LAS SALAS Y SACARLO DE LAS SALAS QUE ESTE ESTE USUARIO
-
     for (const roomId in rooms) {
       const room = rooms[roomId];
       if (room) { // Asegúrate de que room no es undefined
@@ -189,7 +180,7 @@ io.on('connection', (socket) => {
 
   socket.on('contadorPaises', ({ roomId }) => {
     const room = rooms[roomId];
-    if (room && room.paisesConquistados) { // Verifica si room existe y tiene la propiedad paisesConquistados
+    if (room && room.paisesConquistados) { 
       let recuentoPaises = {};
   
       for (let usuario of Object.values(room.paisesConquistados)) {
@@ -201,7 +192,6 @@ io.on('connection', (socket) => {
       }
       let usuarioConMasPaises = Object.keys(recuentoPaises).reduce((a, b) => recuentoPaises[a] > recuentoPaises[b] ? a : b);
       console.log('Paises conquistados:', room.paisesConquistados);
-      // Propagar el cambio a todos los clientes
       io.to(roomId).emit('paisesConquistados', { paisesConquistados: room.paisesConquistados, usuarioGanador: usuarioConMasPaises });
     } else {
       console.log('La sala no existe o no tiene paisesConquistados definido.');
