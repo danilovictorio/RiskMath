@@ -134,6 +134,7 @@ io.on('connection', (socket) => {
   socket.on('enviarPreguntas', ({ roomId , preguntas}) => {
     console.log('Evento enviarPreguntas recibido');
     io.to(roomId).emit('mostrarPreguntas', preguntas);
+    console.log("Pregunta: ", preguntas)
   });
   socket.on('enviarDuelo', ({ roomId , preguntas}) => {
     console.log('Evento enviarPreguntas recibido');
