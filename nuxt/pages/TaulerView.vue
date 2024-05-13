@@ -1,56 +1,49 @@
 <template>
-  <div class="grid grid-cols-2 items-center justify-center w-screen h-screen bg-center bg-cover object-cover"
-    style="grid-template-areas: 'mapa torn' 'mapa preguntesiRespostes' 'mapa preguntesiRespostes'; background-image: url('/mar.gif');">
+   <div class="container">
     <div v-if="!app.duelo">
-    <div class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-64 h-36" v-if="!esTrunoJugador" style="grid-area: torn;">
-  <div class="text-center text-white">
-    <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
-    <div class="p-2 bg-white bg-opacity-20 rounded-md">
-      <h2 class="text-2xl font-bold text-indigo-300">{{ this.app.turnoDe.nombre }}</h2>
+      <div class="torn_container" v-if="!esTrunoJugador">
+        <div class="torn">
+          <h3>Torn de :</h3>
+          <h2>{{ app.turnoDe.nombre }}</h2>
+          <h2>Color : {{ app.turnoDe.color }}</h2>
+          <h3>Espera el teu torn</h3>
+        </div>
+      </div>
+      <div class="torn_container" v-if="esTrunoJugador">
+        <div class="torn">
+          <h3>Torn de :</h3>
+          <h2>{{ app.turnoDe.nombre }}</h2>
+          <h2> Color : {{ app.turnoDe.color }}</h2>
+          <h2>AL ATAC!!!!</h2>
+        </div>
+      </div>
     </div>
-    <h3 class="text-lg font-light">ESPERA EL TEU TORN</h3>
-  </div>
-</div>
-<div class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-64 h-36" v-if="esTrunoJugador" style="grid-area: torn;">
-  <div class="text-center text-white">
-    <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
-    <div class="p-2 bg-white bg-opacity-20 rounded-md">
-      <h2 class="text-2xl font-bold text-indigo-300">{{ this.app.turnoDe.nombre }}</h2>
-    </div>
-    <h2 class="text-2xl text-yellow-300 font-bold">ATACA!!!</h2>
-  </div>
-</div>
-<div v-else>
+    <div v-else>
       <h1>DUELO INICIADO</h1>
     </div>
-    <div class="flex flex-col justify-between items-center bg-white bg-opacity-5 backdrop-blur-lg rounded-lg m-5" id="preg" style="grid-area: preguntesiRespostes;">
-  <div class="text-center text-white" id="cont-preg" v-if="this.app.getMostrarPreguntas()">
-    <h2 class="text-2xl font-semibold">{{ this.app.pregunta ? this.app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
-  </div>
+
+    <div class="preguntaResposta_container">
+      <div class="pregunta_container" v-if="app.getMostrarPreguntas()">
+        <div class="pregunta">
+          <h2>{{ app.pregunta ? app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
+        </div>
+      </div>
+      <div class="respostes" v-if="app.getMostrarPreguntas()">
+        <button class="btn_respostes btn_resposta1" @click="validateResponse(app.pregunta.id, 'a')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+          <h3>Respuesta A:</h3> {{ app.pregunta.respuesta_a }}
+        </button>
+        <button class="btn_respostes btn_resposta2" @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+          <h3>Respuesta B:</h3> {{ app.pregunta.respuesta_b }}
+        </button>
+        <button class="btn_respostes btn_resposta3" @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+          <h3>Respuesta C:</h3> {{ app.pregunta.respuesta_c }}
+        </button>
+        <button class="btn_respostes btn_resposta4" @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+          <h3>Respuesta D:</h3> {{ app.pregunta.respuesta_d }}
+        </button>
+      </div>
     </div>
-
-
-  <div class="grid gap-8 m-5" id="cont-res" v-if="this.app.getMostrarPreguntas()"
-  style="grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; grid-template-areas: 'btn_resposta1 btn_resposta2' 'btn_resposta3 btn_resposta4';">
-  <button class="button" @click="validateResponse(this.app.pregunta.id, 'a')" v-if="this.app.pregunta" :disabled="!esTrunoJugador"
-    style="grid-area: btn_resposta1;">
-    <h3>Respuesta A:</h3> {{ this.app.pregunta.respuesta_a }}
-  </button>
-  <button class="button" @click="validateResponse(this.app.pregunta.id, 'b')" v-if="this.app.pregunta" :disabled="!esTrunoJugador"
-    style="grid-area: btn_resposta2;">
-    <h3>Respuesta B:</h3> {{ this.app.pregunta.respuesta_b }}
-  </button>
-  <button class="button" @click="validateResponse(this.app.pregunta.id, 'c')" v-if="this.app.pregunta" :disabled="!esTrunoJugador"
-    style="grid-area: btn_resposta3;">
-    <h3>Respuesta C:</h3> {{ this.app.pregunta.respuesta_c }}
-  </button>
-  <button class="button" @click="validateResponse(this.app.pregunta.id, 'd')" v-if="this.app.pregunta" :disabled="!esTrunoJugador"
-    style="grid-area: btn_resposta4;">
-    <h3>Respuesta D:</h3> {{ this.app.pregunta.respuesta_d }}
-  </button>
-</div>
-
-  </div>
+    
   <div class="flex items-center justify-center h-screen" style="grid-area: mapa;">
     <svg class="w-screen" version="1.1" id="svg47" sodipodi:docname="MAPA.SVG"
       inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -132,7 +125,7 @@
 
 
 <script>
-import { obtenerPaises, enviarAtac } from '../services/communicationManager.js';
+import { obtenerPaises, enviarAtac, validarResposta } from '../services/communicationManager.js';
 import { socket } from '@/utils/socket.js';
 import { useAppStore } from '../stores/app';
 import tinycolor from 'tinycolor2';
@@ -251,86 +244,57 @@ export default {
       this.app.setEstado("Acabado");
       console.log("Pregufgnta ID:", questionId, "roomid", this.app.sala.id);
       socket.emit('contrincanteVerRespuesta', { questionId: questionId, roomId: this.app.sala.id});
-      const apiUrl = `${this.ruta}/api/verificar-respuesta`;
-      const requestData = {
-        preguntaId: questionId,
-        respuestaUsuario: selectedOption,
-      };
-
-      fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      })
-        .then((response) => response.json())
+      validarResposta(questionId, selectedOption) // Utilizamos la función validarResposta del communicationManager.js
         .then((result) => {
-          if (result.resultado === true) {
-            console.log("La respuesta es verdadera");
-            this.confirmarAtaque(this.app.turnoDe.nombre, this.paisId);
-            this.resultadoPregunta = true;
-            if (this.app.nombre == this.app.turnoDe.nombre) {
-              this.app.paisesConquistados++;
+            if (result.resultado === true) {
+                console.log("La respuesta es verdadera");
+                this.confirmarAtaque(this.app.turnoDe.nombre, this.paisId);
+                this.resultadoPregunta = true;
+                if (this.app.nombre == this.app.turnoDe.nombre) {
+                    this.app.paisesConquistados++;
+                }
+                this.contadorPaises++;
+            } else {
+                console.log("La respuesta es falsa");
+                this.resultadoPregunta = false;
             }
-            this.contadorPaises++;
-          } else {
-            console.log("La respuesta es falsa");
+            console.log("Paises conquistados:", this.app.paisesConquistados);
+
+            socket.emit("respuestaJugador", {
+                turnoDe: this.app.turnoDe.nombre,
+                userName: this.app.nombre,
+                paisId: this.paisSeleccionado,
+                acertado: this.resultadoPregunta,
+                roomId: this.app.sala.id,
+            });
+            this.app.setEstado("Respondiendo");
+
+            socket.emit('OcultarPreguntas', { roomId: this.app.sala.id });
+            if (this.app.duelo) {
+                socket.emit('dueloTerminado', { roomId: this.app.sala.id });
+            }
+
+            socket.emit('OcultarPreguntas', { roomId: this.app.sala.id });
+
             this.resultadoPregunta = false;
-          }
-          console.log("paises conquistados", this.app.paisesConquistados);
-
-          socket.emit("respuestaJugador", {
-            turnoDe: this.app.turnoDe.nombre,
-            userName: this.app.nombre,
-            paisId: this.paisSeleccionado,
-            acertado: this.resultadoPregunta,
-            roomId: this.app.sala.id,
-          });
-          this.app.setEstado("Respondiendo");
-
-          socket.emit('OcultarPreguntas', { roomId: this.app.sala.id});
-          if(this.app.duelo){
-            socket.emit('dueloTerminado', {roomId: this.app.sala.id})
-        
-          }
-
-          socket.emit('OcultarPreguntas', { roomId: this.app.sala.id });
-
-          this.resultadoPregunta = false;
         })
         .catch((error) => {
-          console.error("Error validating response:", error);
+            console.error("Error validando la respuesta:", error);
         });
     },
 
     //funció per confirmar atac
     async confirmarAtaque(idUser, paisId) {
-      console.log("ID QUE PASO AL CONFIRMAR ATAUQE", idUser + paisId);
-      try {
-        const response = await fetch(`${this.ruta}/api/confirmar-ataque`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            idUser: idUser,
-            paisSeleccionado: paisId,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
-        }
-
-        const result = await response.json();
+     console.log("ID QUE PASO AL CONFIRMAR ATAQUE", idUser + paisId);
+    try {
+        const result = await enviarAtac(paisId, idUser); // Utilizamos la función enviarAtac del communicationManager.js
         console.log(result.message);
         this.propietariosPaises();
         console.log("Usuario: " + idUser, "Conquista Pais: " + paisId);
         this.comprovarFinal();
-      } catch (error) {
+    } catch (error) {
         console.error("Error en la solicitud:", error);
-      }
+    }
     },
 
     //funció per a comprovar el final del joc
@@ -353,6 +317,7 @@ export default {
 
       this.app.setEstado("Atacando");
       enviarAtac(name, idUser).then((data) => {
+        console.log("Escucha del servidor ", data)
         this.pregunta = {
           id: data.pregunta.id,
           pregunta: data.pregunta.pregunta,
@@ -364,13 +329,7 @@ export default {
             }).catch((error) => {
                 console.error(error);
             });
-
-        // Emitir el evento al servidor con los datos de las preguntas y respuestas y el roomId
-        socket.emit('preguntasYRespuestas', {
-          preguntasYRespuestas: this.pregunta,
-          roomId: this.app.sala.id
-        });
-
+          console.log("Preguntas mostradas", this.pregunta)
         this.paisSeleccionado = paisId;
         this.app.setEstado("Respondiendo");
 

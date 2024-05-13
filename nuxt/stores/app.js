@@ -25,7 +25,6 @@ export const useAppStore = defineStore('app', {
     jugadorGanador: null,
     duelo: false,
     mostrarPreguntas: false,
-    idRespuestaActual: null,
   }),
   actions: {
     setTurno( nombre ) {
@@ -82,8 +81,5 @@ export const useAppStore = defineStore('app', {
     getDuelo(){
       return this.duelo;
     },
-    setRespuestaContrincante(questionId){
-      this.idRespuestaActual = questionId;
-    }
   },
 })

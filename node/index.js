@@ -21,11 +21,6 @@ const rooms = {};
 io.on('connection', (socket) => {
   console.log("Se ha conectado alguien!! con id " + socket.id);
 
-  socket.esMiTurno = false;
-  socket.on('preguntasYRespuestas', ({ preguntasYRespuestas, roomId }) => {
-    io.to(roomId).emit('preguntasYRespuestas', preguntasYRespuestas);
-  });
-
   socket.on('crearSala', (data) => {
     const roomId = nanoid(6);
     rooms[roomId] = {
