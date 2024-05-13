@@ -1,4 +1,3 @@
-
 <template>
   <div class="container">
     <div v-if="!app.duelo">
@@ -30,16 +29,20 @@
         </div>
       </div>
       <div class="respostes" v-if="app.getMostrarPreguntas()">
-        <button class="btn_respostes btn_resposta1" @click="validateResponse(app.pregunta.id, 'a')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+        <button class="btn_respostes btn_resposta1" @click="validateResponse(app.pregunta.id, 'a')" v-if="app.pregunta"
+          :disabled="!esTrunoJugador && !app.duelo">
           <h3>Respuesta A:</h3> {{ app.pregunta.respuesta_a }}
         </button>
-        <button class="btn_respostes btn_resposta2" @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+        <button class="btn_respostes btn_resposta2" @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta"
+          :disabled="!esTrunoJugador && !app.duelo">
           <h3>Respuesta B:</h3> {{ app.pregunta.respuesta_b }}
         </button>
-        <button class="btn_respostes btn_resposta3" @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+        <button class="btn_respostes btn_resposta3" @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta"
+          :disabled="!esTrunoJugador && !app.duelo">
           <h3>Respuesta C:</h3> {{ app.pregunta.respuesta_c }}
         </button>
-        <button class="btn_respostes btn_resposta4" @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+        <button class="btn_respostes btn_resposta4" @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta"
+          :disabled="!esTrunoJugador && !app.duelo">
           <h3>Respuesta D:</h3> {{ app.pregunta.respuesta_d }}
         </button>
       </div>
@@ -126,6 +129,7 @@
 
 
 <script>
+import { obtenerPaises, enviarAtac, confirmarAtaque, validarResposta } from '../services/communicationManager.js';
 import { socket } from '@/utils/socket.js';
 import { useAppStore } from '../stores/app';
 import tinycolor from 'tinycolor2';
@@ -201,42 +205,26 @@ export default {
       console.log("Enviar duelo");
       this.app.setEstado("Atacando");
       try {
-        const response = await fetch(`${this.ruta}/api/enviar-atac`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: name,
-            idUser: idUser,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log("Respuesta del servidor:", data);
+        const data = await enviarAtac(name, idUser);
 
         this.pregunta = {
-          id: data.pregunta.id,
-          pregunta: data.pregunta.pregunta,
-          respuesta_a: data.pregunta.respuesta_a,
-          respuesta_b: data.pregunta.respuesta_b,
-          respuesta_c: data.pregunta.respuesta_c,
-          respuesta_d: data.pregunta.respuesta_d,
+            id: data.pregunta.id,
+            pregunta: data.pregunta.pregunta,
+            respuesta_a: data.pregunta.respuesta_a,
+            respuesta_b: data.pregunta.respuesta_b,
+            respuesta_c: data.pregunta.respuesta_c,
+            respuesta_d: data.pregunta.respuesta_d,
         };
 
         this.mostrar = 1;
         this.paisSeleccionado = paisId;
         this.app.setEstado("Respondiendo");
-        
+
         socket.emit('enviarDuelo', { roomId: this.app.sala.id, preguntas: this.pregunta });
-        console.log("TaulerView MostrarPreguntasDUELO"+ this.app.getMostrarPreguntas());
-      } catch (error) {
+        console.log("TaulerView MostrarPreguntasDUELO" + this.app.getMostrarPreguntas());
+    } catch (error) {
         console.error("Error en la solicitud:", error);
-      }
+    }
     },
 
     async propietariosPaises() {
@@ -249,99 +237,67 @@ export default {
 
     //funció per obtenir el json de paisos
     async obtenerDatosPaises() {
-      try {
-        const response = await fetch(`${this.ruta}/api/paises`);
-        const data = await response.json();
-        this.paises = data.paises;
-        console.log(data);
-      } catch (error) {
+    try {
+        const paises = await obtenerPaises();
+        this.paises = paises;
+        console.log(paises);
+    } catch (error) {
         console.error("Error al obtener datos de países:", error);
-      }
-    },
+    }
+  },
 
     //funció que valida si la resposta d'un usuari es la correcta
-    validateResponse(questionId, selectedOption) {
+    async validateResponse(questionId, selectedOption) {
       this.app.setEstado("Acabado");
       console.log("Pregunta ID:", questionId);
-      const apiUrl = `${this.ruta}/api/verificar-respuesta`;
-      const requestData = {
-        preguntaId: questionId,
-        respuestaUsuario: selectedOption,
-      };
+      try {
+        const result = await validarResposta(questionId, selectedOption);
 
-      fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          if (result.resultado === true) {
+        if (result.resultado === true) {
             console.log("La respuesta es verdadera");
             this.confirmarAtaque(this.app.turnoDe.nombre, this.paisId);
             this.resultadoPregunta = true;
             if (this.app.nombre == this.app.turnoDe.nombre) {
-              this.app.paisesConquistados++;
+                this.app.paisesConquistados++;
             }
             this.contadorPaises++;
-          } else {
+        } else {
             console.log("La respuesta es falsa");
             this.resultadoPregunta = false;
-          }
-          console.log("paises conquistados", this.app.paisesConquistados);
+        }
+        console.log("paises conquistados", this.app.paisesConquistados);
 
-          socket.emit("respuestaJugador", {
+        socket.emit("respuestaJugador", {
+          turnoDe: this.app.turnoDe.nombre,
             userName: this.app.nombre,
             paisId: this.paisSeleccionado,
             acertado: this.resultadoPregunta,
-            roomId: this.app.sala.id, // Asegúrate de que `roomId` está disponible en `this.app`
-          });
-          this.app.setEstado("Respondiendo");
-          socket.emit('OcultarPreguntas', { roomId: this.app.sala.id});
-          if(this.app.duelo){
-            socket.emit('dueloTerminado', {roomId: this.app.sala.id})
-        
-          }
-          this.resultadoPregunta = false;
-        })
-        .catch((error) => {
-          console.error("Error validating response:", error);
+            roomId: this.app.sala.id,
         });
+        this.app.setEstado("Respondiendo");
+        socket.emit('OcultarPreguntas', { roomId: this.app.sala.id });
+        if (this.app.duelo) {
+            socket.emit('dueloTerminado', { roomId: this.app.sala.id });
+        }
+        this.resultadoPregunta = false;
+    } catch (error) {
+        console.error("Error validating response:", error);
+    }
     },
 
     //funció per confirmar atac
     async confirmarAtaque(idUser, paisId) {
       console.log("ID QUE PASO AL CONFIRMAR ATAUQE", idUser + paisId);
-      try {
-        const response = await fetch(`${this.ruta}/api/confirmar-ataque`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            idUser: idUser,
-            paisSeleccionado: paisId,
-          }),
-        });
+    try {
+        const result = await confirmarAtaque(idUser, paisId);
 
-        if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
-        }
-
-        const result = await response.json();
         console.log(result.message);
         this.propietariosPaises();
         console.log("Usuario: " + idUser, "Conquista Pais: " + paisId);
         this.comprovarFinal();
-      } catch (error) {
+    } catch (error) {
         console.error("Error en la solicitud:", error);
-      }
-      /* } else {
-        this.esActivo = false;
-        return;
-      }*/
+    }
     },
 
     //funció per a comprovar el final del joc
@@ -351,7 +307,7 @@ export default {
         if (Object.keys(paisesConquistados).length == 15) {
           console.log("¡Todos los países han sido conquistados!");
 
-          this.$router.push({name: 'PaginaFinalitzada'});
+          this.$router.push({ name: 'PaginaFinalitzada' });
         } else {
           console.log("Aún no se han conquistado todos los países.");
         }
@@ -359,48 +315,29 @@ export default {
       });
     },
 
-    //funció enviar atac a server
     async enviarAtac(name, paisId, idUser) {
-      //if (this.usuario == this.app.usuario.nombre) {
 
       this.app.setEstado("Atacando");
       try {
-        const response = await fetch(`${this.ruta}/api/enviar-atac`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: name,
-            idUser: idUser,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log("Respuesta del servidor:", data);
-
+        const data = await enviarAtac(name, idUser);
+        
         this.pregunta = {
-          id: data.pregunta.id,
-          pregunta: data.pregunta.pregunta,
-          respuesta_a: data.pregunta.respuesta_a,
-          respuesta_b: data.pregunta.respuesta_b,
-          respuesta_c: data.pregunta.respuesta_c,
-          respuesta_d: data.pregunta.respuesta_d,
+            id: data.pregunta.id,
+            pregunta: data.pregunta.pregunta,
+            respuesta_a: data.pregunta.respuesta_a,
+            respuesta_b: data.pregunta.respuesta_b,
+            respuesta_c: data.pregunta.respuesta_c,
+            respuesta_d: data.pregunta.respuesta_d,
         };
 
-        this.mostrar = 1;
         this.paisSeleccionado = paisId;
         this.app.setEstado("Respondiendo");
-        
+
         socket.emit('enviarPreguntas', { roomId: this.app.sala.id, preguntas: this.pregunta });
-        console.log("TaulerView MostrarPreguntas"+ this.app.getMostrarPreguntas());
-      } catch (error) {
-        console.error("Error en la solicitud:", error);
-      }
+        console.log("TaulerView MostrarPreguntas" + this.app.getMostrarPreguntas());
+    } catch (error) {
+        console.error(error);
+    }
     },
   },
   async mounted() {
@@ -481,7 +418,8 @@ export default {
   margin: 20px;
   border-radius: 20px;
   text-align: center;
-  backdrop-filter: blur(10px); /* Reduced blur for better readability */
+  backdrop-filter: blur(10px);
+  /* Reduced blur for better readability */
   color: #fff;
 }
 
@@ -521,11 +459,13 @@ export default {
   padding: 40px;
   font-size: 1em;
   border: none;
-  background-color: #007bff; /* Changed to a more vibrant blue */
+  background-color: #007bff;
+  /* Changed to a more vibrant blue */
 }
 
 .btn_respostes:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #0056b3;
+  /* Darker blue on hover */
   color: #fff;
 }
 

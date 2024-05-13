@@ -155,7 +155,7 @@ io.on('connection', (socket) => {
     io.to(roomId).emit('dueloAcabado');
   });
 
-  socket.on('respuestaJugador', ({ userName, paisId, acertado, roomId }) => {
+  socket.on('respuestaJugador', ({  turnoDe, userName, paisId, acertado, roomId }) => {
     const room = rooms[roomId];
     if (room && room.jugadores && room.jugadores.length >= 2) {
       const usuario1 = room.jugadores[0];
@@ -166,10 +166,13 @@ io.on('connection', (socket) => {
         const color = userName === usuario1.nombre ? usuario1.color : usuario2.color;
         io.to(roomId).emit('respuestaCorrecta', { paisId, jugador: userName, color});
       }
-      const nextName = userName === usuario1.nombre ? usuario2.nombre : usuario1.nombre;
-      io.to(roomId).emit('cambiarTurno', { turno_de: nextName, usuarios: room.jugadores });
-
-      console.log('Cambio de turno:', nextName);
+      if (turnoDe === userName) {
+        const nextName = userName === usuario1.nombre ? usuario2.nombre : usuario1.nombre;
+        io.to(roomId).emit('cambiarTurno', { turno_de: nextName, usuarios: room.jugadores });
+        console.log('Cambio de turno:', nextName);
+      } else {
+        io.to(roomId).emit('cambiarTurno', { turno_de: userName, usuarios: room.jugadores });
+      }
     } else {
       console.log('Error jugadores sala.');
     }
