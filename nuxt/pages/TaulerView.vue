@@ -1,72 +1,66 @@
 <template>
-  <div class="grid grid-cols-2 items-center justify-center w-screen min-h-screen bg-center bg-cover object-cover"
+<div class="grid grid-cols-2 items-center justify-center w-screen min-h-screen bg-center bg-cover object-cover"
     style="grid-template-areas: 'mapa torn' 'mapa preguntesiRespostes' 'mapa preguntesiRespostes'; background-image: url('/mar.gif');">
     <div v-if="!app.duelo">
-      <div
-        class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-40 h-30 mobile-map2"
-        v-if="!esTrunoJugador" style="grid-area: torn;">
-        <div class="text-center text-white">
-          <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
-          <div class="p-2 bg-white bg-opacity-20 rounded-md">
-            <h2 class="text-2xl font-bold text-indigo-300">{{ this.app.turnoDe.nombre }}</h2>
-          </div>
-          <h3 class="text-lg font-light">ESPERA EL TEU TORN</h3>
-        </div>
-      </div>
-      <div
-        class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-40 h-30 mobile-map2"
-        v-if="esTrunoJugador" style="grid-area: torn;">
-        <div class="text-center text-white">
-          <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
-          <div class="p-2 bg-white bg-opacity-20 rounded-md">
-            <h2 class="text-2xl font-bold text-indigo-300">{{ this.app.turnoDe.nombre }}</h2>
-          </div>
-          <h2 class="text-2xl text-yellow-300 font-bold">ATACA!!!</h2>
-        </div>
-      </div>
-
-      <div v-else>
-        <h1>DUELO INICIADO</h1>
-      </div>
+      <div class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-40 h-30 mobile-map2" v-if="!esTrunoJugador" style="grid-area: torn;">
+  <div class="text-center text-white">
+    <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
+    <div class="p-2 bg-white bg-opacity-20 rounded-md">
+      <h2 class="text-2xl font-bold text-indigo-300">{{ this.app.turnoDe.nombre }}</h2>
+      <h2 class="text-2xl font-bold text-indigo-300">{{ this.app.turnoDe.color }}</h2>
+    </div>
+    <h3 class="text-lg font-light">ESPERA EL TEU TORN</h3>
+  </div>
+</div>
+<div class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-40 h-30 mobile-map2" v-if="esTrunoJugador" style="grid-area: torn;">
+  <div class="text-center text-white">
+    <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
+    <div class="p-2 bg-white bg-opacity-20 rounded-md">
+      <h2 class="text-2xl font-bold text-indigo-300">{{ this.app.turnoDe.nombre }}</h2>
+      <h2 class="text-2xl font-bold text-indigo-300">{{ this.app.turnoDe.color }}</h2>
+    </div>
+    <h2 class="text-2xl text-yellow-300 font-bold">ATACA!!!</h2>
+  </div>
+</div>
+</div>
+    <div v-else class="flex items-center justify-center" style="grid-area: torn;">
+      <h1 class="text-5xl font-bold text-black">DUELO INICIADO</h1>
     </div>
 
-    <div class="flex flex-col justify-between items-center bg-white bg-opacity-5 backdrop-blur-lg rounded-lg m-5"
-      id="preg" style="grid-area: preguntesiRespostes; justify-content: start; margin-right: 60px; padding-bottom: 10px;">
-      <div class="text-center text-white" id="cont-preg" v-if="this.app.getMostrarPreguntas()">
-        <h2 class="text-2xl font-semibold pregunta-texto">{{ this.app.pregunta ? this.app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
-      </div>
 
+<div class="flex flex-col justify-between items-center bg-white bg-opacity-5 backdrop-blur-lg rounded-lg m-5" id="preg" style="grid-area: preguntesiRespostes; justify-content: start; margin-right: 60px; padding-bottom: 10px;">
+   <div class="text-center text-white" id="cont-preg" v-if="this.app.getMostrarPreguntas()">
+    <h2 class="text-2xl font-semibold pregunta-texto">{{ this.app.pregunta ? this.app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
+  </div>
 
-      <div class="grid gap-1 m-5" id="cont-res" v-if="this.app.getMostrarPreguntas()"
-        style="grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; grid-template-areas: 'btn_resposta1 btn_resposta2' 'btn_resposta3 btn_resposta4';">
-        <button class="button" @click="validateResponse(this.app.pregunta.id, 'a')" v-if="this.app.pregunta"
-          :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta1;">
-          <h3>Respuesta A:</h3> {{ this.app.pregunta.respuesta_a }}
-        </button>
-        <button class="button" @click="validateResponse(this.app.pregunta.id, 'b')" v-if="this.app.pregunta"
-          :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta2;">
-          <h3>Respuesta B:</h3> {{ this.app.pregunta.respuesta_b }}
-        </button>
-        <button class="button" @click="validateResponse(this.app.pregunta.id, 'c')" v-if="this.app.pregunta"
-          :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta3;">
-          <h3>Respuesta C:</h3> {{ this.app.pregunta.respuesta_c }}
-        </button>
-        <button class="button" @click="validateResponse(this.app.pregunta.id, 'd')" v-if="this.app.pregunta"
-          :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta4;">
-          <h3>Respuesta D:</h3> {{ this.app.pregunta.respuesta_d }}
-        </button>
-      </div>
+  <div class="grid gap-1 m-5" id="cont-res" v-if="this.app.getMostrarPreguntas()"
+  style="grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; grid-template-areas: 'btn_resposta1 btn_resposta2' 'btn_resposta3 btn_resposta4';">
+  <button class="button" @click="validateResponse(this.app.pregunta.id, 'a')" v-if="this.app.pregunta" :disabled="!esTrunoJugador && !app.duelo"
+    style="grid-area: btn_resposta1;">
+    <h3>Respuesta A:</h3> {{ this.app.pregunta.respuesta_a }}
+  </button>
+  <button class="button" @click="validateResponse(this.app.pregunta.id, 'b')" v-if="this.app.pregunta" :disabled="!esTrunoJugador && !app.duelo"
+    style="grid-area: btn_resposta2;">
+    <h3>Respuesta B:</h3> {{ this.app.pregunta.respuesta_b }}
+  </button>
+  <button class="button" @click="validateResponse(this.app.pregunta.id, 'c')" v-if="this.app.pregunta" :disabled="!esTrunoJugador && !app.duelo"
+    style="grid-area: btn_resposta3;">
+    <h3>Respuesta C:</h3> {{ this.app.pregunta.respuesta_c }}
+  </button>
+  <button class="button" @click="validateResponse(this.app.pregunta.id, 'd')" v-if="this.app.pregunta" :disabled="!esTrunoJugador && !app.duelo"
+    style="grid-area: btn_resposta4;">
+    <h3>Respuesta D:</h3> {{ this.app.pregunta.respuesta_d }}
+  </button>
+</div>
 
-    </div>
-    <div class="flex items-center justify-center h-auto mobile-map" style="grid-area: mapa;" id="mapa">
-      <svg class="w-screen" version="1.1" id="svg47" sodipodi:docname="MAPA.SVG"
+  </div>
+
+    <div class="mapa">
+      <svg class="mapImage" version="1.1" id="svg47" sodipodi:docname="MAPA.SVG"
         inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
         xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
         xmlns:svg="http://www.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap"
         style="width: 30vw; height: 30vw;" viewBox="0 60 400 100">
-
-
-
 
         <defs id="defs30">
           <!-- <amcharts:ammap projection="mercator" leftLongitude="-18.161674" topLatitude="43.794381" rightLongitude="4.332045"
@@ -142,6 +136,7 @@
 
 
 <script>
+import { obtenerPaises, enviarAtac, confirmarAtaque, validarResposta } from '../services/communicationManager.js';
 import { socket } from '@/utils/socket.js';
 import { useAppStore } from '../stores/app';
 import tinycolor from 'tinycolor2';
@@ -213,12 +208,30 @@ export default {
       }
     },
 
-    enviarDuelo() {
+    async enviarDuelo(name, paisId, idUser) {
       console.log("Enviar duelo");
-      // Enviar solicitud al servidor para iniciar el duelo
-      socket.emit('iniciarDuelo', {
-        roomId: this.app.sala.id
-      });
+      this.app.setEstado("Atacando");
+      try {
+        const data = await enviarAtac(name, idUser);
+
+        this.pregunta = {
+          id: data.pregunta.id,
+          pregunta: data.pregunta.pregunta,
+          respuesta_a: data.pregunta.respuesta_a,
+          respuesta_b: data.pregunta.respuesta_b,
+          respuesta_c: data.pregunta.respuesta_c,
+          respuesta_d: data.pregunta.respuesta_d,
+        };
+
+        this.mostrar = 1;
+        this.paisSeleccionado = paisId;
+        this.app.setEstado("Respondiendo");
+
+        socket.emit('enviarDuelo', { roomId: this.app.sala.id, preguntas: this.pregunta });
+        console.log("TaulerView MostrarPreguntasDUELO" + this.app.getMostrarPreguntas());
+      } catch (error) {
+        console.error("Error en la solicitud:", error);
+      }
     },
 
     async propietariosPaises() {
@@ -232,95 +245,66 @@ export default {
     //funció per obtenir el json de paisos
     async obtenerDatosPaises() {
       try {
-        const response = await fetch(`${this.ruta}/api/paises`);
-        const data = await response.json();
-        this.paises = data.paises;
-        console.log(data);
+        const paises = await obtenerPaises();
+        this.paises = paises;
+        console.log(paises);
       } catch (error) {
         console.error("Error al obtener datos de países:", error);
       }
     },
 
     //funció que valida si la resposta d'un usuari es la correcta
-    validateResponse(questionId, selectedOption) {
+    async validateResponse(questionId, selectedOption) {
       this.app.setEstado("Acabado");
-      console.log("Pregufgnta ID:", questionId, "roomid", this.app.sala.id);
-      socket.emit('contrincanteVerRespuesta', { questionId: questionId, roomId: this.app.sala.id });
-      const apiUrl = `${this.ruta}/api/verificar-respuesta`;
-      const requestData = {
-        preguntaId: questionId,
-        respuestaUsuario: selectedOption,
-      };
+      console.log("Pregunta ID:", questionId);
+      try {
+        const result = await validarResposta(questionId, selectedOption);
 
-      fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          if (result.resultado === true) {
-            console.log("La respuesta es verdadera");
-            this.confirmarAtaque(this.app.turnoDe.nombre, this.paisId);
-            this.resultadoPregunta = true;
-            if (this.app.nombre == this.app.turnoDe.nombre) {
-              this.app.paisesConquistados++;
-            }
-            this.contadorPaises++;
-          } else {
-            console.log("La respuesta es falsa");
-            this.resultadoPregunta = false;
+        if (result.resultado === true) {
+          console.log("La respuesta es verdadera");
+          this.confirmarAtaque(this.app.turnoDe.nombre, this.paisId);
+          this.resultadoPregunta = true;
+          if (this.app.nombre == this.app.turnoDe.nombre) {
+            this.app.paisesConquistados++;
           }
-          console.log("paises conquistados", this.app.paisesConquistados);
-
-          socket.emit("respuestaJugador", {
-            userName: this.app.nombre,
-            paisId: this.paisSeleccionado,
-            acertado: this.resultadoPregunta,
-            roomId: this.app.sala.id, // Asegúrate de que `roomId` está disponible en `this.app`
-          });
-          this.app.setEstado("Respondiendo");
-          socket.emit('OcultarPreguntas', { roomId: this.app.sala.id });
+          this.contadorPaises++;
+        } else {
+          console.log("La respuesta es falsa");
           this.resultadoPregunta = false;
-        })
-        .catch((error) => {
-          console.error("Error validating response:", error);
+        }
+        console.log("paises conquistados", this.app.paisesConquistados);
+
+        socket.emit("respuestaJugador", {
+          turnoDe: this.app.turnoDe.nombre,
+          userName: this.app.nombre,
+          paisId: this.paisSeleccionado,
+          acertado: this.resultadoPregunta,
+          roomId: this.app.sala.id,
         });
+        this.app.setEstado("Respondiendo");
+        socket.emit('OcultarPreguntas', { roomId: this.app.sala.id });
+        if (this.app.duelo) {
+          socket.emit('dueloTerminado', { roomId: this.app.sala.id });
+        }
+        this.resultadoPregunta = false;
+      } catch (error) {
+        console.error("Error validating response:", error);
+      }
     },
 
     //funció per confirmar atac
     async confirmarAtaque(idUser, paisId) {
       console.log("ID QUE PASO AL CONFIRMAR ATAUQE", idUser + paisId);
       try {
-        const response = await fetch(`${this.ruta}/api/confirmar-ataque`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            idUser: idUser,
-            paisSeleccionado: paisId,
-          }),
-        });
+        const result = await confirmarAtaque(idUser, paisId);
 
-        if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
-        }
-
-        const result = await response.json();
         console.log(result.message);
         this.propietariosPaises();
         console.log("Usuario: " + idUser, "Conquista Pais: " + paisId);
         this.comprovarFinal();
       } catch (error) {
         console.error("Error en la solicitud:", error);
-      }
-      /* } else {
-        this.esActivo = false;
-        return;
-      }*/
+    }
     },
 
     //funció per a comprovar el final del joc
@@ -338,30 +322,12 @@ export default {
       });
     },
 
-    //funció enviar atac a server
-    //funció enviar atac a server
     async enviarAtac(name, paisId, idUser) {
       //if (this.usuario == this.app.usuario.nombre) {
 
       this.app.setEstado("Atacando");
       try {
-        const response = await fetch(`${this.ruta}/api/enviar-atac`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: name,
-            idUser: idUser,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log("Respuesta del servidor:", data);
+        const data = await enviarAtac(name, idUser);
 
         this.pregunta = {
           id: data.pregunta.id,
@@ -372,19 +338,13 @@ export default {
           respuesta_d: data.pregunta.respuesta_d,
         };
 
-        // Emitir el evento al servidor con los datos de las preguntas y respuestas y el roomId
-        socket.emit('preguntasYRespuestas', {
-          preguntasYRespuestas: this.pregunta,
-          roomId: this.app.sala.id
-        });
-
         this.paisSeleccionado = paisId;
         this.app.setEstado("Respondiendo");
 
         socket.emit('enviarPreguntas', { roomId: this.app.sala.id, preguntas: this.pregunta });
         console.log("TaulerView MostrarPreguntas" + this.app.getMostrarPreguntas());
       } catch (error) {
-        console.error("Error en la solicitud:", error);
+        console.error(error);
       }
     },
   },
@@ -397,17 +357,19 @@ export default {
 };
 </script>
 
-
 <style scoped>
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
-
-#preg {
-
-  border-radius: 10%;
+#preg{
+margin-left: 20%;
+margin-right: 20%;
+padding-bottom: 5%;
+padding-left: 5%;
+padding-right: 5%;
+border-radius: 10%;
 }
 
 #cont-preg {
@@ -542,13 +504,11 @@ export default {
   font-size: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
 .mobile-map {
-  position: absolute;
-  margin-left: 10%;
-  margin-top: 10%;
-}
-
+    position: absolute;
+    margin-left: 10%;
+    margin-top: 10%;
+  }
 .respostes {
   margin: 20px;
   display: grid;
@@ -596,43 +556,39 @@ export default {
     align-items: center;
     justify-content: center;
   }
-
   .mobile-map {
     position: absolute;
     margin-left: 40%;
     margin-bottom: 20%;
   }
-
   .mobile-map2 {
     position: absolute;
     margin-left: 25%;
     margin-bottom: 130%;
   }
-
-  #preg {
+  .torn_container {
+    position: relative; /* Cambia la posición a relativa o estática */
+    margin-top: 20px; /* Ajusta según sea necesario */
+  }
+  #preg{
     width: 100%;
     margin-top: 50%;
-
+  
   }
-
-  #cont-res>div {
+  #cont-res>div{
     width: 50%;
 
   }
-
   #cont-preg {
     width: 100%;
     margin-left: 0;
-
+ 
     padding: 10px;
   }
-
   .pregunta-texto {
     /* Estilos para el texto de la pregunta en pantallas de hasta 600px de ancho (móviles) */
-    font-size: 1rem;
-    /* Ajusta este valor según tus necesidades */
+    font-size: 1rem; /* Ajusta este valor según tus necesidades */
   }
-
   .mapa {
     display: flex;
     align-items: center;
@@ -640,25 +596,20 @@ export default {
     width: 50%;
     margin-bottom: 20%;
   }
-
   .grid {
-    grid-template-areas: 'mapa' 'torn' 'preguntesiRespostes';
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-  }
-
-  .preguntaResposta_container {
-    width: 100%;
-  }
-
-  .button {
+        grid-template-areas: 'mapa' 'torn' 'preguntesiRespostes';
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+      }
+      .preguntaResposta_container {
+        width: 100%;
+      }
+      .button {
     /* Estilos para los botones en pantallas de hasta 600px de ancho (móviles) */
-    font-size: 0.8rem;
-    /* Ajusta este valor según tus necesidades */
-    padding: 10px;
-    /* Ajusta este valor según tus necesidades */
+    font-size: 0.8rem; /* Ajusta este valor según tus necesidades */
+    padding: 10px; /* Ajusta este valor según tus necesidades */
   }
-}
+    }
 
 @media only screen and (min-width: 1200px) {
   .preguntaResposta_container {
@@ -672,4 +623,5 @@ export default {
   .mapa {
     height: 30vh;
   }
-}</style>
+}
+</style>
