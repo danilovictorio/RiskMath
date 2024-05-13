@@ -1,8 +1,8 @@
 <template>
-  <div class="grid grid-cols-2 items-center justify-center w-screen h-screen bg-center bg-cover object-cover"
+  <div class="grid grid-cols-2 items-center justify-center w-screen min-h-screen bg-center bg-cover object-cover"
     style="grid-template-areas: 'mapa torn' 'mapa preguntesiRespostes' 'mapa preguntesiRespostes'; background-image: url('/mar.gif');">
-
-    <div class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-64 h-36" v-if="!esTrunoJugador" style="grid-area: torn;">
+  
+    <div class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-48 h-24 " v-if="!esTrunoJugador" style="grid-area: torn; position: absolute; margin-bottom:130%; margin-left: 25%;">
   <div class="text-center text-white">
     <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
     <div class="p-2 bg-white bg-opacity-20 rounded-md">
@@ -11,7 +11,7 @@
     <h3 class="text-lg font-light">ESPERA EL TEU TORN</h3>
   </div>
 </div>
-<div class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-64 h-36" v-if="esTrunoJugador" style="grid-area: torn;">
+<div class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-48 h-24" v-if="esTrunoJugador" style="grid-area: torn; position: absolute; margin-bottom:130%; margin-left: 25%;">
   <div class="text-center text-white">
     <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
     <div class="p-2 bg-white bg-opacity-20 rounded-md">
@@ -21,13 +21,12 @@
   </div>
 </div>
 
-    <div class="flex flex-col justify-between items-center bg-white bg-opacity-5 backdrop-blur-lg rounded-lg m-5" id="preg" style="grid-area: preguntesiRespostes;">
-  <div class="text-center text-white" id="cont-preg" v-if="this.app.getMostrarPreguntas()">
-    <h2 class="text-2xl font-semibold">{{ this.app.pregunta ? this.app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
-  </div>
+<div class="flex flex-col justify-between items-center bg-white bg-opacity-5 backdrop-blur-lg rounded-lg m-5" id="preg" style="grid-area: preguntesiRespostes; justify-content: start; margin-right: 60px; padding-bottom: 10px;">
+   <div class="text-center text-white" id="cont-preg" v-if="this.app.getMostrarPreguntas()">
+    <h2 class="text-2xl font-semibold pregunta-texto">{{ this.app.pregunta ? this.app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>  </div>
 
 
-  <div class="grid gap-8 m-5" id="cont-res" v-if="this.app.getMostrarPreguntas()"
+  <div class="grid gap-1 m-5" id="cont-res" v-if="this.app.getMostrarPreguntas()"
   style="grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; grid-template-areas: 'btn_resposta1 btn_resposta2' 'btn_resposta3 btn_resposta4';">
   <button class="button" @click="validateResponse(this.app.pregunta.id, 'a')" v-if="this.app.pregunta" :disabled="!esTrunoJugador"
     style="grid-area: btn_resposta1;">
@@ -48,12 +47,14 @@
 </div>
 
   </div>
-  <div class="flex items-center justify-center h-screen" style="grid-area: mapa;">
+  <div class="flex items-center justify-center h-auto" style="grid-area: mapa; position: absolute; margin-left: 40%;  margin-bottom: 20%;" id="mapa">
     <svg class="w-screen" version="1.1" id="svg47" sodipodi:docname="MAPA.SVG"
       inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
       xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
       xmlns:svg="http://www.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap"
       style="width: 30vw; height: 30vw;" viewBox="0 60 400 100">
+
+
 
       <defs id="defs30">
         <!-- <amcharts:ammap projection="mercator" leftLongitude="-18.161674" topLatitude="43.794381" rightLongitude="4.332045"
@@ -392,11 +393,7 @@ export default {
   margin: 0;
 }
 #preg{
-margin-left: 20%;
-margin-right: 20%;
-padding-bottom: 5%;
-padding-left: 5%;
-padding-right: 5%;
+
 border-radius: 10%;
 }
 #cont-preg{
@@ -526,6 +523,7 @@ border-radius: 10%;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  width: 100%;
 }
 
 .pregunta h2 {
@@ -574,20 +572,52 @@ border-radius: 10%;
 
 @media only screen and (max-width: 1200px) {
   .container {
-    grid-template-columns: 1fr;
-    grid-template-rows: 0.5fr 2fr 3fr;
-    grid-template-areas: "torn"
-      "preguntesiRespostes"
-      "mapa";
+    /* Estilos para el contenedor en pantallas de hasta 600px de ancho (móviles) */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
+  #preg{
+    width: 100%;
+    margin-top: 50%;
+  
+  }
+  #cont-res>div{
+    width: 50%;
 
+  }
+  #cont-preg {
+    width: 100%;
+    margin-left: 0;
+ 
+    padding: 10px;
+  }
+  .pregunta-texto {
+    /* Estilos para el texto de la pregunta en pantallas de hasta 600px de ancho (móviles) */
+    font-size: 1rem; /* Ajusta este valor según tus necesidades */
+  }
   .mapa {
     display: flex;
     align-items: center;
-    height: 40vh;
-    width: auto;
+    height: 50%;
+    width: 50%;
+    margin-bottom: 20%;
   }
-}
+  .grid {
+        grid-template-areas: 'mapa' 'torn' 'preguntesiRespostes';
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+      }
+      .preguntaResposta_container {
+        width: 100%;
+      }
+      .button {
+    /* Estilos para los botones en pantallas de hasta 600px de ancho (móviles) */
+    font-size: 0.8rem; /* Ajusta este valor según tus necesidades */
+    padding: 10px; /* Ajusta este valor según tus necesidades */
+  }
+    }
 
 @media only screen and (min-width: 1200px) {
   .preguntaResposta_container {
