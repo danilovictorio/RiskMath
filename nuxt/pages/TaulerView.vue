@@ -16,11 +16,52 @@
     <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
     <div class="p-2 bg-white bg-opacity-20 rounded-md">
       <h2 class="text-2xl font-bold text-indigo-300">{{ this.app.turnoDe.nombre }}</h2>
+   <div class="container">
+    <div v-if="!app.duelo">
+      <div class="torn_container" v-if="!esTrunoJugador">
+        <div class="torn">
+          <h3>Torn de :</h3>
+          <h2>{{ app.turnoDe.nombre }}</h2>
+          <h2>Color : {{ app.turnoDe.color }}</h2>
+          <h3>Espera el teu torn</h3>
+        </div>
+      </div>
+      <div class="torn_container" v-if="esTrunoJugador">
+        <div class="torn">
+          <h3>Torn de :</h3>
+          <h2>{{ app.turnoDe.nombre }}</h2>
+          <h2> Color : {{ app.turnoDe.color }}</h2>
+          <h2>AL ATAC!!!!</h2>
+        </div>
+      </div>
     </div>
-    <h2 class="text-2xl text-yellow-300 font-bold">ATACA!!!</h2>
-  </div>
-</div>
+    <div v-else>
+      <h1>DUELO INICIADO</h1>
+    </div>
 
+    <div class="preguntaResposta_container">
+      <div class="pregunta_container" v-if="app.getMostrarPreguntas()">
+        <div class="pregunta">
+          <h2>{{ app.pregunta ? app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
+        </div>
+      </div>
+      <div class="respostes" v-if="app.getMostrarPreguntas()">
+        <button class="btn_respostes btn_resposta1" @click="validateResponse(app.pregunta.id, 'a')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+          <h3>Respuesta A:</h3> {{ app.pregunta.respuesta_a }}
+        </button>
+        <button class="btn_respostes btn_resposta2" @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+          <h3>Respuesta B:</h3> {{ app.pregunta.respuesta_b }}
+        </button>
+        <button class="btn_respostes btn_resposta3" @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+          <h3>Respuesta C:</h3> {{ app.pregunta.respuesta_c }}
+        </button>
+        <button class="btn_respostes btn_resposta4" @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo">
+          <h3>Respuesta D:</h3> {{ app.pregunta.respuesta_d }}
+        </button>
+      </div>
+    </div>
+    
+  <div class="flex items-center justify-center h-screen" style="grid-area: mapa;">
 <div class="flex flex-col justify-between items-center bg-white bg-opacity-5 backdrop-blur-lg rounded-lg m-5" id="preg" style="grid-area: preguntesiRespostes; justify-content: start; margin-right: 60px; padding-bottom: 10px;">
    <div class="text-center text-white" id="cont-preg" v-if="this.app.getMostrarPreguntas()">
     <h2 class="text-2xl font-semibold pregunta-texto">{{ this.app.pregunta ? this.app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>  </div>
@@ -131,6 +172,7 @@
 
 
 <script>
+import { obtenerPaises, enviarAtac, validarResposta } from '../services/communicationManager.js';
 import { socket } from '@/utils/socket.js';
 import { useAppStore } from '../stores/app';
 import tinycolor from 'tinycolor2';
@@ -195,19 +237,34 @@ export default {
           this.enviarAtac(idPais, name, idUser);
         } else {
           console.log("El país ya está conquistado por otro jugador.");
-          this.enviarDuelo();
+          this.enviarDuelo(idPais, name, idUser);
         }
       } else {
         console.log("No es tu turno.");
       }
     },
 
-    enviarDuelo() {
+    async enviarDuelo(name, paisId, idUser) {
       console.log("Enviar duelo");
-      // Enviar solicitud al servidor para iniciar el duelo
-      socket.emit('iniciarDuelo', {
-        roomId: this.app.sala.id
-      });
+      this.app.setEstado("Atacando");
+      enviarAtac(name, idUser).then((data) => {
+        this.pregunta = {
+          id: data.pregunta.id,
+          pregunta: data.pregunta.pregunta,
+          respuesta_a: data.pregunta.respuesta_a,
+          respuesta_b: data.pregunta.respuesta_b,
+          respuesta_c: data.pregunta.respuesta_c,
+          respuesta_d: data.pregunta.respuesta_d,
+        };
+        }).catch((error) => {
+                console.error(error);
+        });
+        this.mostrar = 1;
+        this.paisSeleccionado = paisId;
+        this.app.setEstado("Respondiendo");
+        
+        socket.emit('enviarDuelo', { roomId: this.app.sala.id, preguntas: this.pregunta });
+        console.log("TaulerView MostrarPreguntasDUELO"+ this.app.getMostrarPreguntas());
     },
 
     async propietariosPaises() {
@@ -221,13 +278,12 @@ export default {
     //funció per obtenir el json de paisos
     async obtenerDatosPaises() {
       try {
-        const response = await fetch(`${this.ruta}/api/paises`);
-        const data = await response.json();
-        this.paises = data.paises;
-        console.log(data);
-      } catch (error) {
-        console.error("Error al obtener datos de países:", error);
-      }
+        const paises = await obtenerPaises();
+        this.paises = paises;
+        console.log("Paises obtenidos:", paises);
+        } catch (error) {
+            console.error("Error al obtener datos de países:", error);
+        }
     },
 
     //funció que valida si la resposta d'un usuari es la correcta
@@ -235,81 +291,57 @@ export default {
       this.app.setEstado("Acabado");
       console.log("Pregufgnta ID:", questionId, "roomid", this.app.sala.id);
       socket.emit('contrincanteVerRespuesta', { questionId: questionId, roomId: this.app.sala.id});
-      const apiUrl = `${this.ruta}/api/verificar-respuesta`;
-      const requestData = {
-        preguntaId: questionId,
-        respuestaUsuario: selectedOption,
-      };
-
-      fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      })
-        .then((response) => response.json())
+      validarResposta(questionId, selectedOption) // Utilizamos la función validarResposta del communicationManager.js
         .then((result) => {
-          if (result.resultado === true) {
-            console.log("La respuesta es verdadera");
-            this.confirmarAtaque(this.app.turnoDe.nombre, this.paisId);
-            this.resultadoPregunta = true;
-            if (this.app.nombre == this.app.turnoDe.nombre) {
-              this.app.paisesConquistados++;
+            if (result.resultado === true) {
+                console.log("La respuesta es verdadera");
+                this.confirmarAtaque(this.app.turnoDe.nombre, this.paisId);
+                this.resultadoPregunta = true;
+                if (this.app.nombre == this.app.turnoDe.nombre) {
+                    this.app.paisesConquistados++;
+                }
+                this.contadorPaises++;
+            } else {
+                console.log("La respuesta es falsa");
+                this.resultadoPregunta = false;
             }
-            this.contadorPaises++;
-          } else {
-            console.log("La respuesta es falsa");
-            this.resultadoPregunta = false;
-          }
-          console.log("paises conquistados", this.app.paisesConquistados);
+            console.log("Paises conquistados:", this.app.paisesConquistados);
 
-          socket.emit("respuestaJugador", {
-            userName: this.app.nombre,
-            paisId: this.paisSeleccionado,
-            acertado: this.resultadoPregunta,
-            roomId: this.app.sala.id, // Asegúrate de que `roomId` está disponible en `this.app`
-          });
-          this.app.setEstado("Respondiendo");
-          socket.emit('OcultarPreguntas', { roomId: this.app.sala.id });
-          this.resultadoPregunta = false;
+            socket.emit("respuestaJugador", {
+                turnoDe: this.app.turnoDe.nombre,
+                userName: this.app.nombre,
+                paisId: this.paisSeleccionado,
+                acertado: this.resultadoPregunta,
+                roomId: this.app.sala.id,
+            });
+            this.app.setEstado("Respondiendo");
+
+            socket.emit('OcultarPreguntas', { roomId: this.app.sala.id });
+            if (this.app.duelo) {
+                socket.emit('dueloTerminado', { roomId: this.app.sala.id });
+            }
+
+            socket.emit('OcultarPreguntas', { roomId: this.app.sala.id });
+
+            this.resultadoPregunta = false;
         })
         .catch((error) => {
-          console.error("Error validating response:", error);
+            console.error("Error validando la respuesta:", error);
         });
     },
 
     //funció per confirmar atac
     async confirmarAtaque(idUser, paisId) {
-      console.log("ID QUE PASO AL CONFIRMAR ATAUQE", idUser + paisId);
-      try {
-        const response = await fetch(`${this.ruta}/api/confirmar-ataque`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            idUser: idUser,
-            paisSeleccionado: paisId,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
-        }
-
-        const result = await response.json();
+     console.log("ID QUE PASO AL CONFIRMAR ATAQUE", idUser + paisId);
+    try {
+        const result = await enviarAtac(paisId, idUser); // Utilizamos la función enviarAtac del communicationManager.js
         console.log(result.message);
         this.propietariosPaises();
         console.log("Usuario: " + idUser, "Conquista Pais: " + paisId);
         this.comprovarFinal();
-      } catch (error) {
+    } catch (error) {
         console.error("Error en la solicitud:", error);
-      }
-      /* } else {
-        this.esActivo = false;
-        return;
-      }*/
+    }
     },
 
     //funció per a comprovar el final del joc
@@ -328,30 +360,11 @@ export default {
     },
 
     //funció enviar atac a server
-    //funció enviar atac a server
     async enviarAtac(name, paisId, idUser) {
-      //if (this.usuario == this.app.usuario.nombre) {
 
       this.app.setEstado("Atacando");
-      try {
-        const response = await fetch(`${this.ruta}/api/enviar-atac`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: name,
-            idUser: idUser,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log("Respuesta del servidor:", data);
-
+      enviarAtac(name, idUser).then((data) => {
+        console.log("Escucha del servidor ", data)
         this.pregunta = {
           id: data.pregunta.id,
           pregunta: data.pregunta.pregunta,
@@ -360,21 +373,15 @@ export default {
           respuesta_c: data.pregunta.respuesta_c,
           respuesta_d: data.pregunta.respuesta_d,
         };
-
-        // Emitir el evento al servidor con los datos de las preguntas y respuestas y el roomId
-        socket.emit('preguntasYRespuestas', {
-          preguntasYRespuestas: this.pregunta,
-          roomId: this.app.sala.id
-        });
-
+            }).catch((error) => {
+                console.error(error);
+            });
+          console.log("Preguntas mostradas", this.pregunta)
         this.paisSeleccionado = paisId;
         this.app.setEstado("Respondiendo");
 
         socket.emit('enviarPreguntas', { roomId: this.app.sala.id, preguntas: this.pregunta });
-        console.log("TaulerView MostrarPreguntas" + this.app.getMostrarPreguntas());
-      } catch (error) {
-        console.error("Error en la solicitud:", error);
-      }
+        console.log("TaulerView MostrarPreguntas"+ this.app.getMostrarPreguntas());
     },
   },
   async mounted() {
@@ -403,10 +410,7 @@ border-radius: 10%;
   margin-left: auto;
   margin-right: auto;
 }
-#cont-res{
-  
 
-}
 .button {
   padding: 2rem;
   text-align: center;
@@ -460,29 +464,20 @@ border-radius: 10%;
 .torn {
   border-radius: 20px;
   backdrop-filter: blur(8px);
-  /* Reduce el valor para un efecto de desenfoque más sutil */
   width: 250px;
   height: 150px;
-  /* Aumenta la altura para dar más espacio al contenido */
   padding: 20px;
   text-align: center;
   color: #fff;
-  /* Cambiado a blanco para mejorar la legibilidad del texto */
   background-color: rgba(1, 5, 63, 0.7);
-  /* Fondo semi-transparente para resaltar */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  /* Sombra suave para resaltar el contorno */
 }
 
-/* Estilo adicional para el mensaje de "AL ATAC!!!!" */
 .torn h2:last-child {
   color: #ff4500;
-  /* Color naranja para destacar el mensaje de ataque */
   font-size: 24px;
-  /* Tamaño de fuente más grande para el mensaje especial */
 }
 
-/* Estilo adicional para mejorar el espaciado entre los elementos de texto */
 .torn h3 {
   margin-bottom: 10px;
 }
@@ -506,7 +501,7 @@ border-radius: 10%;
   margin: 20px;
   border-radius: 20px;
   text-align: center;
-  backdrop-filter: blur(100px);
+  backdrop-filter: blur(10px); /* Reduced blur for better readability */
   color: #fff;
 }
 
@@ -551,11 +546,11 @@ border-radius: 10%;
   padding: 40px;
   font-size: 1em;
   border: none;
-  background-color: lightblue;
+  background-color: #007bff; /* Changed to a more vibrant blue */
 }
 
 .btn_respostes:hover {
-  background-color: #00339a;
+  background-color: #0056b3; /* Darker blue on hover */
   color: #fff;
 }
 

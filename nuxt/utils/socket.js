@@ -8,27 +8,13 @@ const URL = "http://localhost:3123";
 
 export const socket = io(URL);
 
-const colores = ['green','blue'];
-
-
-socket.on('startGame', () => { 
-  // Aquí puedes agregar código para manejar el inicio del juego
-});
-
-
-
 socket.on('salaCreada', (data) => {
   let store = useAppStore();
   console.log('Datos recibidos:', data);
   store.setSala(data.sala);
   console.log('Sala creada:', store.sala);
 });
-socket.on('preguntasYRespuestas', (preguntasYRespuestas) => {
-  const appStore = useAppStore();
-  // Aquí puedes actualizar tu estado de la aplicación con las preguntas y respuestas recibidas
-  // Por ejemplo, si tienes un método en tu store para establecer las preguntas y respuestas:
-  appStore.setPreguntasYRespuestas(preguntasYRespuestas);
-});
+
 socket.on('salas', (salas) => {
   let store = useAppStore();
   console.log('Salas recibidas:', salas);
@@ -94,14 +80,10 @@ socket.on('cambiarTurno', ({ turno_de, usuarios }) => {
   }
 });
 
-socket.on('respuestaCorrecta', ({ paisId, jugador }) => {
-  console.log(`¡${jugador} ha conquistado ${paisId}!`);
-  // Actualizar el color del país conquistado en la interfaz de usuario
-  // Encuentra el elemento del país en tu vista y cámbiale el color según el jugador que lo conquistó
+socket.on('respuestaCorrecta', ({ paisId, jugador, color }) => {
+  console.log(`¡${jugador} ha conquistado ${paisId}! con color ${color}`);
   const paisElement = document.getElementById(paisId);
   if (paisElement) {
-    const appStore = useAppStore();
-    const color = appStore.getColor();
     paisElement.style.fill = color;
   }
 });
@@ -110,7 +92,15 @@ socket.on('mostrarPreguntas', (preguntas) => {
   const appStore = useAppStore();
   appStore.setMostrarPreguntas(true);
   appStore.setPreguntas(preguntas);
-  console.log('Mostrar preguntas SOCKETCLIENT:', appStore.mostrarPreguntas);
+  console.log('Mostrar preguntas SOCKETCLIENT:', appStore.mostrarPreguntas, " ",  appStore.pregunta);
+});
+
+socket.on('mostrarPreguntasDuelo', (preguntas) => {
+  const appStore = useAppStore();
+  appStore.setMostrarPreguntas(true);
+  appStore.setPreguntas(preguntas);
+  appStore.setDuelo(true);
+  console.log('Mostrar preguntas duelo SOCKETCLIENT:', appStore.mostrarPreguntas);
 });
 
 socket.on('ocultarPreguntas', () => {
@@ -118,16 +108,21 @@ socket.on('ocultarPreguntas', () => {
   appStore.setMostrarPreguntas(false);
   console.log('Ocultar preguntas SOCKETCLIENT:', appStore.mostrarPreguntas);
 });
+socket.on('dueloAcabado', () => {
+  const appStore = useAppStore();
+  appStore.setDuelo(false);
+  console.log('Duelo preguntas terminado SOCKETCLIENT:', appStore.mostrarPreguntas);
+});
 
 socket.on('finDelJuego', ({ ganador, empate }) => {
   const appStore = useAppStore();
 
   if (ganador) {
     console.log(`¡${ganador} es el ganador!`);
-    appStore.setGanador(ganador); // Agrega un método en tu store para almacenar el ganador
+    appStore.setGanador(ganador); 
   } else if (empate) {
     console.log('¡El juego ha terminado en empate!');
-    appStore.setGanador(null); // Puedes manejar el empate según tus necesidades
+    appStore.setGanador(null);
   }
 });
 

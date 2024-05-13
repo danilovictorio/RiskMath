@@ -25,7 +25,6 @@ export const useAppStore = defineStore('app', {
     jugadorGanador: null,
     duelo: false,
     mostrarPreguntas: false,
-    idRespuestaActual: null,
   }),
   actions: {
     setTurno( nombre ) {
@@ -61,18 +60,6 @@ export const useAppStore = defineStore('app', {
     getColorActual(){
       return this.turnoDe.colorActual;
     },
-    assignCountryToPlayer(country, player) {
-      // Asigna el país al jugador
-      this.countries[country] = player;
-    },
-    resetCountryColor(country) {
-      // Restablece el país a un estado neutral
-      this.countries[country] = null;
-    },
-    setPlayerColor(player, color) {
-      // Asigna un color a un jugador
-      this.players[player] = color;
-    },
     setSala(sala) {
       this.sala = sala;
     },
@@ -94,8 +81,5 @@ export const useAppStore = defineStore('app', {
     getDuelo(){
       return this.duelo;
     },
-    setRespuestaContrincante(questionId){
-      this.idRespuestaActual = questionId;
-    }
   },
 })
