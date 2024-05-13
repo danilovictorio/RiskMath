@@ -2,7 +2,7 @@
   <div class="grid grid-cols-2 items-center justify-center w-screen min-h-screen bg-center bg-cover object-cover"
     style="grid-template-areas: 'mapa torn' 'mapa preguntesiRespostes' 'mapa preguntesiRespostes'; background-image: url('/mar.gif');">
   
-    <div class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-48 h-24 " v-if="!esTrunoJugador" style="grid-area: torn; position: absolute; margin-bottom:130%; margin-left: 25%;">
+    <div class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-48 h-24 mobile-map2" v-if="!esTrunoJugador" style="grid-area: torn;">
   <div class="text-center text-white">
     <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
     <div class="p-2 bg-white bg-opacity-20 rounded-md">
@@ -11,7 +11,7 @@
     <h3 class="text-lg font-light">ESPERA EL TEU TORN</h3>
   </div>
 </div>
-<div class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-48 h-24" v-if="esTrunoJugador" style="grid-area: torn; position: absolute; margin-bottom:130%; margin-left: 25%;">
+<div class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-48 h-24 mobile-map2" v-if="esTrunoJugador" style="grid-area: torn;">
   <div class="text-center text-white">
     <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
     <div class="p-2 bg-white bg-opacity-20 rounded-md">
@@ -583,6 +583,11 @@ border-radius: 10%;
     position: absolute;
     margin-left: 40%;
     margin-bottom: 20%;
+  }
+  .mobile-map2 {
+    position: absolute;
+    margin-left: 25%;
+    margin-bottom: 130%;
   }
   #preg{
     width: 100%;
