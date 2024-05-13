@@ -47,12 +47,13 @@
 </div>
 
   </div>
-  <div class="flex items-center justify-center h-auto" style="grid-area: mapa; position: absolute; margin-left: 40%;  margin-bottom: 20%;" id="mapa">
+  <div class="flex items-center justify-center h-auto mobile-map" style="grid-area: mapa;" id="mapa">
     <svg class="w-screen" version="1.1" id="svg47" sodipodi:docname="MAPA.SVG"
       inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
       xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
       xmlns:svg="http://www.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap"
       style="width: 30vw; height: 30vw;" viewBox="0 60 400 100">
+
 
 
 
@@ -577,6 +578,11 @@ border-radius: 10%;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+  .mobile-map {
+    position: absolute;
+    margin-left: 40%;
+    margin-bottom: 20%;
   }
   #preg{
     width: 100%;
