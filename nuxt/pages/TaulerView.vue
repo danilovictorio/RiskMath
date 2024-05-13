@@ -1,3 +1,9 @@
+<!-- RUTAS PARA FETCH A LARAVEL
+  En LOCAL : http://localhost:8000
+  En PRODUCCIÓN : http://trfinal.a17danvicfer.daw.inspedralbes.cat/laravel/public
+
+  sustituir valor en variable global:  ruta
+ -->
 <template>
 <div class="grid grid-cols-2 items-center justify-center w-screen min-h-screen bg-center bg-cover object-cover"
     style="grid-template-areas: 'mapa torn' 'mapa preguntesiRespostes' 'mapa preguntesiRespostes'; background-image: url('/mar.gif');">
@@ -156,7 +162,6 @@ export default {
       esActivo: true,
       resultadoPregunta: false,
       miTurno: false,
-      ruta: 'http://localhost:8000',
       contadorPaises: 0,
       pregDuelo: false,
       esMiTurnoDeResponder: false,

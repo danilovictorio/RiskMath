@@ -1,5 +1,5 @@
 const url = 'http://localhost:8000';
-//const url = 'http://trfinal.a17danvicfer.daw.inspedralbes.cat/laravel/public/api'; //producción
+//const url = 'http://trfinal.a17danvicfer.daw.inspedralbes.cat/laravel/public'; //producción
 
 export async function enviarAtac(name, idUser) {
     try {

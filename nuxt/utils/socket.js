@@ -2,11 +2,10 @@
 import { io } from "socket.io-client";
 import { useAppStore } from '../stores/app';
 import { onMounted, onUnmounted } from 'vue';
+const url = 'http://localhost:3123';
+//const url = 'http://trfinal.a17danvicfer.daw.inspedralbes.cat:3123'; //producción
 
-
-const URL = "http://localhost:3123"; 
-
-export const socket = io(URL);
+export const socket = io(url);
 
 const colores = ['green','blue'];
 
