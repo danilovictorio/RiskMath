@@ -1,52 +1,59 @@
 <template>
-  <div class="container">
+<div class="grid grid-cols-2 items-center justify-center w-screen min-h-screen bg-center bg-cover object-cover"
+    style="grid-template-areas: 'mapa torn' 'mapa preguntesiRespostes' 'mapa preguntesiRespostes'; background-image: url('/mar.gif');">
     <div v-if="!app.duelo">
-      <div class="torn_container" v-if="!esTrunoJugador">
-        <div class="torn">
-          <h3>Torn de :</h3>
-          <h2>{{ app.turnoDe.nombre }}</h2>
-          <h2>Color : {{ app.turnoDe.color }}</h2>
-          <h3>Espera el teu torn</h3>
-        </div>
-      </div>
-      <div class="torn_container" v-if="esTrunoJugador">
-        <div class="torn">
-          <h3>Torn de :</h3>
-          <h2>{{ app.turnoDe.nombre }}</h2>
-          <h2> Color : {{ app.turnoDe.color }}</h2>
-          <h2>AL ATAC!!!!</h2>
-        </div>
-      </div>
+      <div class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-40 h-30 mobile-map2" v-if="!esTrunoJugador" style="grid-area: torn;">
+  <div class="text-center text-white">
+    <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
+    <div class="p-2 bg-white bg-opacity-20 rounded-md">
+      <h2 class="text-2xl font-bold text-indigo-300">{{ this.app.turnoDe.nombre }}</h2>
+      <h2 class="text-2xl font-bold text-indigo-300">{{ this.app.turnoDe.color }}</h2>
     </div>
-    <div v-else>
-      <h1>DUELO INICIADO</h1>
+    <h3 class="text-lg font-light">ESPERA EL TEU TORN</h3>
+  </div>
+</div>
+<div class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-40 h-30 mobile-map2" v-if="esTrunoJugador" style="grid-area: torn;">
+  <div class="text-center text-white">
+    <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
+    <div class="p-2 bg-white bg-opacity-20 rounded-md">
+      <h2 class="text-2xl font-bold text-indigo-300">{{ this.app.turnoDe.nombre }}</h2>
+      <h2 class="text-2xl font-bold text-indigo-300">{{ this.app.turnoDe.color }}</h2>
+    </div>
+    <h2 class="text-2xl text-yellow-300 font-bold">ATACA!!!</h2>
+  </div>
+</div>
+</div>
+    <div v-else class="flex items-center justify-center" style="grid-area: torn;">
+      <h1 class="text-5xl font-bold text-black">DUELO INICIADO</h1>
     </div>
 
-    <div class="preguntaResposta_container">
-      <div class="pregunta_container" v-if="app.getMostrarPreguntas()">
-        <div class="pregunta">
-          <h2>{{ app.pregunta ? app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
-        </div>
-      </div>
-      <div class="respostes" v-if="app.getMostrarPreguntas()">
-        <button class="btn_respostes btn_resposta1" @click="validateResponse(app.pregunta.id, 'a')" v-if="app.pregunta"
-          :disabled="!esTrunoJugador && !app.duelo">
-          <h3>Respuesta A:</h3> {{ app.pregunta.respuesta_a }}
-        </button>
-        <button class="btn_respostes btn_resposta2" @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta"
-          :disabled="!esTrunoJugador && !app.duelo">
-          <h3>Respuesta B:</h3> {{ app.pregunta.respuesta_b }}
-        </button>
-        <button class="btn_respostes btn_resposta3" @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta"
-          :disabled="!esTrunoJugador && !app.duelo">
-          <h3>Respuesta C:</h3> {{ app.pregunta.respuesta_c }}
-        </button>
-        <button class="btn_respostes btn_resposta4" @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta"
-          :disabled="!esTrunoJugador && !app.duelo">
-          <h3>Respuesta D:</h3> {{ app.pregunta.respuesta_d }}
-        </button>
-      </div>
-    </div>
+
+<div class="flex flex-col justify-between items-center bg-white bg-opacity-5 backdrop-blur-lg rounded-lg m-5" id="preg" style="grid-area: preguntesiRespostes; justify-content: start; margin-right: 60px; padding-bottom: 10px;">
+   <div class="text-center text-white" id="cont-preg" v-if="this.app.getMostrarPreguntas()">
+    <h2 class="text-2xl font-semibold pregunta-texto">{{ this.app.pregunta ? this.app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
+  </div>
+
+  <div class="grid gap-1 m-5" id="cont-res" v-if="this.app.getMostrarPreguntas()"
+  style="grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; grid-template-areas: 'btn_resposta1 btn_resposta2' 'btn_resposta3 btn_resposta4';">
+  <button class="button" @click="validateResponse(this.app.pregunta.id, 'a')" v-if="this.app.pregunta" :disabled="!esTrunoJugador && !app.duelo"
+    style="grid-area: btn_resposta1;">
+    <h3>Respuesta A:</h3> {{ this.app.pregunta.respuesta_a }}
+  </button>
+  <button class="button" @click="validateResponse(this.app.pregunta.id, 'b')" v-if="this.app.pregunta" :disabled="!esTrunoJugador && !app.duelo"
+    style="grid-area: btn_resposta2;">
+    <h3>Respuesta B:</h3> {{ this.app.pregunta.respuesta_b }}
+  </button>
+  <button class="button" @click="validateResponse(this.app.pregunta.id, 'c')" v-if="this.app.pregunta" :disabled="!esTrunoJugador && !app.duelo"
+    style="grid-area: btn_resposta3;">
+    <h3>Respuesta C:</h3> {{ this.app.pregunta.respuesta_c }}
+  </button>
+  <button class="button" @click="validateResponse(this.app.pregunta.id, 'd')" v-if="this.app.pregunta" :disabled="!esTrunoJugador && !app.duelo"
+    style="grid-area: btn_resposta4;">
+    <h3>Respuesta D:</h3> {{ this.app.pregunta.respuesta_d }}
+  </button>
+</div>
+
+  </div>
 
     <div class="mapa">
       <svg class="mapImage" version="1.1" id="svg47" sodipodi:docname="MAPA.SVG"
@@ -208,12 +215,12 @@ export default {
         const data = await enviarAtac(name, idUser);
 
         this.pregunta = {
-            id: data.pregunta.id,
-            pregunta: data.pregunta.pregunta,
-            respuesta_a: data.pregunta.respuesta_a,
-            respuesta_b: data.pregunta.respuesta_b,
-            respuesta_c: data.pregunta.respuesta_c,
-            respuesta_d: data.pregunta.respuesta_d,
+          id: data.pregunta.id,
+          pregunta: data.pregunta.pregunta,
+          respuesta_a: data.pregunta.respuesta_a,
+          respuesta_b: data.pregunta.respuesta_b,
+          respuesta_c: data.pregunta.respuesta_c,
+          respuesta_d: data.pregunta.respuesta_d,
         };
 
         this.mostrar = 1;
@@ -222,9 +229,9 @@ export default {
 
         socket.emit('enviarDuelo', { roomId: this.app.sala.id, preguntas: this.pregunta });
         console.log("TaulerView MostrarPreguntasDUELO" + this.app.getMostrarPreguntas());
-    } catch (error) {
+      } catch (error) {
         console.error("Error en la solicitud:", error);
-    }
+      }
     },
 
     async propietariosPaises() {
@@ -237,14 +244,14 @@ export default {
 
     //funció per obtenir el json de paisos
     async obtenerDatosPaises() {
-    try {
+      try {
         const paises = await obtenerPaises();
         this.paises = paises;
         console.log(paises);
-    } catch (error) {
+      } catch (error) {
         console.error("Error al obtener datos de países:", error);
-    }
-  },
+      }
+    },
 
     //funció que valida si la resposta d'un usuari es la correcta
     async validateResponse(questionId, selectedOption) {
@@ -254,50 +261,50 @@ export default {
         const result = await validarResposta(questionId, selectedOption);
 
         if (result.resultado === true) {
-            console.log("La respuesta es verdadera");
-            this.confirmarAtaque(this.app.turnoDe.nombre, this.paisId);
-            this.resultadoPregunta = true;
-            if (this.app.nombre == this.app.turnoDe.nombre) {
-                this.app.paisesConquistados++;
-            }
-            this.contadorPaises++;
+          console.log("La respuesta es verdadera");
+          this.confirmarAtaque(this.app.turnoDe.nombre, this.paisId);
+          this.resultadoPregunta = true;
+          if (this.app.nombre == this.app.turnoDe.nombre) {
+            this.app.paisesConquistados++;
+          }
+          this.contadorPaises++;
         } else {
-            console.log("La respuesta es falsa");
-            this.resultadoPregunta = false;
+          console.log("La respuesta es falsa");
+          this.resultadoPregunta = false;
         }
         console.log("paises conquistados", this.app.paisesConquistados);
 
         socket.emit("respuestaJugador", {
           turnoDe: this.app.turnoDe.nombre,
-            userName: this.app.nombre,
-            paisId: this.paisSeleccionado,
-            acertado: this.resultadoPregunta,
-            roomId: this.app.sala.id,
+          userName: this.app.nombre,
+          paisId: this.paisSeleccionado,
+          acertado: this.resultadoPregunta,
+          roomId: this.app.sala.id,
         });
         this.app.setEstado("Respondiendo");
         socket.emit('OcultarPreguntas', { roomId: this.app.sala.id });
         if (this.app.duelo) {
-            socket.emit('dueloTerminado', { roomId: this.app.sala.id });
+          socket.emit('dueloTerminado', { roomId: this.app.sala.id });
         }
         this.resultadoPregunta = false;
-    } catch (error) {
+      } catch (error) {
         console.error("Error validating response:", error);
-    }
+      }
     },
 
     //funció per confirmar atac
     async confirmarAtaque(idUser, paisId) {
       console.log("ID QUE PASO AL CONFIRMAR ATAUQE", idUser + paisId);
-    try {
+      try {
         const result = await confirmarAtaque(idUser, paisId);
 
         console.log(result.message);
         this.propietariosPaises();
         console.log("Usuario: " + idUser, "Conquista Pais: " + paisId);
         this.comprovarFinal();
-    } catch (error) {
+      } catch (error) {
         console.error("Error en la solicitud:", error);
-    }
+      }
     },
 
     //funció per a comprovar el final del joc
@@ -320,14 +327,14 @@ export default {
       this.app.setEstado("Atacando");
       try {
         const data = await enviarAtac(name, idUser);
-        
+
         this.pregunta = {
-            id: data.pregunta.id,
-            pregunta: data.pregunta.pregunta,
-            respuesta_a: data.pregunta.respuesta_a,
-            respuesta_b: data.pregunta.respuesta_b,
-            respuesta_c: data.pregunta.respuesta_c,
-            respuesta_d: data.pregunta.respuesta_d,
+          id: data.pregunta.id,
+          pregunta: data.pregunta.pregunta,
+          respuesta_a: data.pregunta.respuesta_a,
+          respuesta_b: data.pregunta.respuesta_b,
+          respuesta_c: data.pregunta.respuesta_c,
+          respuesta_d: data.pregunta.respuesta_d,
         };
 
         this.paisSeleccionado = paisId;
@@ -335,9 +342,9 @@ export default {
 
         socket.emit('enviarPreguntas', { roomId: this.app.sala.id, preguntas: this.pregunta });
         console.log("TaulerView MostrarPreguntas" + this.app.getMostrarPreguntas());
-    } catch (error) {
+      } catch (error) {
         console.error(error);
-    }
+      }
     },
   },
   async mounted() {
@@ -349,14 +356,38 @@ export default {
 };
 </script>
 
-
 <style scoped>
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
+#preg{
 
+border-radius: 10%;
+}
+#cont-preg{
+  margin-top: 5%;
+  margin-bottom: 5%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.button {
+  padding: 2rem;
+  text-align: center;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  background-color: #4299e1;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
+}
+
+.button:hover {
+  background-color: #2b6cb0;
+  transform: scale(1.05);
+}
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -395,22 +426,45 @@ export default {
 .torn {
   border-radius: 20px;
   backdrop-filter: blur(8px);
+  /* Reduce el valor para un efecto de desenfoque más sutil */
   width: 250px;
   height: 150px;
+  /* Aumenta la altura para dar más espacio al contenido */
   padding: 20px;
   text-align: center;
   color: #fff;
+  /* Cambiado a blanco para mejorar la legibilidad del texto */
   background-color: rgba(1, 5, 63, 0.7);
+  /* Fondo semi-transparente para resaltar */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Sombra suave para resaltar el contorno */
 }
 
+/* Estilo adicional para el mensaje de "AL ATAC!!!!" */
 .torn h2:last-child {
   color: #ff4500;
+  /* Color naranja para destacar el mensaje de ataque */
   font-size: 24px;
+  /* Tamaño de fuente más grande para el mensaje especial */
 }
 
+/* Estilo adicional para mejorar el espaciado entre los elementos de texto */
 .torn h3 {
   margin-bottom: 10px;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "mapa torn" "mapa preguntesiRespostes" "mapa preguntesiRespostes";
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('../public/mar.gif');
+  background-position: center;
+  background-size: cover;
+  object-fit: cover;
 }
 
 .pregunta_container {
@@ -418,8 +472,7 @@ export default {
   margin: 20px;
   border-radius: 20px;
   text-align: center;
-  backdrop-filter: blur(10px);
-  /* Reduced blur for better readability */
+  backdrop-filter: blur(100px);
   color: #fff;
 }
 
@@ -437,13 +490,18 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  width: 100%;
 }
 
 .pregunta h2 {
   font-size: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
+.mobile-map {
+    position: absolute;
+    margin-left: 10%;
+    margin-top: 10%;
+  }
 .respostes {
   margin: 20px;
   display: grid;
@@ -459,13 +517,11 @@ export default {
   padding: 40px;
   font-size: 1em;
   border: none;
-  background-color: #007bff;
-  /* Changed to a more vibrant blue */
+  background-color: lightblue;
 }
 
 .btn_respostes:hover {
-  background-color: #0056b3;
-  /* Darker blue on hover */
+  background-color: #00339a;
   color: #fff;
 }
 
@@ -487,20 +543,66 @@ export default {
 
 @media only screen and (max-width: 1200px) {
   .container {
-    grid-template-columns: 1fr;
-    grid-template-rows: 0.5fr 2fr 3fr;
-    grid-template-areas: "torn"
-      "preguntesiRespostes"
-      "mapa";
+    /* Estilos para el contenedor en pantallas de hasta 600px de ancho (móviles) */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
+  .mobile-map {
+    position: absolute;
+    margin-left: 40%;
+    margin-bottom: 20%;
+  }
+  .mobile-map2 {
+    position: absolute;
+    margin-left: 25%;
+    margin-bottom: 130%;
+  }
+  .torn_container {
+    position: relative; /* Cambia la posición a relativa o estática */
+    margin-top: 20px; /* Ajusta según sea necesario */
+  }
+  #preg{
+    width: 100%;
+    margin-top: 50%;
+  
+  }
+  #cont-res>div{
+    width: 50%;
 
+  }
+  #cont-preg {
+    width: 100%;
+    margin-left: 0;
+ 
+    padding: 10px;
+  }
+  .pregunta-texto {
+    /* Estilos para el texto de la pregunta en pantallas de hasta 600px de ancho (móviles) */
+    font-size: 1rem; /* Ajusta este valor según tus necesidades */
+  }
   .mapa {
     display: flex;
     align-items: center;
-    height: 40vh;
-    width: auto;
+    height: 50%;
+    width: 50%;
+    margin-bottom: 20%;
   }
-}
+  .grid {
+        grid-template-areas: 'mapa' 'torn' 'preguntesiRespostes';
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+      }
+      .preguntaResposta_container {
+        width: 100%;
+      }
+      .button {
+    /* Estilos para los botones en pantallas de hasta 600px de ancho (móviles) */
+    font-size: 0.8rem; /* Ajusta este valor según tus necesidades */
+    padding: 10px; /* Ajusta este valor según tus necesidades */
+  }
+    }
 
 @media only screen and (min-width: 1200px) {
   .preguntaResposta_container {
