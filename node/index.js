@@ -118,6 +118,11 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('marcarTerritorioSeleccionado', ({ roomId, paisId }) => {
+    console.log("Territorio SELECCIONADO SERVER");
+    io.to(roomId).emit('marcarTerritorio', { paisId });
+  });
+
   socket.on('disconnect', () => {
     console.log("Se ha desconectado alguien!! con id " + socket.id);
     //HAY QUE MIRARLO PORQUE PETA!

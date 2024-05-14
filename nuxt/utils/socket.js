@@ -3,8 +3,8 @@ import { io } from "socket.io-client";
 import { useAppStore } from '../stores/app';
 import { onMounted, onUnmounted } from 'vue';
 
-//const url = 'http://localhost:3123';
-const url = 'http://trfinal.a17danvicfer.daw.inspedralbes.cat:3123'; //producción
+const url = 'http://localhost:3123';
+//const url = 'http://trfinal.a17danvicfer.daw.inspedralbes.cat:3123'; //producción
 
 export const socket = io(url);
 
@@ -73,6 +73,13 @@ socket.on('cambiarTurno', ({ turno_de, usuarios }) => {
     console.log("entrandooooooo2");
     appStore.setColor(usuarios[1].color);
     console.log('así queda: ', appStore.getColor());
+  }
+});
+socket.on('marcarTerritorio', ({ paisId }) => {
+  console.log(`¡Territorio ${paisId}! con color gris`);
+  const paisElement = document.getElementById(paisId);
+  if (paisElement) {
+    paisElement.style.fill = 'gray';
   }
 });
 

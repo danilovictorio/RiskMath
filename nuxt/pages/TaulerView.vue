@@ -339,7 +339,8 @@ export default {
 
         this.paisSeleccionado = paisId;
         this.app.setEstado("Respondiendo");
-
+        console.log("ROOMID SELECCIONADO", this.app.sala.id);
+        socket.emit('marcarTerritorioSeleccionado'), { roomId: this.app.sala.id, paisId: paisId };
         socket.emit('enviarPreguntas', { roomId: this.app.sala.id, preguntas: this.pregunta });
         console.log("TaulerView MostrarPreguntas" + this.app.getMostrarPreguntas());
       } catch (error) {
