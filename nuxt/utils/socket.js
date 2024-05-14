@@ -79,7 +79,7 @@ socket.on('marcarTerritorio', ({ paisId }) => {
   console.log(`¡Territorio ${paisId}! con color gris`);
   const paisElement = document.getElementById(paisId);
   if (paisElement) {
-    paisElement.style.fill = 'gray';
+    paisElement.style.fill = 'grey ';
   }
 });
 
