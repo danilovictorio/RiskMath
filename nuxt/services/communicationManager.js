@@ -126,3 +126,47 @@ export async function eliminarPregunta(id) {
         throw error; // Propagar el error hacia arriba
     }
 }
+export async function actualizarPreguntaEditada(pregunta) {
+    try {
+        const response = await fetch(`${url}/api/modificar-pregunta`, {
+            method: "PUT", // Método HTTP para actualizar la pregunta
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(pregunta),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Respuesta del servidor:", data);
+        return data; // Retornar los datos de respuesta si es necesario
+    } catch (error) {
+        console.error("Error en la solicitud:", error);
+        throw error; // Propagar el error hacia arriba
+    }
+}
+export async function crearPregunta(preguntaData) {
+    try {
+        const response = await fetch(`${url}/api/crear-pregunta`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(preguntaData),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Pregunta creada:", data);
+        return data; // Retornar los datos de la pregunta creada
+    } catch (error) {
+        console.error("Error al crear la pregunta:", error);
+        throw error; // Propagar el error hacia arriba
+    }
+}
