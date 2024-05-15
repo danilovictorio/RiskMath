@@ -19,6 +19,7 @@ socket.on('salaCreada', (data) => {
   let store = useAppStore();
   console.log('Datos recibidos:', data);
   store.setSala(data.sala);
+  store.setpaisesConquistados(data.sala.recuentoPaises);
   console.log('Sala creada:', store.sala);
 });
 
@@ -37,6 +38,7 @@ socket.on('salas', (salas) => {
 socket.on('usuarioUnidoSala', (data) => {
   let store = useAppStore();
   store.setSala(data.sala);
+  store.setpaisesConquistados(data.sala.recuentoPaises);
   console.log('Datos de la sala DE UNIDO SALA:', store.sala);
 });
 
@@ -66,6 +68,11 @@ socket.on('marcarTerritorio', ({ paisId }) => {
   if (paisElement) {
     paisElement.style.fill = 'grey ';
   }
+});
+
+socket.on('paisesConquistados', (recuentoPaises) => {
+  const appStore = useAppStore();
+  appStore.setpaisesConquistados(recuentoPaises);
 });
 
 socket.on('respuestaCorrecta', ({ paisId, jugador, color }) => {

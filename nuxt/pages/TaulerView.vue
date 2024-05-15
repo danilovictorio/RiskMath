@@ -249,11 +249,12 @@ export default {
       }
     },
 
-    async propietariosPaises() {
+    async propietariosPaises(nombreJugador) {
       console.log("propietariosPaises" + " " + this.app.sala.jugadores);
 
       socket.emit("contadorPaises", {
         roomId: this.app.sala.id,
+        nombreJugador: nombreJugador,
       });
     },
 
@@ -314,7 +315,7 @@ export default {
         const result = await confirmarAtaque(idUser, paisId);
 
         console.log(result.message);
-        this.propietariosPaises();
+        this.propietariosPaises(this.app.nombre);
         console.log("Usuario: " + idUser, "Conquista Pais: " + paisId);
         this.comprovarFinal();
       } catch (error) {
@@ -324,9 +325,8 @@ export default {
 
     //funció per a comprovar el final del joc
     async comprovarFinal() {
-      socket.on('paisesConquistados', ({ recuentoPaises, usuarioGanador }) => {
+      socket.on('comprovarFinal', ({ paisesConquistados, usuarioGanador }) => {
         this.app.jugadorGanador = usuarioGanador;
-        this.app.setpaisesConquistados(recuentoPaises);
         if (Object.keys(paisesConquistados).length == 15) {
           console.log("¡Todos los países han sido conquistados!");
 

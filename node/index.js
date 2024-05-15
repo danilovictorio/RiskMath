@@ -32,6 +32,7 @@ io.on('connection', (socket) => {
       capacidad: data.capacidadSala,
       jugadores: [data.nombreJugador],
       paisesConquistados: {},
+      recuentoPaises: { [data.nombreJugador]: 0 }
     };
     console.log('Sala creada con ID:', roomId);
     console.log('Datos de la sala:', rooms[roomId]);
@@ -55,6 +56,7 @@ io.on('connection', (socket) => {
     if (room && room.jugadores.length < room.capacidad) {
       if (!room.jugadores.includes(nombreJugador)) {
         room.jugadores.push(nombreJugador);
+        room.recuentoPaises[nombreJugador] = 0;
       }
       console.log('Se ha unido a la sala con ID:', socket.id);
       socket.join(roomId);
@@ -183,23 +185,26 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('contadorPaises', ({roomId }) => {
+  socket.on('contadorPaises', ({roomId , nombreJugador}) => {
     const room = rooms[roomId];
-    let recuentoPaises = {};
-
-    for (let usuario of Object.values(room.paisesConquistados)) {
-      if (usuario in recuentoPaises) {
-        recuentoPaises[usuario]++;
-      } else {
-        recuentoPaises[usuario] = 1;
-      }
+    console.log('nombreJugador:', nombreJugador)
+  if (room) {
+    // Inicializa el recuento de países
+    const nuevoRecuentoPaises = { ...room.recuentoPaises };
+    if (nombreJugador in nuevoRecuentoPaises) {
+      nuevoRecuentoPaises[nombreJugador]++;
+    } else {
+      nuevoRecuentoPaises[nombreJugador] = 1;
     }
-    let usuarioConMasPaises = Object.keys(recuentoPaises).reduce((a, b) => recuentoPaises[a] > recuentoPaises[b] ? a : b);
+    // Actualiza room.recuentoPaises con nuevoRecuentoPaises
+    room.recuentoPaises = nuevoRecuentoPaises;
+    // Calcula el usuario con más países conquistados
+    let usuarioConMasPaises = Object.keys(room.recuentoPaises).reduce((a, b) => room.recuentoPaises[a] > room.recuentoPaises[b] ? a : b);
     console.log('Paises conquistados:', room.paisesConquistados);
-    console.log('Recuento de países:', recuentoPaises);
-    io.to(roomId).emit('paisesConquistados', { recuentoPaises, usuarioGanador: usuarioConMasPaises });
-
-
+    console.log('Recuento de países:', room.recuentoPaises);
+    io.to(roomId).emit('paisesConquistados', { recuentoPaises: room.recuentoPaises });
+    io.to(roomId).emit('comprovarFinal', { paisesConquistados: room.paisesConquistados, usuarioGanador: usuarioConMasPaises });
+  }
   });
 });
 
