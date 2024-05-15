@@ -8,8 +8,8 @@
         <p class="mt-2 text-center text-sm">
           {{ sala ? sala.nombre : 'Nombre de la sala no disponible' }}
         </p>
-        <p class="mt-2 text-center text-sm relative group" @click="copyToClipboard(sala ? sala.id : '')">
-          Código de la sala: {{ sala ? sala.id : 'Nombre de la sala no disponible' }}
+        <p class="mt-2 text-center text-sm relative group">
+          Código de la sala: {{ sala ? sala.id : 'Código de la sala no disponible' }}
           <span class="absolute right-0 top-0 mt-2 mr-2 text-xs text-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out cursor-pointer">Copy</span>
         </p>
       </div>
@@ -40,59 +40,40 @@
 
 <script>
 // SalaEspera.vue
-import { onMounted, computed, ref } from 'vue';
 import { socket } from '@/utils/socket.js';
 import { useAppStore } from '../stores/app.js';
 
 export default {
+  data() {
+    return {
+      store: useAppStore(),
+    };
+  },
   computed: {
     sala() {
-      let store = useAppStore();
-      return store.sala;
+      return this.store.sala;
     },
     esCreador() {
-      let store = useAppStore();
-      return store.esCreador;
-    }
+      return this.store.esCreador;
+    },
   },
-  setup() {
-    const store = useAppStore();
-    const esCreador = ref(false);
-    const router = useRouter();
-
-    const redirectToGame = () => {
-      router.push({ name: 'TaulerView' });
-    };
-
-    onMounted(() => {
-      socket.on('peticion_jugar_aceptada', (datos) => {
-        console.log('peticion_jugar_aceptada', datos);
-        redirectToGame();
-      });
-
-      socket.emit('obtenerSalas');
-    });
-
-    return {
-      iniciarPartida() {
-        socket.emit('iniciarPartida', store.sala.id, (response) => {
-          if (response.success) {
-            console.log(response.message);
-            socket.emit('peticion_jugar', { nombreUsuario: 'Usuario' + socket.id }, store.sala.id);
-          } else {
-            console.error(response.message);
-          }
-        });
-      },
-      async copyToClipboard(text) {
-        try {
-          await navigator.clipboard.writeText(text);
-          alert('Código de sala copiado al portapapeles');
-        } catch (err) {
-          console.error('Failed to copy text: ', err);
+  methods: {
+    iniciarPartida() {
+      socket.emit('iniciarPartida', this.sala.id, (response) => {
+        if (response.success) {
+          console.log(response.message);
+          socket.emit('peticion_jugar', { nombreUsuario: 'Usuario' + socket.id }, this.sala.id);
+        } else {
+          console.error(response.message);
         }
-      }
-    }
-  }
+      });
+    },
+  },
+  created() {
+    socket.on('peticion_jugar_aceptada', (datos) => {
+      console.log('peticion_jugar_aceptada', datos);
+      this.$router.push({ name: 'TaulerView' });
+    });
+  },
 };
 </script>

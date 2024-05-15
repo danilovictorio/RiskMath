@@ -46,21 +46,6 @@ socket.on('cambiarPrimerTurno', ({ turno_de }) => {
   console.log('Cambio PRIMER de turno. ¿Es mi turno?', turno_de);
 });
 
-const usuarioUnidoSalaHandler = (data) => {
-  let store = useAppStore();
-  store.setSala(data.sala);
-  console.log('Datos de la sala:', store.sala);
-  console.log('Usuarios en la sala:', store.usuariosJuego.users);
-};
-
-onMounted(() => {
-  socket.on('usuarioUnidoSala', usuarioUnidoSalaHandler);
-});
-
-onUnmounted(() => {
-  socket.off('usuarioUnidoSala', usuarioUnidoSalaHandler);
-});
-
 socket.on('cambiarTurno', ({ turno_de, usuarios }) => {
   console.log('Cambio de turno. ¿Es mi turno?', turno_de);
   const appStore = useAppStore();
