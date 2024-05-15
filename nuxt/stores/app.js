@@ -6,7 +6,7 @@ export const useAppStore = defineStore('app', {
       nombre:'',
       estado:'',
       color: '',
-      idPais: '',
+      pais: '',
       ganador: null,
       colorActual: ""   
     },
@@ -19,7 +19,7 @@ export const useAppStore = defineStore('app', {
     },
     pregunta: {},
     nombre:'',
-    paisesConquistados: 0,
+    paisesConquistados: {},
     countries: {}, 
     players: {}, 
     jugadorGanador: null,
@@ -27,6 +27,12 @@ export const useAppStore = defineStore('app', {
     mostrarPreguntas: false,
   }),
   actions: {
+    setpaisesConquistados(paisesConquistados){
+      this.paisesConquistados = paisesConquistados;
+    },
+    getpaisesConquistados(){
+      return this.paisesConquistados;
+    },
     setTurno( nombre ) {
       this.turnoDe.nombre=nombre;       
     },
@@ -45,8 +51,11 @@ export const useAppStore = defineStore('app', {
     setColor(color){
       this.turnoDe.color=color;
     },
-    getIdPais(){
-      return this.turnoDe.idPais;
+    setPais(pais){
+      this.turnoDe.pais = pais;
+    },
+    getPais(){
+      return this.turnoDe.pais;
     }, 
     esMiturno(){
       return this.turnoDe.nombre === this.nombre;

@@ -1,59 +1,74 @@
 <template>
-<div class="grid grid-cols-2 items-center justify-center w-screen min-h-screen bg-center bg-cover object-cover"
-    style="grid-template-areas: 'mapa torn' 'mapa preguntesiRespostes' 'mapa preguntesiRespostes'; background-image: url('/mar.gif');">
+  <div class="grid grid-cols-2 items-center justify-center w-screen min-h-screen bg-center bg-cover object-cover"
+       style="grid-template-areas: 'mapa torn' 'mapa preguntesiRespostes' 'mapa preguntesiRespostes'; background-image: url('/mar.gif');">
+    
     <div v-if="!app.duelo">
-      <div class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-40 h-30 mobile-map2" v-if="!esTrunoJugador" style="grid-area: torn;">
-  <div class="text-center text-white">
-    <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
-    <div class="p-2 bg-white bg-opacity-20 rounded-md">
-      <h2 class="text-2xl font-bold text-indigo-300">{{ app.turnoDe.nombre }}</h2>
-      <h2 class="text-2xl font-bold text-indigo-300">{{ app.turnoDe.color }}</h2>
+      <div
+        class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-40 h-30 mobile-map2"
+        v-if="!esTrunoJugador" style="grid-area: torn;">
+        <div class="text-center text-white">
+          <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
+          <div class="p-2 bg-white bg-opacity-20 rounded-md">
+            <h2 class="text-2xl font-bold text-indigo-300">{{ app.turnoDe.nombre }}</h2>
+            <h2 class="text-2xl font-bold text-indigo-300">{{ app.turnoDe.color }}</h2>
+          </div>
+          <h3 class="text-lg font-light">ESPERA EL TEU TORN</h3>
+        </div>
+      </div>
+      <div
+        class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-40 h-30 mobile-map2"
+        v-if="esTrunoJugador" style="grid-area: torn;">
+        <div class="text-center text-white">
+          <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
+          <div class="p-2 bg-white bg-opacity-20 rounded-md">
+            <h2 class="text-2xl font-bold text-indigo-300">{{ app.turnoDe.nombre }}</h2>
+            <h2 class="text-2xl font-bold text-indigo-300">{{ app.turnoDe.color }}</h2>
+          </div>
+          <h2 class="text-2xl text-yellow-300 font-bold">ATACA!!!</h2>
+        </div>
+      </div>
     </div>
-    <h3 class="text-lg font-light">ESPERA EL TEU TORN</h3>
-  </div>
-</div>
-<div class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-40 h-30 mobile-map2" v-if="esTrunoJugador" style="grid-area: torn;">
-  <div class="text-center text-white">
-    <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
-    <div class="p-2 bg-white bg-opacity-20 rounded-md">
-      <h2 class="text-2xl font-bold text-indigo-300">{{ app.turnoDe.nombre }}</h2>
-      <h2 class="text-2xl font-bold text-indigo-300">{{ app.turnoDe.color }}</h2>
-    </div>
-    <h2 class="text-2xl text-yellow-300 font-bold">ATACA!!!</h2>
-  </div>
-</div>
-</div>
+
     <div v-else class="flex items-center justify-center" style="grid-area: torn;">
       <h1 class="text-5xl font-bold text-black">DUELO INICIADO</h1>
     </div>
+    <div class="text-center text-white mt-4">
+          <h4 class="text-lg font-medium">Países conquistados:</h4>
+          <div class="p-2 bg-white bg-opacity-20 rounded-md">
+            <div v-for="(cantidad, jugador) in app.paisesConquistados" :key="jugador">
+              <p class="text-md font-semibold">{{ jugador }}: {{ cantidad }}</p>
+            </div>
+          </div>
+        </div>
 
+    <div class="flex flex-col justify-between items-center bg-white bg-opacity-5 backdrop-blur-lg rounded-lg m-5"
+         id="preg"
+         style="grid-area: preguntesiRespostes; justify-content: start; margin-right: 60px; padding-bottom: 10px;">
+      <div class="text-center text-white" id="cont-preg" v-if="app.getMostrarPreguntas()">
+        <h2 class="text-2xl font-semibold pregunta-texto">{{ app.pregunta ? app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
+      </div>
 
-<div class="flex flex-col justify-between items-center bg-white bg-opacity-5 backdrop-blur-lg rounded-lg m-5" id="preg" style="grid-area: preguntesiRespostes; justify-content: start; margin-right: 60px; padding-bottom: 10px;">
-   <div class="text-center text-white" id="cont-preg" v-if="app.getMostrarPreguntas()">
-    <h2 class="text-2xl font-semibold pregunta-texto">{{ app.pregunta ? app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
-  </div>
+      <div class="grid gap-1 m-5" id="cont-res" v-if="app.getMostrarPreguntas()"
+           style="grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; grid-template-areas: 'btn_resposta1 btn_resposta2' 'btn_resposta3 btn_resposta4';">
+        <button class="button" @click="validateResponse(app.pregunta.id, 'a')" v-if="app.pregunta"
+                :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta1;">
+          <h3>Respuesta A:</h3> {{ app.pregunta.respuesta_a }}
+        </button>
+        <button class="button" @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta"
+                :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta2;">
+          <h3>Respuesta B:</h3> {{ app.pregunta.respuesta_b }}
+        </button>
+        <button class="button" @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta"
+                :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta3;">
+          <h3>Respuesta C:</h3> {{ app.pregunta.respuesta_c }}
+        </button>
+        <button class="button" @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta"
+                :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta4;">
+          <h3>Respuesta D:</h3> {{ app.pregunta.respuesta_d }}
+        </button>
+      </div>
 
-  <div class="grid gap-1 m-5" id="cont-res" v-if="app.getMostrarPreguntas()"
-  style="grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; grid-template-areas: 'btn_resposta1 btn_resposta2' 'btn_resposta3 btn_resposta4';">
-  <button class="button" @click="validateResponse(app.pregunta.id, 'a')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo"
-    style="grid-area: btn_resposta1;">
-    <h3>Respuesta A:</h3> {{ app.pregunta.respuesta_a }}
-  </button>
-  <button class="button" @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo"
-    style="grid-area: btn_resposta2;">
-    <h3>Respuesta B:</h3> {{ app.pregunta.respuesta_b }}
-  </button>
-  <button class="button" @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo"
-    style="grid-area: btn_resposta3;">
-    <h3>Respuesta C:</h3> {{ app.pregunta.respuesta_c }}
-  </button>
-  <button class="button" @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo"
-    style="grid-area: btn_resposta4;">
-    <h3>Respuesta D:</h3> {{ app.pregunta.respuesta_d }}
-  </button>
-</div>
-
-  </div>
+    </div>
 
     <div class="mapa">
       <svg class="mapImage" version="1.1" id="svg47" sodipodi:docname="MAPA.SVG"
@@ -309,8 +324,9 @@ export default {
 
     //funció per a comprovar el final del joc
     async comprovarFinal() {
-      socket.on('paisesConquistados', ({ paisesConquistados, usuarioGanador }) => {
+      socket.on('paisesConquistados', ({ recuentoPaises, usuarioGanador }) => {
         this.app.jugadorGanador = usuarioGanador;
+        this.app.setpaisesConquistados(recuentoPaises);
         if (Object.keys(paisesConquistados).length == 15) {
           console.log("¡Todos los países han sido conquistados!");
 
@@ -363,11 +379,13 @@ export default {
   padding: 0;
   margin: 0;
 }
-#preg{
 
-border-radius: 10%;
+#preg {
+
+  border-radius: 10%;
 }
-#cont-preg{
+
+#cont-preg {
   margin-top: 5%;
   margin-bottom: 5%;
   margin-left: auto;
@@ -389,6 +407,7 @@ border-radius: 10%;
   background-color: #2b6cb0;
   transform: scale(1.05);
 }
+
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -498,11 +517,13 @@ border-radius: 10%;
   font-size: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
 .mobile-map {
-    position: absolute;
-    margin-left: 10%;
-    margin-top: 10%;
-  }
+  position: absolute;
+  margin-left: 10%;
+  margin-top: 10%;
+}
+
 .respostes {
   margin: 20px;
   display: grid;
@@ -550,39 +571,50 @@ border-radius: 10%;
     align-items: center;
     justify-content: center;
   }
+
   .mobile-map {
     position: absolute;
     margin-left: 40%;
     margin-bottom: 20%;
   }
+
   .mobile-map2 {
     position: absolute;
     margin-left: 25%;
     margin-bottom: 130%;
   }
+
   .torn_container {
-    position: relative; /* Cambia la posición a relativa o estática */
-    margin-top: 20px; /* Ajusta según sea necesario */
+    position: relative;
+    /* Cambia la posición a relativa o estática */
+    margin-top: 20px;
+    /* Ajusta según sea necesario */
   }
-  #preg{
+
+  #preg {
     width: 100%;
     margin-top: 50%;
-  
+
   }
-  #cont-res>div{
+
+  #cont-res>div {
     width: 50%;
 
   }
+
   #cont-preg {
     width: 100%;
     margin-left: 0;
- 
+
     padding: 10px;
   }
+
   .pregunta-texto {
     /* Estilos para el texto de la pregunta en pantallas de hasta 600px de ancho (móviles) */
-    font-size: 1rem; /* Ajusta este valor según tus necesidades */
+    font-size: 1rem;
+    /* Ajusta este valor según tus necesidades */
   }
+
   .mapa {
     display: flex;
     align-items: center;
@@ -590,20 +622,25 @@ border-radius: 10%;
     width: 50%;
     margin-bottom: 20%;
   }
+
   .grid {
-        grid-template-areas: 'mapa' 'torn' 'preguntesiRespostes';
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-      }
-      .preguntaResposta_container {
-        width: 100%;
-      }
-      .button {
-    /* Estilos para los botones en pantallas de hasta 600px de ancho (móviles) */
-    font-size: 0.8rem; /* Ajusta este valor según tus necesidades */
-    padding: 10px; /* Ajusta este valor según tus necesidades */
+    grid-template-areas: 'mapa' 'torn' 'preguntesiRespostes';
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
   }
-    }
+
+  .preguntaResposta_container {
+    width: 100%;
+  }
+
+  .button {
+    /* Estilos para los botones en pantallas de hasta 600px de ancho (móviles) */
+    font-size: 0.8rem;
+    /* Ajusta este valor según tus necesidades */
+    padding: 10px;
+    /* Ajusta este valor según tus necesidades */
+  }
+}
 
 @media only screen and (min-width: 1200px) {
   .preguntaResposta_container {

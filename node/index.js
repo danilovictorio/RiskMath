@@ -196,8 +196,8 @@ io.on('connection', (socket) => {
     }
     let usuarioConMasPaises = Object.keys(recuentoPaises).reduce((a, b) => recuentoPaises[a] > recuentoPaises[b] ? a : b);
     console.log('Paises conquistados:', room.paisesConquistados);
-    // Propagar el cambio a todos los clientes
-    io.to(roomId).emit('paisesConquistados', { paisesConquistados: room.paisesConquistados, usuarioGanador: usuarioConMasPaises });
+    console.log('Recuento de países:', recuentoPaises);
+    io.to(roomId).emit('paisesConquistados', { recuentoPaises, usuarioGanador: usuarioConMasPaises });
 
 
   });
