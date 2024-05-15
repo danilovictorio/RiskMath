@@ -26,7 +26,6 @@ export async function enviarAtac(name, idUser) {
         throw error; // Propagar el error hacia arriba
     }
 }
-
 export async function obtenerPaises() {
     try {
         const response = await fetch(`${url}/api/paises`);
@@ -64,7 +63,6 @@ export async function validarResposta(questionId, selectedOption) {
         throw error; // Propagar el error hacia arriba
     }
 }
-
 export async function confirmarAtaque(idUser, paisId) {
     const apiUrl = `${url}/api/confirmar-ataque`;
     const requestData = {
@@ -89,5 +87,42 @@ export async function confirmarAtaque(idUser, paisId) {
         return result;
     } catch (error) {
         throw new Error(`Error al confirmar el ataque: ${error.message}`);
+    }
+}
+export async function mostrarPreguntas() {
+    try {
+        const response = await fetch(`${url}/api/mostrar-preguntas`);
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log("Preguntas:", data.preguntas);
+        return data.preguntas;
+    } catch (error) {
+        throw new Error(`Error al obtener datos de preguntas: ${error.message}`);
+    }
+}
+export async function eliminarPregunta(id) {
+    try {
+        const response = await fetch(`${url}/api/eliminar-pregunta`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id: id,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Respuesta del servidor:", data);
+        return data; // Retornar los datos de respuesta
+    } catch (error) {
+        console.error("Error en la solicitud:", error);
+        throw error; // Propagar el error hacia arriba
     }
 }

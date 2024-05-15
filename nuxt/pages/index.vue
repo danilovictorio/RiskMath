@@ -13,10 +13,11 @@
       <div class="input-container">
         <input v-model="nombreUsuario" />
         <label for="nombreUsuario">Nombre de usuario</label>
+
       </div>
       <button @click="crearSala">Crear sala</button>
       <button @click="unirseSala">Unirse a sala</button>
-
+      <nuxt-link to="/AdminPreguntes">Administrar Preguntes</nuxt-link>
       <img src="../public/info_icon.png" @click="popupInfo" class="info-icon">
       <div class="superpuesto" id="superpuesto">
         <button @click="popoffInfo" class="poppup_btn">x</button>
