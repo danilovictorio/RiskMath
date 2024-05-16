@@ -71,8 +71,9 @@ socket.on('marcarTerritorio', ({ paisId }) => {
 });
 
 socket.on('paisesConquistados', (recuentoPaises) => {
+  console.log('Recuento de paises:', recuentoPaises.recuentoPaises);
   const appStore = useAppStore();
-  appStore.setpaisesConquistados(recuentoPaises);
+  appStore.setpaisesConquistados(recuentoPaises.recuentoPaises);
 });
 
 socket.on('respuestaCorrecta', ({ paisId, jugador, color }) => {

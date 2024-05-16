@@ -249,12 +249,11 @@ export default {
       }
     },
 
-    async propietariosPaises(nombreJugador) {
+    async propietariosPaises() {
       console.log("propietariosPaises" + " " + this.app.sala.jugadores);
 
       socket.emit("contadorPaises", {
         roomId: this.app.sala.id,
-        nombreJugador: nombreJugador,
       });
     },
 
@@ -315,7 +314,7 @@ export default {
         const result = await confirmarAtaque(idUser, paisId);
 
         console.log(result.message);
-        this.propietariosPaises(this.app.nombre);
+        this.propietariosPaises();
         console.log("Usuario: " + idUser, "Conquista Pais: " + paisId);
         this.comprovarFinal();
       } catch (error) {

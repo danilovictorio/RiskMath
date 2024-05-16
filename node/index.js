@@ -169,7 +169,15 @@ io.on('connection', (socket) => {
       const usuario2 = room.jugadores[1];
       console.log('Room jugadores:', usuario1, usuario2);
       if (acertado) {
-        room.paisesConquistados[paisId] = userName;
+        const jugadorAnterior = room.paisesConquistados[paisId];
+            if (jugadorAnterior && jugadorAnterior !== userName) {
+                // Restar un territorio al jugador anterior
+                room.recuentoPaises[jugadorAnterior]--;
+            }
+            // Actualizar el país conquistado por el nuevo jugador
+            room.paisesConquistados[paisId] = userName;
+            // Sumar un territorio al nuevo conquistador
+            room.recuentoPaises[userName]++;
         const color = userName === usuario1.nombre ? usuario1.color : usuario2.color;
         io.to(roomId).emit('respuestaCorrecta', { paisId, jugador: userName, color});
       }
@@ -185,19 +193,9 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('contadorPaises', ({roomId , nombreJugador}) => {
+  socket.on('contadorPaises', ({roomId }) => {
     const room = rooms[roomId];
-    console.log('nombreJugador:', nombreJugador)
-  if (room) {
-    // Inicializa el recuento de países
-    const nuevoRecuentoPaises = { ...room.recuentoPaises };
-    if (nombreJugador in nuevoRecuentoPaises) {
-      nuevoRecuentoPaises[nombreJugador]++;
-    } else {
-      nuevoRecuentoPaises[nombreJugador] = 1;
-    }
-    // Actualiza room.recuentoPaises con nuevoRecuentoPaises
-    room.recuentoPaises = nuevoRecuentoPaises;
+    if (room) {
     // Calcula el usuario con más países conquistados
     let usuarioConMasPaises = Object.keys(room.recuentoPaises).reduce((a, b) => room.recuentoPaises[a] > room.recuentoPaises[b] ? a : b);
     console.log('Paises conquistados:', room.paisesConquistados);
