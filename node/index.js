@@ -143,6 +143,9 @@ io.on('connection', (socket) => {
       }
     }
   });
+  socket.on('cambiarAccion', ({ roomId, accion }) => {
+    io.to(roomId).emit('cambiarAccion', accion);
+  });
 
   socket.on('enviarPreguntas', ({ roomId , preguntas}) => {
     console.log('Evento enviarPreguntas recibido');

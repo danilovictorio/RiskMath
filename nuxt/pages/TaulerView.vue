@@ -1,7 +1,9 @@
 <template>
   <div class="grid grid-cols-2 items-center justify-center w-screen min-h-screen bg-center bg-cover object-cover"
-       style="grid-template-areas: 'mapa torn' 'mapa preguntesiRespostes' 'mapa preguntesiRespostes'; background-image: url('/mar.gif');">
-    
+    style="grid-template-areas: 'mapa torn' 'mapa preguntesiRespostes' 'mapa preguntesiRespostes'; background-image: url('/mar.gif');">
+    <div>
+      <h3>{{ app.turnoDe.estado }}</h3>
+    </div>
     <div v-if="!app.duelo">
       <div
         class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-40 h-30 mobile-map2"
@@ -33,37 +35,37 @@
       <h1 class="text-5xl font-bold text-black">DUELO INICIADO</h1>
     </div>
     <div class="text-center text-white mt-4">
-          <h4 class="text-lg font-medium">Países conquistados:</h4>
-          <div class="p-2 bg-white bg-opacity-20 rounded-md">
-            <div v-for="(cantidad, jugador) in app.paisesConquistados" :key="jugador">
-              <p class="text-md font-semibold">{{ jugador }}: {{ cantidad }}</p>
-            </div>
-          </div>
+      <h4 class="text-lg font-medium">Países conquistados:</h4>
+      <div class="p-2 bg-white bg-opacity-20 rounded-md">
+        <div v-for="(cantidad, jugador) in app.paisesConquistados" :key="jugador">
+          <p class="text-md font-semibold">{{ jugador }}: {{ cantidad }}</p>
         </div>
+      </div>
+    </div>
 
     <div class="flex flex-col justify-between items-center bg-white bg-opacity-5 backdrop-blur-lg rounded-lg m-5"
-         id="preg"
-         style="grid-area: preguntesiRespostes; justify-content: start; margin-right: 60px; padding-bottom: 10px;">
+      id="preg"
+      style="grid-area: preguntesiRespostes; justify-content: start; margin-right: 60px; padding-bottom: 10px;">
       <div class="text-center text-white" id="cont-preg" v-if="app.getMostrarPreguntas()">
         <h2 class="text-2xl font-semibold pregunta-texto">{{ app.pregunta ? app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
       </div>
 
       <div class="grid gap-1 m-5" id="cont-res" v-if="app.getMostrarPreguntas()"
-           style="grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; grid-template-areas: 'btn_resposta1 btn_resposta2' 'btn_resposta3 btn_resposta4';">
+        style="grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; grid-template-areas: 'btn_resposta1 btn_resposta2' 'btn_resposta3 btn_resposta4';">
         <button class="button" @click="validateResponse(app.pregunta.id, 'a')" v-if="app.pregunta"
-                :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta1;">
+          :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta1;">
           <h3>Respuesta A:</h3> {{ app.pregunta.respuesta_a }}
         </button>
         <button class="button" @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta"
-                :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta2;">
+          :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta2;">
           <h3>Respuesta B:</h3> {{ app.pregunta.respuesta_b }}
         </button>
         <button class="button" @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta"
-                :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta3;">
+          :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta3;">
           <h3>Respuesta C:</h3> {{ app.pregunta.respuesta_c }}
         </button>
         <button class="button" @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta"
-                :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta4;">
+          :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta4;">
           <h3>Respuesta D:</h3> {{ app.pregunta.respuesta_d }}
         </button>
       </div>
@@ -182,6 +184,7 @@ export default {
       return this.app.nombre === this.app.turnoDe.nombre;
     }
 
+
   },
   methods: {
     manejarClic(name, idPais, idUser) {
@@ -222,7 +225,31 @@ export default {
         console.log("No es tu turno.");
       }
     },
+    async enviarAtac(name, paisId, idUser) {
 
+      this.cambiarAccion("Atacando");
+      try {
+        const data = await enviarAtac(name, idUser);
+
+        this.pregunta = {
+          id: data.pregunta.id,
+          pregunta: data.pregunta.pregunta,
+          respuesta_a: data.pregunta.respuesta_a,
+          respuesta_b: data.pregunta.respuesta_b,
+          respuesta_c: data.pregunta.respuesta_c,
+          respuesta_d: data.pregunta.respuesta_d,
+        };
+
+        this.paisSeleccionado = paisId;
+        //this.app.setEstado("Respondiendo");
+        console.log("ROOMID SELECCIONADO", this.app.sala.id);
+        socket.emit('marcarTerritorioSeleccionado', { roomId: this.app.sala.id, paisId: paisId });
+        socket.emit('enviarPreguntas', { roomId: this.app.sala.id, preguntas: this.pregunta });
+        console.log("TaulerView MostrarPreguntas" + this.app.getMostrarPreguntas());
+      } catch (error) {
+        console.error(error);
+      }
+    },
     async enviarDuelo(name, paisId, idUser) {
       console.log("Enviar duelo");
       this.app.setEstado("Atacando");
@@ -270,12 +297,13 @@ export default {
 
     //funció que valida si la resposta d'un usuari es la correcta
     async validateResponse(questionId, selectedOption) {
-      this.app.setEstado("Acabado");
+      //this.app.setEstado("Acabado");
       console.log("Pregunta ID:", questionId);
       try {
         const result = await validarResposta(questionId, selectedOption);
 
         if (result.resultado === true) {
+          this.cambiarAccion("Conquistado");
           console.log("La respuesta es verdadera");
           this.confirmarAtaque(this.app.turnoDe.nombre, this.paisId);
           this.resultadoPregunta = true;
@@ -284,6 +312,7 @@ export default {
           }
           this.contadorPaises++;
         } else {
+          this.cambiarAccion("Derrotado");
           console.log("La respuesta es falsa");
           this.resultadoPregunta = false;
         }
@@ -296,7 +325,7 @@ export default {
           acertado: this.resultadoPregunta,
           roomId: this.app.sala.id,
         });
-        this.app.setEstado("Respondiendo");
+        //this.app.setEstado("Respondiendo");
         socket.emit('OcultarPreguntas', { roomId: this.app.sala.id });
         if (this.app.duelo) {
           socket.emit('dueloTerminado', { roomId: this.app.sala.id });
@@ -310,12 +339,14 @@ export default {
     //funció per confirmar atac
     async confirmarAtaque(idUser, paisId) {
       console.log("ID QUE PASO AL CONFIRMAR ATAUQE", idUser + paisId);
+
       try {
         const result = await confirmarAtaque(idUser, paisId);
 
         console.log(result.message);
         this.propietariosPaises();
         console.log("Usuario: " + idUser, "Conquista Pais: " + paisId);
+
         this.comprovarFinal();
       } catch (error) {
         console.error("Error en la solicitud:", error);
@@ -336,37 +367,16 @@ export default {
 
       });
     },
-
-    async enviarAtac(name, paisId, idUser) {
-
-      this.app.setEstado("Atacando");
-      try {
-        const data = await enviarAtac(name, idUser);
-
-        this.pregunta = {
-          id: data.pregunta.id,
-          pregunta: data.pregunta.pregunta,
-          respuesta_a: data.pregunta.respuesta_a,
-          respuesta_b: data.pregunta.respuesta_b,
-          respuesta_c: data.pregunta.respuesta_c,
-          respuesta_d: data.pregunta.respuesta_d,
-        };
-
-        this.paisSeleccionado = paisId;
-        this.app.setEstado("Respondiendo");
-        console.log("ROOMID SELECCIONADO", this.app.sala.id);
-        socket.emit('marcarTerritorioSeleccionado', { roomId: this.app.sala.id, paisId: paisId });
-        socket.emit('enviarPreguntas', { roomId: this.app.sala.id, preguntas: this.pregunta });
-        console.log("TaulerView MostrarPreguntas" + this.app.getMostrarPreguntas());
-      } catch (error) {
-        console.error(error);
-      }
+    async cambiarAccion(accion) {
+      socket.emit('cambiarAccion', { roomId: this.app.sala.id, accion: accion });
     },
+
+
   },
   async mounted() {
     //this.obtenerPreguntas();
     this.obtenerDatosPaises();
-
+    this.cambiarAccion("Esperando ataque");
 
   },
 };

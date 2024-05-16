@@ -8,10 +8,10 @@ const url = 'http://localhost:3123';
 
 export const socket = io(url);
 
-const colores = ['green','blue'];
+const colores = ['green', 'blue'];
 
 
-socket.on('startGame', () => { 
+socket.on('startGame', () => {
   // Aquí puedes agregar código para manejar el inicio del juego
 });
 
@@ -40,6 +40,10 @@ socket.on('usuarioUnidoSala', (data) => {
   store.setSala(data.sala);
   store.setpaisesConquistados(data.sala.recuentoPaises);
   console.log('Datos de la sala DE UNIDO SALA:', store.sala);
+});
+socket.on('cambiarAccion', (accion) => {
+  let store = useAppStore();
+  store.setEstado(accion);
 });
 
 socket.on('cambiarPrimerTurno', ({ turno_de }) => {
@@ -128,10 +132,10 @@ socket.on('peticion_jugar_aceptada', (datos) => {
   console.log('Nos han aceptado la petición:', datos);
 });
 
-socket.on('rellenarColor',(colorTurno)=>{
+socket.on('rellenarColor', (colorTurno) => {
   const appStore = useAppStore();
   appStore.setColor(colorTurno);
-  console.log('1r color turno pinia actualizado',appStore.getColor());
+  console.log('1r color turno pinia actualizado', appStore.getColor());
 });
 
 socket.on('actualizacionUsuario', (datos) => {
