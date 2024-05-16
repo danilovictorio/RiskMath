@@ -44,33 +44,41 @@
     </div>
 
     <div class="flex flex-col justify-between items-center bg-white bg-opacity-5 backdrop-blur-lg rounded-lg m-5"
-      id="preg"
-      style="grid-area: preguntesiRespostes; justify-content: start; margin-right: 60px; padding-bottom: 10px;">
-      <div class="text-center text-white" id="cont-preg" v-if="app.getMostrarPreguntas()">
-        <h2 class="text-2xl font-semibold pregunta-texto">{{ app.pregunta ? app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
-      </div>
+  id="preg"
+  style="grid-area: preguntesiRespostes; justify-content: start; margin-right: 60px; padding-bottom: 10px;">
+  <div class="text-center text-white" id="cont-preg" v-if="app.getMostrarPreguntas()">
+    <h2 class="text-2xl font-semibold pregunta-texto">{{ app.pregunta ? app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
+  </div>
 
-      <div class="grid gap-1 m-5" id="cont-res" v-if="app.getMostrarPreguntas()"
-        style="grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; grid-template-areas: 'btn_resposta1 btn_resposta2' 'btn_resposta3 btn_resposta4';">
-        <button class="button" @click="validateResponse(app.pregunta.id, 'a')" v-if="app.pregunta"
-          :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta1;">
-          <h3>Respuesta A:</h3> {{ app.pregunta.respuesta_a }}
-        </button>
-        <button class="button" @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta"
-          :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta2;">
-          <h3>Respuesta B:</h3> {{ app.pregunta.respuesta_b }}
-        </button>
-        <button class="button" @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta"
-          :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta3;">
-          <h3>Respuesta C:</h3> {{ app.pregunta.respuesta_c }}
-        </button>
-        <button class="button" @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta"
-          :disabled="!esTrunoJugador && !app.duelo" style="grid-area: btn_resposta4;">
-          <h3>Respuesta D:</h3> {{ app.pregunta.respuesta_d }}
-        </button>
-      </div>
+  <div class="grid gap-1 m-5" id="cont-res" v-if="app.getMostrarPreguntas()"
+    style="grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; grid-template-areas: 'btn_resposta1 btn_resposta2' 'btn_resposta3 btn_resposta4';">
+    <button class="button" @click="validateResponse(app.pregunta.id, 'a')" v-if="app.pregunta"
+      :disabled="!esTrunoJugador && !app.duelo" 
+      :class="{ 'opacity-50': !esTrunoJugador && !app.duelo }" 
+      style="grid-area: btn_resposta1;">
+      <h3>Respuesta A:</h3> {{ app.pregunta.respuesta_a }}
+    </button>
+    <button class="button" @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta"
+      :disabled="!esTrunoJugador && !app.duelo" 
+      :class="{ 'opacity-50': !esTrunoJugador && !app.duelo }"
+      style="grid-area: btn_resposta2;">
+      <h3>Respuesta B:</h3> {{ app.pregunta.respuesta_b }}
+    </button>
+    <button class="button" @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta"
+      :disabled="!esTrunoJugador && !app.duelo" 
+      :class="{ 'opacity-50': !esTrunoJugador && !app.duelo }" 
+      style="grid-area: btn_resposta3;">
+      <h3>Respuesta C:</h3> {{ app.pregunta.respuesta_c }}
+    </button>
+    <button class="button" @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta"
+      :disabled="!esTrunoJugador && !app.duelo" 
+      :class="{ 'opacity-50': !esTrunoJugador && !app.duelo }"
+      style="grid-area: btn_resposta4;">
+      <h3>Respuesta D:</h3> {{ app.pregunta.respuesta_d }}
+    </button>
+  </div>
+</div>
 
-    </div>
 
     <div class="mapa">
       <svg class="mapImage" version="1.1" id="svg47" sodipodi:docname="MAPA.SVG"
@@ -381,7 +389,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 * {
   box-sizing: border-box;
@@ -390,7 +397,6 @@ export default {
 }
 
 #preg {
-
   border-radius: 10%;
 }
 
@@ -417,6 +423,12 @@ export default {
   transform: scale(1.05);
 }
 
+.mobile-map2 {
+  position: absolute;
+  margin-left: 25%;
+  margin-bottom: 130%;
+}
+
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -433,16 +445,6 @@ export default {
   object-fit: cover;
 }
 
-.mapImage {
-  width: 100vw;
-}
-
-.land {
-  stroke: black;
-  stroke-opacity: 1;
-  stroke-width: 1;
-}
-
 .torn_container {
   grid-area: torn;
   display: flex;
@@ -455,136 +457,30 @@ export default {
 .torn {
   border-radius: 20px;
   backdrop-filter: blur(8px);
-  /* Reduce el valor para un efecto de desenfoque más sutil */
   width: 250px;
   height: 150px;
-  /* Aumenta la altura para dar más espacio al contenido */
   padding: 20px;
   text-align: center;
   color: #fff;
-  /* Cambiado a blanco para mejorar la legibilidad del texto */
   background-color: rgba(1, 5, 63, 0.7);
-  /* Fondo semi-transparente para resaltar */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  /* Sombra suave para resaltar el contorno */
 }
 
-/* Estilo adicional para el mensaje de "AL ATAC!!!!" */
 .torn h2:last-child {
   color: #ff4500;
-  /* Color naranja para destacar el mensaje de ataque */
   font-size: 24px;
-  /* Tamaño de fuente más grande para el mensaje especial */
 }
 
-/* Estilo adicional para mejorar el espaciado entre los elementos de texto */
 .torn h3 {
   margin-bottom: 10px;
 }
 
-.container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-areas: "mapa torn" "mapa preguntesiRespostes" "mapa preguntesiRespostes";
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 100vh;
-  background-image: url('../public/mar.gif');
-  background-position: center;
-  background-size: cover;
-  object-fit: cover;
-}
-
-.pregunta_container {
-  padding: 10px;
-  margin: 20px;
-  border-radius: 20px;
-  text-align: center;
-  backdrop-filter: blur(100px);
-  color: #fff;
-}
-
-.mapa {
-  grid-area: mapa;
-  width: auto;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.preguntaResposta_container {
-  grid-area: preguntesiRespostes;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  width: 100%;
-}
-
-.pregunta h2 {
-  font-size: 2rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.mobile-map {
-  position: absolute;
-  margin-left: 10%;
-  margin-top: 10%;
-}
-
-.respostes {
-  margin: 20px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  grid-template-areas: "btn_resposta1 btn_resposta2"
-    "btn_resposta3 btn_resposta4";
-  gap: 30px;
-}
-
-.btn_respostes {
-  border-radius: 30px;
-  padding: 40px;
-  font-size: 1em;
-  border: none;
-  background-color: lightblue;
-}
-
-.btn_respostes:hover {
-  background-color: #00339a;
-  color: #fff;
-}
-
-.btn-resposta1 {
-  grid-area: btn-resposta1;
-}
-
-.btn-resposta2 {
-  grid-area: btn-resposta2;
-}
-
-.btn-resposta3 {
-  grid-area: btn-resposta3;
-}
-
-.btn-resposta4 {
-  grid-area: btn-resposta4;
-}
-
 @media only screen and (max-width: 1200px) {
   .container {
-    /* Estilos para el contenedor en pantallas de hasta 600px de ancho (móviles) */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-  }
-
-  .mobile-map {
-    position: absolute;
-    margin-left: 40%;
-    margin-bottom: 20%;
   }
 
   .mobile-map2 {
@@ -595,33 +491,26 @@ export default {
 
   .torn_container {
     position: relative;
-    /* Cambia la posición a relativa o estática */
     margin-top: 20px;
-    /* Ajusta según sea necesario */
   }
 
   #preg {
     width: 100%;
     margin-top: 50%;
-
   }
 
   #cont-res>div {
     width: 50%;
-
   }
 
   #cont-preg {
     width: 100%;
     margin-left: 0;
-
     padding: 10px;
   }
 
   .pregunta-texto {
-    /* Estilos para el texto de la pregunta en pantallas de hasta 600px de ancho (móviles) */
     font-size: 1rem;
-    /* Ajusta este valor según tus necesidades */
   }
 
   .mapa {
@@ -638,16 +527,9 @@ export default {
     grid-template-rows: auto;
   }
 
-  .preguntaResposta_container {
-    width: 100%;
-  }
-
   .button {
-    /* Estilos para los botones en pantallas de hasta 600px de ancho (móviles) */
     font-size: 0.8rem;
-    /* Ajusta este valor según tus necesidades */
     padding: 10px;
-    /* Ajusta este valor según tus necesidades */
   }
 }
 
