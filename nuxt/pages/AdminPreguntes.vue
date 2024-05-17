@@ -85,7 +85,7 @@
                 </div>
             </div>
         </div>
-
+        <nuxt-link to="/">Volver</nuxt-link>
     </div>
 </template>
 

@@ -222,7 +222,7 @@ export default {
       if (this.app.esMiturno()) {
         if (colorName === this.app.turnoDe.color || fillColor === turnoColorHex || fillColor === turnoColorRGB) {
           console.log("El país ya está conquistado por ti.");
-        } else if (fillColor === '#ffffff' || fillColor === 'rgb(255, 255, 255)') { // Color blanco
+        } else if (fillColor === '#ffffff' || fillColor === 'rgb(255, 255, 255)' || colorName == 'white') { // Color blanco
           console.log("El país no está conquistado.");
           this.enviarAtac(idPais, name, idUser);
         } else {

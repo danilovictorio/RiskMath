@@ -87,6 +87,21 @@ socket.on('respuestaCorrecta', ({ paisId, jugador, color }) => {
     paisElement.style.fill = color;
   }
 });
+socket.on('respuestaIncorrecta', ({ paisId }) => {
+  const paisElement = document.getElementById(paisId);
+  if (paisElement) {
+    paisElement.style.fill = "white";
+  }
+});
+socket.on('deshabilitarBotones', () => {
+  console.log('Deshabilitando botones para el jugador actual');
+  deshabilitarBotones();
+});
+
+socket.on('habilitarBotones', () => {
+  console.log('Habilitando botones para el jugador oponente');
+  habilitarBotones();
+});
 
 socket.on('mostrarPreguntas', (preguntas) => {
   const appStore = useAppStore();
