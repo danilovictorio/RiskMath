@@ -161,4 +161,17 @@ socket.on('actualizacionUsuario', (datos) => {
 
 socket.on('actualizacionEstado', (datos) => {
   console.log('Han actualizado el estado', datos);
-});
+});,
+function deshabilitarBotones() {
+  const botones = document.querySelectorAll('.button');
+  botones.forEach(boton => {
+    boton.disabled = true;
+  });
+}
+
+function habilitarBotones() {
+  const botones = document.querySelectorAll('.button');
+  botones.forEach(boton => {
+    boton.disabled = false;
+  });
+}
