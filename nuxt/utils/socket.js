@@ -1,15 +1,11 @@
 // Importar el cliente Socket.io
 import { io } from "socket.io-client";
 import { useAppStore } from '../stores/app';
-import { onMounted, onUnmounted } from 'vue';
 
 const url = 'http://localhost:3123';
 //const url = 'http://trfinal.a17danvicfer.daw.inspedralbes.cat:3123'; //producción
 
 export const socket = io(url);
-
-const colores = ['green', 'blue'];
-
 
 socket.on('startGame', () => {
   // Aquí puedes agregar código para manejar el inicio del juego
@@ -41,6 +37,7 @@ socket.on('usuarioUnidoSala', (data) => {
   store.setpaisesConquistados(data.sala.recuentoPaises);
   console.log('Datos de la sala DE UNIDO SALA:', store.sala);
 });
+
 socket.on('cambiarAccion', (accion) => {
   let store = useAppStore();
   store.setEstado(accion);
@@ -66,11 +63,12 @@ socket.on('cambiarTurno', ({ turno_de, usuarios }) => {
     console.log('así queda: ', appStore.getColor());
   }
 });
+
 socket.on('marcarTerritorio', ({ paisId }) => {
   console.log(`¡Territorio ${paisId}! con color gris`);
   const paisElement = document.getElementById(paisId);
   if (paisElement) {
-    paisElement.style.fill = 'grey ';
+    paisElement.style.fill = 'grey';
   }
 });
 
@@ -87,20 +85,12 @@ socket.on('respuestaCorrecta', ({ paisId, jugador, color }) => {
     paisElement.style.fill = color;
   }
 });
+
 socket.on('respuestaIncorrecta', ({ paisId }) => {
   const paisElement = document.getElementById(paisId);
   if (paisElement) {
     paisElement.style.fill = "white";
   }
-});
-socket.on('deshabilitarBotones', () => {
-  console.log('Deshabilitando botones para el jugador actual');
-  deshabilitarBotones();
-});
-
-socket.on('habilitarBotones', () => {
-  console.log('Habilitando botones para el jugador oponente');
-  habilitarBotones();
 });
 
 socket.on('mostrarPreguntas', (preguntas) => {
@@ -123,6 +113,7 @@ socket.on('ocultarPreguntas', () => {
   appStore.setMostrarPreguntas(false);
   console.log('Ocultar preguntas SOCKETCLIENT:', appStore.mostrarPreguntas);
 });
+
 socket.on('dueloAcabado', () => {
   const appStore = useAppStore();
   appStore.setDuelo(false);
@@ -131,7 +122,6 @@ socket.on('dueloAcabado', () => {
 
 socket.on('finDelJuego', ({ ganador, empate }) => {
   const appStore = useAppStore();
-
   if (ganador) {
     console.log(`¡${ganador} es el ganador!`);
     appStore.setGanador(ganador); // Agrega un método en tu store para almacenar el ganador
@@ -162,17 +152,3 @@ socket.on('actualizacionUsuario', (datos) => {
 socket.on('actualizacionEstado', (datos) => {
   console.log('Han actualizado el estado', datos);
 });
-
-function deshabilitarBotones() {
-  const botones = document.querySelectorAll('.button');
-  botones.forEach(boton => {
-    boton.disabled = true;
-  });
-}
-
-function habilitarBotones() {
-  const botones = document.querySelectorAll('.button');
-  botones.forEach(boton => {
-    boton.disabled = false;
-  });
-}

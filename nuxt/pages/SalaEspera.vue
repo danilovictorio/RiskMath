@@ -22,7 +22,7 @@
             </div>
             <div class="ml-3">
               <p class="text-sm font-medium text-white">
-                {{ jugador ? jugador : "No hay usuario" }}
+                {{ jugador.nombre }}
               </p>
               <p class="text-xs text-gray-400">
                 Esperando para jugar...

@@ -332,8 +332,8 @@ export default {
           paisId: this.paisSeleccionado,
           acertado: this.resultadoPregunta,
           roomId: this.app.sala.id,
+          esDuelo: this.app.duelo,
         });
-        //this.app.setEstado("Respondiendo");
         socket.emit('OcultarPreguntas', { roomId: this.app.sala.id });
         if (this.app.duelo) {
           socket.emit('dueloTerminado', { roomId: this.app.sala.id });
@@ -378,13 +378,19 @@ export default {
     async cambiarAccion(accion) {
       socket.emit('cambiarAccion', { roomId: this.app.sala.id, accion: accion });
     },
-
-
   },
+
   async mounted() {
     //this.obtenerPreguntas();
     this.obtenerDatosPaises();
     this.cambiarAccion("Esperando ataque");
+    socket.on('deshabilitarBotones', ({ deshabilitar }) => {
+      // Si deshabilitar es true, se deshabilitan los botones; de lo contrario, se habilitan
+      const botones = document.querySelectorAll('.button');
+      botones.forEach(boton => {
+        boton.disabled = deshabilitar;
+      });
+    });
 
   },
 };

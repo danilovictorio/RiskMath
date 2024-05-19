@@ -165,31 +165,30 @@ io.on('connection', (socket) => {
     io.to(roomId).emit('dueloAcabado');
   });
 
-  socket.on('respuestaJugador', ({ turnoDe, userName, paisId, acertado, roomId }) => {
+  socket.on('respuestaJugador', ({ turnoDe, userName, paisId, acertado, roomId, esDuelo }) => {
     const room = rooms[roomId];
     if (room && room.jugadores && room.jugadores.length >= 2) {
-      const jugadorActual = room.jugadores.find(jugador => jugador.nombre === userName);
-      const jugadorOponente = room.jugadores.find(jugador => jugador.nombre !== userName);
-
+      const usuario1 = room.jugadores[0];
+      const usuario2 = room.jugadores[1];
+      console.log('Room jugadores:', usuario1, usuario2);
       if (acertado) {
         const jugadorAnterior = room.paisesConquistados[paisId];
-        if (jugadorAnterior && jugadorAnterior !== userName) {
-          room.recuentoPaises[jugadorAnterior]--;
-        }
-        room.paisesConquistados[paisId] = userName;
-        room.recuentoPaises[userName]++;
-        const color = userName === room.jugadores[0].nombre ? room.jugadores[0].color : room.jugadores[1].color;
-        io.to(roomId).emit('respuestaCorrecta', { paisId, jugador: userName, color });
-      } else {
-        
-        io.to(roomId).emit('respuestaIncorrecta', { paisId });
-        //CAMBIAR Y PONER UN SI ES DUELO HACER LOS CAMBIOS
-        io.to(jugadorActual.socketId).emit('deshabilitarBotones');
-        io.to(jugadorOponente.socketId).emit('habilitarBotones');
+            if (jugadorAnterior && jugadorAnterior !== userName) {
+                // Restar un territorio al jugador anterior
+                room.recuentoPaises[jugadorAnterior]--;
+            }
+            const yaPoseiaPais = room.paisesConquistados[paisId] === userName;
+            if (!yaPoseiaPais) {
+                // Actualizar el país conquistado por el nuevo jugador
+                room.paisesConquistados[paisId] = userName;
+                // Sumar un territorio al nuevo conquistador
+                room.recuentoPaises[userName]++;
+            }
+        const color = userName === usuario1.nombre ? usuario1.color : usuario2.color;
+        io.to(roomId).emit('respuestaCorrecta', { paisId, jugador: userName, color});
       }
-
       if (turnoDe === userName) {
-        const nextName = userName === room.jugadores[0].nombre ? room.jugadores[1].nombre : room.jugadores[0].nombre;
+        const nextName = userName === usuario1.nombre ? usuario2.nombre : usuario1.nombre;
         io.to(roomId).emit('cambiarTurno', { turno_de: nextName, usuarios: room.jugadores });
         console.log('Cambio de turno:', nextName);
       } else {
