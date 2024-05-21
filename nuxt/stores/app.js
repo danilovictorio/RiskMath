@@ -17,6 +17,7 @@ export const useAppStore = defineStore('app', {
       capacidad: 0,
       jugadores: []
     },
+    paisSeleccionado: '',
     pregunta: {},
     nombre:'',
     paisesConquistados: {},
@@ -27,6 +28,12 @@ export const useAppStore = defineStore('app', {
     mostrarPreguntas: false,
   }),
   actions: {
+    setPaisSeleccionado(paisId){
+      this.paisSeleccionado = paisId;
+    },
+    getPaisSeleccionado(){
+      return this.paisSeleccionado;
+    },
     setpaisesConquistados(paisesConquistados){
       this.paisesConquistados = paisesConquistados;
     },

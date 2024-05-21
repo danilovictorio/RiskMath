@@ -65,7 +65,9 @@ socket.on('cambiarTurno', ({ turno_de, usuarios }) => {
 });
 
 socket.on('marcarTerritorio', ({ paisId }) => {
+  const appStore = useAppStore();
   console.log(`¡Territorio ${paisId}! con color gris`);
+  appStore.setPaisSeleccionado(paisId);
   const paisElement = document.getElementById(paisId);
   if (paisElement) {
     paisElement.style.fill = 'grey';
