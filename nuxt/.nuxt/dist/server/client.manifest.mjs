@@ -1,1 +1,0 @@
-export { default } from "file:///C:/Users/Argo/Desktop/trfinal/tr2-MultipliCAT-G7/nuxt/node_modules/@nuxt/vite-builder/dist/runtime/client.manifest.mjs"
