@@ -173,19 +173,28 @@ io.on('connection', (socket) => {
       console.log('Room jugadores:', usuario1, usuario2);
       if (acertado) {
         const jugadorAnterior = room.paisesConquistados[paisId];
-            if (jugadorAnterior && jugadorAnterior !== userName) {
-                // Restar un territorio al jugador anterior
-                room.recuentoPaises[jugadorAnterior]--;
-            }
-            const yaPoseiaPais = room.paisesConquistados[paisId] === userName;
-            if (!yaPoseiaPais) {
-                // Actualizar el país conquistado por el nuevo jugador
-                room.paisesConquistados[paisId] = userName;
-                // Sumar un territorio al nuevo conquistador
-                room.recuentoPaises[userName]++;
-            }
+        if (jugadorAnterior && jugadorAnterior !== userName) {
+          // Restar un territorio al jugador anterior
+          room.recuentoPaises[jugadorAnterior]--;
+        }
+        // Recorrer todos los países conquistados para verificar si el ataque ya lo tenía
+        let yaPoseiaPais = false;
+        for (const [conquistadoPaisId, conquistador] of Object.entries(room.paisesConquistados)) {
+          if (conquistadoPaisId === paisId && conquistador === userName) {
+            yaPoseiaPais = true;
+            break;
+          }
+        }
+        if (!yaPoseiaPais) {
+          // Actualizar el país conquistado por el nuevo jugador
+          room.paisesConquistados[paisId] = userName;
+          // Sumar un territorio al nuevo conquistador
+          room.recuentoPaises[userName]++;
+        }
         const color = userName === usuario1.nombre ? usuario1.color : usuario2.color;
-        io.to(roomId).emit('respuestaCorrecta', { paisId, jugador: userName, color});
+        io.to(roomId).emit('respuestaCorrecta', { paisId, jugador: userName, color });
+      }else{
+        io.to(roomId).emit('respuestaIncorrecta', { paisId});
       }
       if (turnoDe === userName) {
         const nextName = userName === usuario1.nombre ? usuario2.nombre : usuario1.nombre;

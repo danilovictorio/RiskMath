@@ -7,12 +7,12 @@
     "module": true,
     "resourceType": "script"
   },
-  "C:/Users/Danilo/Desktop/DAW/TrFinal/tr2-MultipliCAT-G7/nuxt/node_modules/nuxt/dist/app/entry.js": {
+  "C:/Users/Argo/Desktop/trfinal/tr2-MultipliCAT-G7/nuxt/node_modules/nuxt/dist/app/entry.js": {
     "resourceType": "script",
     "module": true,
     "prefetch": true,
     "preload": true,
     "isEntry": true,
-    "file": "C:/Users/Danilo/Desktop/DAW/TrFinal/tr2-MultipliCAT-G7/nuxt/node_modules/nuxt/dist/app/entry.js"
+    "file": "C:/Users/Argo/Desktop/trfinal/tr2-MultipliCAT-G7/nuxt/node_modules/nuxt/dist/app/entry.js"
   }
 }
