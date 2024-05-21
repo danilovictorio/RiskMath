@@ -1,10 +1,9 @@
 <template>
   <div class="grid grid-cols-2 items-center justify-center w-screen min-h-screen bg-center bg-cover object-cover"
     style="grid-template-areas: 'mapa torn' 'mapa preguntesiRespostes' 'mapa preguntesiRespostes'; background-image: url('/mar.gif');">
-    <div>
-      <h3>{{ app.turnoDe.estado }}</h3>
-    </div>
-    <div v-if="!app.duelo">
+    <div class="text-center p-4">
+  <h3 class="text-2xl font-semibold text-blue-500">{{ app.turnoDe.estado }}</h3>
+</div>    <div v-if="!app.duelo">
       <div
         class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-40 h-30 mobile-map2"
         v-if="!esTrunoJugador" style="grid-area: torn;">
@@ -34,14 +33,15 @@
     <div v-else class="flex items-center justify-center" style="grid-area: torn;">
       <h1 class="text-5xl font-bold text-black">DUELO INICIADO</h1>
     </div>
-    <div class="text-center text-white mt-4">
-      <h4 class="text-lg font-medium">Países conquistados:</h4>
-      <div class="p-2 bg-white bg-opacity-20 rounded-md">
-        <div v-for="(cantidad, jugador) in app.paisesConquistados" :key="jugador">
-          <p class="text-md font-semibold">{{ jugador }}: {{ cantidad }}</p>
-        </div>
-      </div>
+    <div class="text-center mt-4 bg-blue-500 text-white p-4 rounded-lg shadow-lg max-w-md mx-auto">
+  <h4 class="text-2xl font-bold mb-4">Países conquistados:</h4>
+  <div class="bg-white bg-opacity-10 rounded-lg p-4">
+    <div v-for="(cantidad, jugador) in app.paisesConquistados" :key="jugador" class="flex justify-between items-center mb-2">
+      <p class="text-lg font-semibold text-white">{{ jugador }}</p>
+      <p class="text-lg font-semibold text-white">{{ cantidad }}</p>
     </div>
+  </div>
+</div>
 
     <div class="flex flex-col justify-between items-center bg-white bg-opacity-5 backdrop-blur-lg rounded-lg m-5"
   id="preg"
