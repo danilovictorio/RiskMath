@@ -3,6 +3,7 @@
     style="grid-template-areas: 'mapa torn' 'mapa preguntesiRespostes' 'mapa preguntesiRespostes'; background-image: url('/mar.gif');">
     <div>
       <h3>{{ app.turnoDe.estado }}</h3>
+      <h3>{{ app.turnoDe.pais }}</h3>
     </div>
     <div v-if="!app.duelo">
       <div
@@ -196,6 +197,7 @@ export default {
   },
   methods: {
     manejarClic(name, idPais, idUser) {
+      this.asignarPais(idPais);
       this.paisId = name;
       let paisElement = document.getElementById(name);
       let fillColor = paisElement.getAttribute('style'); // Obtener fill attribute
@@ -378,6 +380,9 @@ export default {
     async cambiarAccion(accion) {
       socket.emit('cambiarAccion', { roomId: this.app.sala.id, accion: accion });
     },
+    async asignarPais(pais){
+      socket.emit('asignarPais', { roomId: this.app.sala.id, pais: pais });
+    }
   },
 
   async mounted() {

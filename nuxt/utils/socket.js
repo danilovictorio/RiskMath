@@ -64,6 +64,11 @@ socket.on('cambiarTurno', ({ turno_de, usuarios }) => {
   }
 });
 
+socket.on('nombrePaisAsignado', ({pais})=>{
+  const appStore = useAppStore();
+  appStore.setPais(pais);
+});
+
 socket.on('marcarTerritorio', ({ paisId }) => {
   const appStore = useAppStore();
   console.log(`¡Territorio ${paisId}! con color gris`);

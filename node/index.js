@@ -119,6 +119,10 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('asignarPais', ({roomId, pais})=>{
+    io.to(roomId).emit('nombrePaisAsignado', {pais});
+  });
+
   socket.on('marcarTerritorioSeleccionado', ({ roomId, paisId }) => {
     console.log("Territorio SELECCIONADO SERVER");
     io.to(roomId).emit('marcarTerritorio', { paisId });
@@ -195,6 +199,14 @@ io.on('connection', (socket) => {
         io.to(roomId).emit('respuestaCorrecta', { paisId, jugador: userName, color });
       }else{
         io.to(roomId).emit('respuestaIncorrecta', { paisId});
+        const jugadoresContestados={};
+        if(esDuelo){
+          if (room.jugadores.nombre == userName) {
+            jugadoresContestados= userName;
+          }
+          io.sockets(room.jugadores.socketId);
+        }
+        
       }
       if (turnoDe === userName) {
         const nextName = userName === usuario1.nombre ? usuario2.nombre : usuario1.nombre;
