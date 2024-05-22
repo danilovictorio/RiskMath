@@ -16,7 +16,12 @@ const io = new Server(server, {
 });
 
 const rooms = {};
-const colores = ['green', 'blue']; // Define colores aquí
+const colores = ['green', 'blue', 'red', 'yellow', 'purple', 'orange']; // Lista de colores
+
+function getRandomColor(excludeColors = []) {
+  const availableColors = colores.filter(color => !excludeColors.includes(color));
+  return availableColors[Math.floor(Math.random() * availableColors.length)];
+}
 
 io.on('connection', (socket) => {
   console.log("Se ha conectado alguien!! con id " + socket.id);
@@ -29,7 +34,7 @@ io.on('connection', (socket) => {
       id: roomId,
       nombre: data.nombreSala,
       capacidad: data.capacidadSala,
-      jugadores: [{ nombre: data.nombreJugador, socketId: socket.id }],
+      jugadores: [{ nombre: data.nombreJugador, socketId: socket.id, color: getRandomColor() }],
       paisesConquistados: {},
       recuentoPaises: { [data.nombreJugador]: 0 }
     };
@@ -54,7 +59,8 @@ io.on('connection', (socket) => {
     const room = rooms[roomId];
     if (room && room.jugadores.length < room.capacidad) {
       if (!room.jugadores.some(jugador => jugador.nombre === nombreJugador)) {
-        room.jugadores.push({ nombre: nombreJugador, socketId: socket.id });
+        const color = getRandomColor(room.jugadores.map(jugador => jugador.color));
+        room.jugadores.push({ nombre: nombreJugador, socketId: socket.id, color });
         room.recuentoPaises[nombreJugador] = 0;
       }
       console.log('Se ha unido a la sala con ID:', socket.id);
@@ -89,7 +95,7 @@ io.on('connection', (socket) => {
   socket.on('peticion_jugar', (datos, roomId) => {
     const room = rooms[roomId];
     if (room) {
-      const jugadores = room.jugadores.map(jugador => ({ nombre: jugador.nombre }));
+      const jugadores = room.jugadores.map(jugador => ({ nombre: jugador.nombre, color: jugador.color }));
       socket.emit('jugadoresEnSala', jugadores);
     } else {
       socket.emit('error', { message: 'La sala no existe.' });
@@ -106,12 +112,6 @@ io.on('connection', (socket) => {
       console.log("room", room);
       console.log("room.jugadores", room.jugadores);
       console.log("jugadorInicial", jugadorInicial);
-
-      // Asignar colores a los jugadores
-      room.jugadores = room.jugadores.map((jugador, index) => {
-        const color = colores[index];
-        return { ...jugador, color }; // Mantener el socketId y añadir color
-      });
 
       io.to(roomId).emit("peticion_jugar_aceptada", datos);
       io.to(roomId).emit("rellenarColor", room.jugadores.find(u => u.nombre === jugadorInicial.nombre).color);
@@ -197,16 +197,15 @@ io.on('connection', (socket) => {
         }
         const color = userName === usuario1.nombre ? usuario1.color : usuario2.color;
         io.to(roomId).emit('respuestaCorrecta', { paisId, jugador: userName, color });
-      }else{
-        io.to(roomId).emit('respuestaIncorrecta', { paisId});
-        const jugadoresContestados={};
-        if(esDuelo){
+      } else {
+        io.to(roomId).emit('respuestaIncorrecta', { paisId });
+        const jugadoresContestados = {};
+        if (esDuelo) {
           if (room.jugadores.nombre == userName) {
-            jugadoresContestados= userName;
+            jugadoresContestados = userName;
           }
           io.sockets(room.jugadores.socketId);
         }
-        
       }
       if (turnoDe === userName) {
         const nextName = userName === usuario1.nombre ? usuario2.nombre : usuario1.nombre;
