@@ -1,93 +1,49 @@
 <template>
-  <div class="grid grid-cols-2 items-center justify-center w-screen min-h-screen bg-center bg-cover object-cover"
-    style="grid-template-areas: 'mapa torn' 'mapa preguntesiRespostes' 'mapa preguntesiRespostes'; background-image: url('/mar.gif');">
-    <div>
+  <div class="container">
+    <div class="turno-de">
       <h3>{{ app.turnoDe.estado }}</h3>
       <h3>{{ app.turnoDe.pais }}</h3>
     </div>
-    <div v-if="!app.duelo">
-      <div
-        class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-40 h-30 mobile-map2"
-        v-if="!esTrunoJugador" style="grid-area: torn;">
-        <div class="text-center text-white">
-          <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
-          <div class="p-2 bg-white bg-opacity-20 rounded-md">
-            <h2 class="text-2xl font-bold text-indigo-300">{{ app.turnoDe.nombre }}</h2>
-            <h2 class="text-2xl font-bold text-indigo-300">{{ app.turnoDe.color }}</h2>
+    <div class="torn">
+      <div v-if="!app.duelo">
+        <div class="turn-container" v-if="!esTrunoJugador">
+          <div class="text-container">
+            <h3>Torn de :</h3>
+            <div class="info">
+              <h2>{{ app.turnoDe.nombre }}</h2>
+              <h2>{{ app.turnoDe.color }}</h2>
+            </div>
+            <h3>ESPERA EL TEU TORN</h3>
           </div>
-          <h3 class="text-lg font-light">ESPERA EL TEU TORN</h3>
         </div>
-      </div>
-      <div
-        class="flex items-center justify-center p-5 bg-indigo-700 bg-opacity-80 backdrop-blur-md rounded-xl shadow-2xl w-40 h-30 mobile-map2"
-        v-if="esTrunoJugador" style="grid-area: torn;">
-        <div class="text-center text-white">
-          <h3 class="mb-2 text-lg font-medium">Torn de :</h3>
-          <div class="p-2 bg-white bg-opacity-20 rounded-md">
-            <h2 class="text-2xl font-bold text-indigo-300">{{ app.turnoDe.nombre }}</h2>
-            <h2 class="text-2xl font-bold text-indigo-300">{{ app.turnoDe.color }}</h2>
+        <div class="turn-container" v-if="esTrunoJugador">
+          <div class="text-container">
+            <h3>Torn de :</h3>
+            <div class="info">
+              <h2>{{ app.turnoDe.nombre }}</h2>
+              <h2>{{ app.turnoDe.color }}</h2>
+            </div>
+            <h2>ATACA!!!</h2>
           </div>
-          <h2 class="text-2xl text-yellow-300 font-bold">ATACA!!!</h2>
         </div>
       </div>
-    </div>
-
-    <div v-else class="flex items-center justify-center" style="grid-area: torn;">
-      <h1 class="text-5xl font-bold text-black">DUELO INICIADO</h1>
-    </div>
-    <div class="text-center text-white mt-4">
-      <h4 class="text-lg font-medium">Países conquistados:</h4>
-      <div class="p-2 bg-white bg-opacity-20 rounded-md">
-        <div v-for="(cantidad, jugador) in app.paisesConquistados" :key="jugador">
-          <p class="text-md font-semibold">{{ jugador }}: {{ cantidad }}</p>
-        </div>
+      <div v-else>
+        <h1>DUELO INICIADO</h1>
       </div>
     </div>
-
-    <div class="flex flex-col justify-between items-center bg-white bg-opacity-5 backdrop-blur-lg rounded-lg m-5"
-  id="preg"
-  style="grid-area: preguntesiRespostes; justify-content: start; margin-right: 60px; padding-bottom: 10px;">
-  <div class="text-center text-white" id="cont-preg" v-if="app.getMostrarPreguntas()">
-    <h2 class="text-2xl font-semibold pregunta-texto">{{ app.pregunta ? app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
-  </div>
-
-  <div class="grid gap-1 m-5" id="cont-res" v-if="app.getMostrarPreguntas()"
-    style="grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; grid-template-areas: 'btn_resposta1 btn_resposta2' 'btn_resposta3 btn_resposta4';">
-    <button class="button" @click="validateResponse(app.pregunta.id, 'a')" v-if="app.pregunta"
-      :disabled="!esTrunoJugador && !app.duelo" 
-      :class="{ 'opacity-50': !esTrunoJugador && !app.duelo }" 
-      style="grid-area: btn_resposta1;">
-      <h3>Respuesta A:</h3> {{ app.pregunta.respuesta_a }}
-    </button>
-    <button class="button" @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta"
-      :disabled="!esTrunoJugador && !app.duelo" 
-      :class="{ 'opacity-50': !esTrunoJugador && !app.duelo }"
-      style="grid-area: btn_resposta2;">
-      <h3>Respuesta B:</h3> {{ app.pregunta.respuesta_b }}
-    </button>
-    <button class="button" @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta"
-      :disabled="!esTrunoJugador && !app.duelo" 
-      :class="{ 'opacity-50': !esTrunoJugador && !app.duelo }" 
-      style="grid-area: btn_resposta3;">
-      <h3>Respuesta C:</h3> {{ app.pregunta.respuesta_c }}
-    </button>
-    <button class="button" @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta"
-      :disabled="!esTrunoJugador && !app.duelo" 
-      :class="{ 'opacity-50': !esTrunoJugador && !app.duelo }"
-      style="grid-area: btn_resposta4;">
-      <h3>Respuesta D:</h3> {{ app.pregunta.respuesta_d }}
-    </button>
-  </div>
-</div>
-
-
+    <div class="jugadores">
+      <div v-for="(cantidad, jugador) in app.paisesConquistados" :key="jugador">
+        <p>{{ jugador }}</p>
+        <p>{{ cantidad }}</p>
+      </div>
+    </div>
     <div class="mapa">
+      <!-- SVG Content -->
       <svg class="mapImage" version="1.1" id="svg47" sodipodi:docname="MAPA.SVG"
         inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
         xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
         xmlns:svg="http://www.w3.org/2000/svg" xmlns:amcharts="http://amcharts.com/ammap"
-        style="width: 30vw; height: 30vw;" viewBox="0 60 400 100">
-
+        style="width: 80vw; height: 80vh;" viewBox="0 60 400 100">
         <defs id="defs30">
           <!-- <amcharts:ammap projection="mercator" leftLongitude="-18.161674" topLatitude="43.794381" rightLongitude="4.332045"
             bottomLatitude="27.636889" /> -->
@@ -156,7 +112,17 @@
           @click="manejarClic($event.target.getAttribute('id'), $event.target.getAttribute('title'), app.nombre)" />
       </svg>
     </div>
-
+    <div class="preguntas">
+      <div v-if="app.getMostrarPreguntas()">
+        <h2>{{ app.pregunta ? app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
+        <div class="respuestas" v-if="app.getMostrarPreguntas()">
+          <button @click="validateResponse(app.pregunta.id, 'a')" v-if="app.pregunta">{{ app.pregunta.respuesta_a }}</button>
+          <button @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta">{{ app.pregunta.respuesta_b }}</button>
+          <button @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta">{{ app.pregunta.respuesta_c }}</button>
+          <button @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta">{{ app.pregunta.respuesta_d }}</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -401,90 +367,185 @@ export default {
 };
 </script>
 <style scoped>
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-#preg {
-  border-radius: 10%;
-}
-
-#cont-preg {
-  margin-top: 5%;
-  margin-bottom: 5%;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.button {
-  padding: 2rem;
-  text-align: center;
-  color: white;
-  border: none;
-  border-radius: 50px;
-  background-color: #4299e1;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease-in-out;
-}
-
-.button:hover {
-  background-color: #2b6cb0;
-  transform: scale(1.05);
-}
-
-.mobile-map2 {
-  position: absolute;
-  margin-left: 25%;
-  margin-bottom: 130%;
-}
-
 .container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-areas: "mapa torn"
-    "mapa preguntesiRespostes"
-    "mapa preguntesiRespostes";
-  align-items: center;
-  justify-content: center;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, auto);
+  grid-gap: 20px;
   width: 100vw;
   height: 100vh;
-  background-image: url('../public/mar.gif');
-  background-position: center;
+  background-image: url('/mar.gif');
   background-size: cover;
-  object-fit: cover;
+  background-position: center;
+  justify-items: center;
+  align-items: center;
 }
 
-.torn_container {
-  grid-area: torn;
-  display: flex;
-  height: auto;
+.turno-de {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.6);
   padding: 20px;
-  align-items: center;
-  justify-content: center;
+  border-radius: 10px;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .torn {
-  border-radius: 20px;
-  backdrop-filter: blur(8px);
-  width: 250px;
-  height: 150px;
-  padding: 20px;
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
   text-align: center;
-  color: #fff;
-  background-color: rgba(1, 5, 63, 0.7);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.torn h2:last-child {
-  color: #ff4500;
-  font-size: 24px;
+.jugadores {
+  grid-column: 3 / 4;
+  grid-row: 1 / 2;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.torn h3 {
-  margin-bottom: 10px;
+.mapa {
+  grid-column: 1 / 3; 
+  grid-row: 2 / 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
 }
+
+.preguntas {
+  grid-column: 2 / 4;
+  grid-row: 2 / 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+
+.turn-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(146, 175, 255, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.text-container {
+  color: white;
+}
+
+.info {
+  background-color: rgba(47, 78, 255, 0.2);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.respuestas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 10px;
+}
+
+button {
+  padding: 10px;
+  background-color: #49b0ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #2b6cb0;
+}
+
+@media only screen and (max-width: 1200px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-map2 {
+    position: absolute;
+    margin-left: 25%;
+    margin-bottom: 130%;
+  }
+
+  .torn_container {
+    position: relative;
+    margin-top: 20px;
+  }
+
+  #preg {
+    width: 100%;
+    margin-top: 50%;
+  }
+
+  #cont-res>div {
+    width: 50%;
+  }
+
+  #cont-preg {
+    width: 100%;
+    margin-left: 0;
+    padding: 10px;
+  }
+
+  .pregunta-texto {
+    font-size: 1rem;
+  }
+
+  .mapa {
+    display: flex;
+    align-items: center;
+    height: 50%;
+    width: 50%;
+    margin-bottom: 20%;
+  }
+
+  .grid {
+    grid-template-areas: 'mapa' 'torn' 'preguntesiRespostes';
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .button {
+    font-size: 0.8rem;
+    padding: 10px;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .preguntaResposta_container {
+    height: 70vh;
+  }
+
+  .torn_container {
+    height: 20vh;
+  }
+
+  .mapa {
+    height: 30vh;
+  }
+}
+
 
 @media only screen and (max-width: 1200px) {
   .container {
