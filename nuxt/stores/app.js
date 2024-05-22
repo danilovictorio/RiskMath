@@ -26,6 +26,7 @@ export const useAppStore = defineStore('app', {
     jugadorGanador: null,
     duelo: false,
     mostrarPreguntas: false,
+    puedeResponder: true,
   }),
   actions: {
     setPaisSeleccionado(paisId){
@@ -97,5 +98,11 @@ export const useAppStore = defineStore('app', {
     getDuelo(){
       return this.duelo;
     },
+    getPuedeRsponder(){
+      return this.puedeResponder;
+    },
+    setPuedeResponder(valor) {
+      this.puedeResponder = valor;
+    }
   },
 })

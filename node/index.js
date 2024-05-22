@@ -144,6 +144,9 @@ io.on('connection', (socket) => {
       }
     }
   });
+  socket.on('habilitarBotonesDuelo', ({ roomId }) => {
+    io.to(roomId).emit('habilitarBotonesDuelo');
+  });
 
   socket.on('cambiarAccion', ({ roomId, accion }) => {
     io.to(roomId).emit('cambiarAccion', accion);
@@ -197,23 +200,50 @@ io.on('connection', (socket) => {
         }
         const color = userName === usuario1.nombre ? usuario1.color : usuario2.color;
         io.to(roomId).emit('respuestaCorrecta', { paisId, jugador: userName, color });
+        room.jugadoresContestados = {};
       } else {
-        io.to(roomId).emit('respuestaIncorrecta', { paisId });
-        const jugadoresContestados = {};
         if (esDuelo) {
-          if (room.jugadores.nombre == userName) {
-            jugadoresContestados = userName;
+          if (!room.jugadoresContestados) {
+            room.jugadoresContestados = {};
           }
-          io.sockets(room.jugadores.socketId);
+          room.jugadoresContestados[userName] = true;
+          console.log('Jugadores contestados:', room.jugadoresContestados);
+          //Si los dos jugadores han contestado, terminar el duelo
+          if (room.jugadoresContestados[usuario1.nombre] && room.jugadoresContestados[usuario2.nombre]) {
+            io.to(roomId).emit('respuestaIncorrecta', { paisId });
+            room.jugadoresContestados = {};
+        } else {
+            // Si solo un jugador ha contestado, deshabilita los botones del jugador
+            io.to(roomId).emit('deshabilitarBotones', { userName });
+            return;
+        }
+        }else{
+          io.to(roomId).emit('respuestaIncorrecta', { paisId });
+          if (turnoDe === userName) {
+            const nextName = userName === usuario1.nombre ? usuario2.nombre : usuario1.nombre;
+            io.to(roomId).emit('cambiarTurno', { turno_de: nextName, usuarios: room.jugadores });
+            console.log('Cambio de turno:', nextName);
+            return;
+          } else {
+            io.to(roomId).emit('cambiarTurno', { turno_de: userName, usuarios: room.jugadores });
+            return;
+          }
         }
       }
       if (turnoDe === userName) {
         const nextName = userName === usuario1.nombre ? usuario2.nombre : usuario1.nombre;
         io.to(roomId).emit('cambiarTurno', { turno_de: nextName, usuarios: room.jugadores });
+        io.to(roomId).emit('habilitarBotonesDuelo', { roomId });
+        io.to(roomId).emit('dueloAcabado', { roomId});
+        io.to(roomId).emit('ocultarPreguntas', { roomId });
         console.log('Cambio de turno:', nextName);
       } else {
         io.to(roomId).emit('cambiarTurno', { turno_de: userName, usuarios: room.jugadores });
+        io.to(roomId).emit('habilitarBotonesDuelo', { roomId });
+        io.to(roomId).emit('dueloAcabado', { roomId});
+        io.to(roomId).emit('ocultarPreguntas', { roomId });
       }
+      
     } else {
       console.log('Error jugadores sala.');
     }

@@ -78,6 +78,17 @@ socket.on('marcarTerritorio', ({ paisId }) => {
     paisElement.style.fill = 'grey';
   }
 });
+socket.on('deshabilitarBotones', ({ userName }) => {
+  const appStore = useAppStore();
+  if (appStore.nombre === userName) {
+    appStore.setPuedeResponder(false);
+  }
+});
+
+socket.on('habilitarBotonesDuelo', () => {
+  const appStore = useAppStore();
+    appStore.setPuedeResponder(true);
+});
 
 socket.on('paisesConquistados', (recuentoPaises) => {
   console.log('Recuento de paises:', recuentoPaises.recuentoPaises);
