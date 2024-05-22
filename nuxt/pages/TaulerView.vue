@@ -116,10 +116,14 @@
       <div v-if="app.getMostrarPreguntas()">
         <h2>{{ app.pregunta ? app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
         <div class="respuestas" v-if="app.getMostrarPreguntas()">
-          <button @click="validateResponse(app.pregunta.id, 'a')" v-if="app.pregunta">{{ app.pregunta.respuesta_a }}</button>
-          <button @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta">{{ app.pregunta.respuesta_b }}</button>
-          <button @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta">{{ app.pregunta.respuesta_c }}</button>
-          <button @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta">{{ app.pregunta.respuesta_d }}</button>
+          <button @click="validateResponse(app.pregunta.id, 'a')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo" 
+      :class="{ 'opacity-50': !esTrunoJugador && !app.duelo }">{{ app.pregunta.respuesta_a }}</button>
+          <button @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo" 
+      :class="{ 'opacity-50': !esTrunoJugador && !app.duelo }">{{ app.pregunta.respuesta_b }}</button>
+          <button @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo" 
+      :class="{ 'opacity-50': !esTrunoJugador && !app.duelo }">{{ app.pregunta.respuesta_c }}</button>
+          <button @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta" :disabled="!esTrunoJugador && !app.duelo" 
+      :class="{ 'opacity-50': !esTrunoJugador && !app.duelo }">{{ app.pregunta.respuesta_d }}</button>
         </div>
       </div>
     </div>
