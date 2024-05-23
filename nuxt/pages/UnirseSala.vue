@@ -48,8 +48,7 @@ export default {
     },
     usuarioUnidoSalaHandler(data) {
       this.store.setSala(data.sala);
-      console.log('Datos de la sala:', this.store.sala);
-      console.log('Usuarios en la sala:', this.store.usuariosJuego.users);
+
     },
   },
   mounted() {
