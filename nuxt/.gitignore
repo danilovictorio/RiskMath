@@ -2,13 +2,14 @@
 .output
 .data
 .nuxt
+nuxt\.nuxt
 .nitro
 .cache
 dist
 
 # Node dependencies
 node_modules
-
+/nuxt/node_modules
 # Logs
 logs
 *.log

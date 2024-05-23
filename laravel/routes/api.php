@@ -18,6 +18,9 @@ use App\Http\Controllers\RoomController;
 */
 //Rutas de Preguntas con las respuestas
 Route::get('/mostrar-preguntas', [PreguntaController::class, 'mostrarPreguntas']);
+Route::put('/modificar-pregunta', [PreguntaController::class, 'modificarPregunta']);
+Route::delete('/eliminar-pregunta', [PreguntaController::class, 'eliminarPregunta']);
+Route::post('/crear-pregunta', [PreguntaController::class, 'crearPregunta']);
 Route::post('/verificar-respuesta', [PreguntaController::class, 'verificarRespuesta']);
 
 

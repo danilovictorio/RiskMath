@@ -1,16 +1,12 @@
 // Importar el cliente Socket.io
 import { io } from "socket.io-client";
 import { useAppStore } from '../stores/app';
-import { onMounted, onUnmounted } from 'vue';
 const url = 'http://localhost:3123';
 //const url = 'http://trfinal.a17danvicfer.daw.inspedralbes.cat:3123'; //producción
 
 export const socket = io(url);
 
-const colores = ['green','blue'];
-
-
-socket.on('startGame', () => { 
+socket.on('startGame', () => {
   // Aquí puedes agregar código para manejar el inicio del juego
 });
 
@@ -18,6 +14,7 @@ socket.on('salaCreada', (data) => {
   let store = useAppStore();
   console.log('Datos recibidos:', data);
   store.setSala(data.sala);
+  store.setpaisesConquistados(data.sala.recuentoPaises);
   console.log('Sala creada:', store.sala);
 });
 
@@ -36,39 +33,19 @@ socket.on('salas', (salas) => {
 socket.on('usuarioUnidoSala', (data) => {
   let store = useAppStore();
   store.setSala(data.sala);
+  store.setpaisesConquistados(data.sala.recuentoPaises);
   console.log('Datos de la sala DE UNIDO SALA:', store.sala);
+});
+
+socket.on('cambiarAccion', (accion) => {
+  let store = useAppStore();
+  store.setEstado(accion);
 });
 
 socket.on('cambiarPrimerTurno', ({ turno_de }) => {
   const appStore = useAppStore();
   appStore.setTurno(turno_de);
   console.log('Cambio PRIMER de turno. ¿Es mi turno?', turno_de);
-});
-
-const usuarioUnidoSalaHandler = (data) => {
-  let store = useAppStore();
-  store.setSala(data.sala);
-  console.log('Datos de la sala:', store.sala);
-  console.log('Usuarios en la sala:', store.usuariosJuego.users);
-};
-
-onMounted(() => {
-  socket.on('usuarioUnidoSala', usuarioUnidoSalaHandler);
-});
-
-onUnmounted(() => {
-  socket.off('usuarioUnidoSala', usuarioUnidoSalaHandler);
-});
-socket.on('contrincante', (questionId) => {
-  let appStore = useAppStore();
-  appStore.setRespuestaContrincante(questionId);
-  console.log('Respuesta contrincante:', questionId);
-});
-
-socket.on('updateRespuesta', (data) => {
-  // Update idRespuestaActual in the pinia store
-  let appStore = useAppStore();
-  appStore.setRespuestaContrincante(data.questionId);
 });
 
 socket.on('cambiarTurno', ({ turno_de, usuarios }) => {
@@ -86,11 +63,50 @@ socket.on('cambiarTurno', ({ turno_de, usuarios }) => {
   }
 });
 
+socket.on('nombrePaisAsignado', ({pais})=>{
+  const appStore = useAppStore();
+  appStore.setPais(pais);
+});
+
+socket.on('marcarTerritorio', ({ paisId }) => {
+  const appStore = useAppStore();
+  console.log(`¡Territorio ${paisId}! con color gris`);
+  appStore.setPaisSeleccionado(paisId);
+  const paisElement = document.getElementById(paisId);
+  if (paisElement) {
+    paisElement.style.fill = 'grey';
+  }
+});
+socket.on('deshabilitarBotones', ({ userName }) => {
+  const appStore = useAppStore();
+  if (appStore.nombre === userName) {
+    appStore.setPuedeResponder(false);
+  }
+});
+
+socket.on('habilitarBotonesDuelo', () => {
+  const appStore = useAppStore();
+    appStore.setPuedeResponder(true);
+});
+
+socket.on('paisesConquistados', (recuentoPaises) => {
+  console.log('Recuento de paises:', recuentoPaises.recuentoPaises);
+  const appStore = useAppStore();
+  appStore.setpaisesConquistados(recuentoPaises.recuentoPaises);
+});
+
 socket.on('respuestaCorrecta', ({ paisId, jugador, color }) => {
   console.log(`¡${jugador} ha conquistado ${paisId}! con color ${color}`);
   const paisElement = document.getElementById(paisId);
   if (paisElement) {
     paisElement.style.fill = color;
+  }
+});
+
+socket.on('respuestaIncorrecta', ({ paisId }) => {
+  const paisElement = document.getElementById(paisId);
+  if (paisElement) {
+    paisElement.style.fill = "white";
   }
 });
 
@@ -114,6 +130,7 @@ socket.on('ocultarPreguntas', () => {
   appStore.setMostrarPreguntas(false);
   console.log('Ocultar preguntas SOCKETCLIENT:', appStore.mostrarPreguntas);
 });
+
 socket.on('dueloAcabado', () => {
   const appStore = useAppStore();
   appStore.setDuelo(false);
@@ -122,7 +139,6 @@ socket.on('dueloAcabado', () => {
 
 socket.on('finDelJuego', ({ ganador, empate }) => {
   const appStore = useAppStore();
-
   if (ganador) {
     console.log(`¡${ganador} es el ganador!`);
     appStore.setGanador(ganador); // Agrega un método en tu store para almacenar el ganador
@@ -138,10 +154,10 @@ socket.on('peticion_jugar_aceptada', (datos) => {
   console.log('Nos han aceptado la petición:', datos);
 });
 
-socket.on('rellenarColor',(colorTurno)=>{
+socket.on('rellenarColor', (colorTurno) => {
   const appStore = useAppStore();
   appStore.setColor(colorTurno);
-  console.log('1r color turno pinia actualizado',appStore.getColor());
+  console.log('1r color turno pinia actualizado', appStore.getColor());
 });
 
 socket.on('actualizacionUsuario', (datos) => {

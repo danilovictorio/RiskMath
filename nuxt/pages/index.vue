@@ -7,16 +7,17 @@
  -->
 
  <template>
-  <div class="w-screen h-screen flex items-center justify-center bg-center bg-cover bg-no-repeat" style="background-image: url('/mapaRisk.jpg');">
+  <div class="w-screen h-screen flex items-center justify-center bg-center bg-cover bg-no-repeat" style="background-image: url('/mapaRisk.png');">
    <div class="login-container" v-if="!nombreEscrito">
       <h2>Risk Math</h2>
       <div class="input-container">
         <input v-model="nombreUsuario" />
         <label for="nombreUsuario">Nombre de usuario</label>
+
       </div>
       <button @click="crearSala">Crear sala</button>
       <button @click="unirseSala">Unirse a sala</button>
-
+      <nuxt-link to="/AdminPreguntes" class="adminPreg">Administrar Preguntes</nuxt-link>
       <img src="../public/info_icon.png" @click="popupInfo" class="info-icon">
       <div class="superpuesto" id="superpuesto">
         <button @click="popoffInfo" class="poppup_btn">x</button>
@@ -164,7 +165,9 @@ export default {
   background-color: #000;
   color: #fff;
 }
-
+.adminPreg{
+  color:#52C8FA;
+}
 img.info-icon {
   cursor: pointer;
   position: fixed;
@@ -201,7 +204,7 @@ img.info-icon {
   display: block;
   transform: translate(-50%, -50%) scale(1);
   border-radius: 10px;
-  border: 2px solid red;
+  border: 2px solid rgb(0, 17, 255);
 }
 
 button {
@@ -216,7 +219,7 @@ button {
 }
 
 button:hover {
-  box-shadow: inset 0 0 0 50px #FA3030;
+  box-shadow: inset 0 0 0 50px #a0aeff;
 }
 
 .contador {

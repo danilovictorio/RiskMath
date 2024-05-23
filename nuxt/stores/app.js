@@ -6,7 +6,7 @@ export const useAppStore = defineStore('app', {
       nombre:'',
       estado:'',
       color: '',
-      idPais: '',
+      pais: '',
       ganador: null,
       colorActual: ""   
     },
@@ -17,16 +17,30 @@ export const useAppStore = defineStore('app', {
       capacidad: 0,
       jugadores: []
     },
+    paisSeleccionado: '',
     pregunta: {},
     nombre:'',
-    paisesConquistados: 0,
+    paisesConquistados: {},
     countries: {}, 
     players: {}, 
     jugadorGanador: null,
     duelo: false,
     mostrarPreguntas: false,
+    puedeResponder: true,
   }),
   actions: {
+    setPaisSeleccionado(paisId){
+      this.paisSeleccionado = paisId;
+    },
+    getPaisSeleccionado(){
+      return this.paisSeleccionado;
+    },
+    setpaisesConquistados(paisesConquistados){
+      this.paisesConquistados = paisesConquistados;
+    },
+    getpaisesConquistados(){
+      return this.paisesConquistados;
+    },
     setTurno( nombre ) {
       this.turnoDe.nombre=nombre;       
     },
@@ -45,8 +59,11 @@ export const useAppStore = defineStore('app', {
     setColor(color){
       this.turnoDe.color=color;
     },
-    getIdPais(){
-      return this.turnoDe.idPais;
+    setPais(pais){
+      this.turnoDe.pais = pais;
+    },
+    getPais(){
+      return this.turnoDe.pais;
     }, 
     esMiturno(){
       return this.turnoDe.nombre === this.nombre;
@@ -81,5 +98,11 @@ export const useAppStore = defineStore('app', {
     getDuelo(){
       return this.duelo;
     },
+    getPuedeRsponder(){
+      return this.puedeResponder;
+    },
+    setPuedeResponder(valor) {
+      this.puedeResponder = valor;
+    }
   },
 })
