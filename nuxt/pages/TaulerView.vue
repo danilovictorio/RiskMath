@@ -419,7 +419,7 @@ export default {
 }
 
 .preguntas {
-  grid-column: 2 / 4;
+  grid-column: 3 / 4;
   grid-row: 2 / 4;
   display: flex;
   flex-direction: column;
