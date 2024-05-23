@@ -182,7 +182,7 @@ export default {
       ruta: 'http://localhost:8000',
       contadorPaises: 0,
       pregDuelo: false,
-
+      clicksDeshabilitados: false,
     };
   }, computed: {
 
@@ -194,6 +194,10 @@ export default {
   },
   methods: {
     manejarClic(name, idPais, idUser) {
+      if (this.clicksDeshabilitados) {
+      return;  // Ignorar clics si los clics están deshabilitados
+    }
+    this.clicksDeshabilitados = true;
       this.asignarPais(idPais);
       this.paisId = name;
       let paisElement = document.getElementById(name);
@@ -230,6 +234,7 @@ export default {
         }
       } else {
         console.log("No es tu turno.");
+        this.clicksDeshabilitados = false;
       }
     },
     async enviarAtac(name, paisId, idUser) {
@@ -348,6 +353,7 @@ export default {
         }
 
         this.resultadoPregunta = false;
+        this.clicksDeshabilitados = false;
       } catch (error) {
         console.error("Error validating response:", error);
       }
