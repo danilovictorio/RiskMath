@@ -119,8 +119,8 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('asignarPais', ({roomId, pais})=>{
-    io.to(roomId).emit('nombrePaisAsignado', {pais});
+  socket.on('asignarPais', ({ roomId, pais }) => {
+    io.to(roomId).emit('nombrePaisAsignado', { pais });
   });
 
   socket.on('marcarTerritorioSeleccionado', ({ roomId, paisId }) => {
@@ -210,14 +210,19 @@ io.on('connection', (socket) => {
           console.log('Jugadores contestados:', room.jugadoresContestados);
           //Si los dos jugadores han contestado, terminar el duelo
           if (room.jugadoresContestados[usuario1.nombre] && room.jugadoresContestados[usuario2.nombre]) {
+            if (room.paisesConquistados[paisId]) {
+              const conquistador = room.paisesConquistados[paisId];
+              delete room.paisesConquistados[paisId];
+              room.recuentoPaises[conquistador]--;
+            }
             io.to(roomId).emit('respuestaIncorrecta', { paisId });
             room.jugadoresContestados = {};
-        } else {
+          } else {
             // Si solo un jugador ha contestado, deshabilita los botones del jugador
             io.to(roomId).emit('deshabilitarBotones', { userName });
             return;
-        }
-        }else{
+          }
+        } else {
           io.to(roomId).emit('respuestaIncorrecta', { paisId });
           if (turnoDe === userName) {
             const nextName = userName === usuario1.nombre ? usuario2.nombre : usuario1.nombre;
@@ -234,16 +239,19 @@ io.on('connection', (socket) => {
         const nextName = userName === usuario1.nombre ? usuario2.nombre : usuario1.nombre;
         io.to(roomId).emit('cambiarTurno', { turno_de: nextName, usuarios: room.jugadores });
         io.to(roomId).emit('habilitarBotonesDuelo', { roomId });
-        io.to(roomId).emit('dueloAcabado', { roomId});
+        io.to(roomId).emit('dueloAcabado', { roomId });
         io.to(roomId).emit('ocultarPreguntas', { roomId });
+        io.to(roomId).emit('paisesConquistados', { recuentoPaises: room.recuentoPaises });
+     
         console.log('Cambio de turno:', nextName);
       } else {
         io.to(roomId).emit('cambiarTurno', { turno_de: userName, usuarios: room.jugadores });
         io.to(roomId).emit('habilitarBotonesDuelo', { roomId });
-        io.to(roomId).emit('dueloAcabado', { roomId});
+        io.to(roomId).emit('dueloAcabado', { roomId });
         io.to(roomId).emit('ocultarPreguntas', { roomId });
+        io.to(roomId).emit('paisesConquistados', { recuentoPaises: room.recuentoPaises });
       }
-      
+
     } else {
       console.log('Error jugadores sala.');
     }
