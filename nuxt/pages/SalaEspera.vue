@@ -1,6 +1,7 @@
 <template>
   <div
-    class="flex flex-col items-center justify-center min-h-screen bg-blue-200 py-6 px-4 sm:px-6 lg:px-8 w-full h-full absolute inset-0">
+    class="flex flex-col items-center justify-center min-h-screen py-6 px-4 sm:px-6 lg:px-8 w-full h-full absolute inset-0"
+    :class="{ 'bg-blue-200': !sala, 'bg-blue-300': sala }">
     <div class="max-w-md w-full space-y-8 bg-blue-300 p-6 rounded-xl shadow-md text-blue-1100">
       <div>
         <h2 class="mt-6 text-center text-3xl font-extrabold text-blue-800">
@@ -19,8 +20,8 @@
       <div class="mt-8 space-y-6">
         <p class="text-lg mb-2 text-blue-800">Usuarios en la sala:</p>
         <div class="grid grid-cols-1 gap-4">
-          <div class="flex items-center p-2 bg-blue-400 rounded-lg shadow-md text-blue-900" v-for="(jugador, index) in sala.jugadores"
-            :key="index">
+          <div class="flex items-center p-2 bg-blue-400 rounded-lg shadow-md text-blue-900"
+            v-for="jugador in sala.jugadores" :key="jugador.id">
             <div class="flex-shrink-0">
               <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/150" alt="" />
             </div>
@@ -74,13 +75,25 @@ export default {
         }
       });
     },
+    handleIniciarPartidaResponse(response) {
+      if (response.success) {
+        console.log(response.message);
+        socket.emit('peticion_jugar', { nombreUsuario: 'Usuario' + socket.id }, this.sala.id);
+      } else {
+        console.error(response.message);
+      }
+    },
     copyToClipboard(text) {
       navigator.clipboard.writeText(text).then(() => {
         console.log('Copied to clipboard');
       }).catch(err => {
         console.error('Could not copy text: ', err);
       });
-    }
+    },
+    handlePeticionJugarAceptada(datos) {
+      console.log('peticion_jugar_aceptada', datos);
+      this.$router.push({ name: 'TaulerView' });
+    },
   },
   created() {
     socket.on('peticion_jugar_aceptada', (datos) => {
@@ -88,5 +101,6 @@ export default {
       this.$router.push({ name: 'TaulerView' });
     });
   },
+  
 };
 </script>
