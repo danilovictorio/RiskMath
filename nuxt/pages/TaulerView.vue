@@ -5,7 +5,7 @@
   sustituir valor en variable global:  ruta
  -->
 <template>
-  <div class="w-screen h-screen flex items-center justify-center bg-center bg-cover bg-no-repeat" style="background-image: url('/mar3.jpg');">
+  <div class="w-screen h-screen flex items-center justify-center bg-center bg-cover bg-no-repeat" style="background-image: url('/2.webp');">
   <div class="container">
     <div class="turno-de">
       <h3>{{ app.turnoDe.estado }}</h3>
@@ -522,7 +522,10 @@ border-radius: 10%;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80%;
+  width: 60%;
+  position: relative;
+  right: 20%;
+  bottom: 5%;
 }
 
 .preguntas {
