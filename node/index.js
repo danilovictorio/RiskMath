@@ -141,6 +141,16 @@ io.on('connection', (socket) => {
       }
     }
   });
+
+  socket.on('desHabilitarClicks', ({ roomId }) => {
+    console.log('Evento desHabilitarClicks recibido');
+    io.to(roomId).emit('clicksDesHabilitados');
+  });
+
+  socket.on('HabilitarClicks', ({ roomId }) => {
+    io.to(roomId).emit('clicksHabilitados');
+  });
+
   socket.on('habilitarBotonesDuelo', ({ roomId }) => {
     io.to(roomId).emit('habilitarBotonesDuelo');
   });

@@ -5,7 +5,7 @@
   sustituir valor en variable global:  ruta
  -->
 <template>
-  <div class="w-screen h-screen flex items-center justify-center bg-center bg-cover bg-no-repeat" style="background-image: url('/2.webp');">
+  <div class="w-screen h-screen flex items-center justify-center bg-center bg-cover bg-no-repeat" style="background-image: url('/mapaTauler.png');">
   <div class="container">
     <div class="turno-de">
       <h3>{{ app.turnoDe.estado }}</h3>
@@ -189,7 +189,6 @@ export default {
       miTurno: false,
       contadorPaises: 0,
       pregDuelo: false,
-      clicksDeshabilitados: false,
       paisesConquistadosLocal: {},
     };
   }, computed: {
@@ -212,10 +211,14 @@ export default {
   },
   methods: {
     manejarClic(name, idPais, idUser) {
-      if (this.clicksDeshabilitados) {
+      if (!this.app.esMiturno()) {
+            console.log("No es tu turno.");
+            return;  // Ignorar clics si no es el turno del jugador
+        }
+      if (this.app.getClicksDeshabilitados()) {
         return;  // Ignorar clics si los clics están deshabilitados
       }
-      this.clicksDeshabilitados = true;
+      socket.emit('desHabilitarClicks', { roomId: this.app.sala.id });
       this.asignarPais(idPais);
       this.paisId = name;
       let paisElement = document.getElementById(name);
@@ -243,7 +246,7 @@ export default {
       if (this.app.esMiturno()) {
         if (colorName === this.app.turnoDe.color) {
           console.log("El país ya está conquistado por ti.");
-          this.clicksDeshabilitados = false;
+          socket.emit('HabilitarClicks', { roomId: this.app.sala.id });
         } else if (fillColor === '#ffffff' || fillColor === 'rgb(255, 255, 255)' || colorName == 'white') { // Color blanco
           console.log("El país no está conquistado.");
           this.enviarAtac(idPais, name, idUser);
@@ -254,7 +257,7 @@ export default {
         }
       } else {
         console.log("No es tu turno.");
-        this.clicksDeshabilitados = false;
+        socket.emit('HabilitarClicks', { roomId: this.app.sala.id });
       }
     },
     async enviarAtac(name, paisId, idUser) {
@@ -373,7 +376,7 @@ export default {
         }
 
         this.resultadoPregunta = false;
-        this.clicksDeshabilitados = false;
+        socket.emit('HabilitarClicks', { roomId: this.app.sala.id });
       } catch (error) {
         console.error("Error validating response:", error);
       }
