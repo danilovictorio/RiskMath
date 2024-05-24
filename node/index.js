@@ -141,18 +141,7 @@ io.on('connection', (socket) => {
       }
     }
   });
-  socket.on('habilitarBotonesDuelo', ({ roomId }) => {
-    io.to(roomId).emit('habilitarBotonesDuelo');
-  });
-
-  socket.on('cambiarAccion', ({ roomId, accion }) => {
-    io.to(roomId).emit('cambiarAccion', accion);
-  });
-
-  socket.on('enviarPreguntas', ({ roomId, preguntas }) => {
-    console.log('Evento enviarPreguntas recibido');
-    io.to(roomId).emit('mostrarPreguntas', preguntas);
-  });
+  
 
   socket.on('enviarDuelo', ({ roomId, preguntas }) => {
     console.log('Evento enviarPreguntas recibido');
