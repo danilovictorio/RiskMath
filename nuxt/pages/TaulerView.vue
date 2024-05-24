@@ -135,32 +135,20 @@
       </svg>
     </div>
     <div class="preguntas">
-      <div v-if="app.getMostrarPreguntas()">
-        <h2>{{ app.pregunta ? app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
-        <div class="respuestas" v-if="app.getMostrarPreguntas()">
-          <button @click="validateResponse(app.pregunta.id, 'a')" v-if="app.pregunta"
-            :disabled="(app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador)"
-            :class="{ 'disabled-button': (app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador) }">
-            {{ app.pregunta.respuesta_a }}
-          </button>
-          <button @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta"
-            :disabled="(app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador)"
-            :class="{ 'disabled-button': (app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador) }">
-            {{ app.pregunta.respuesta_b }}
-          </button>
-          <button @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta"
-            :disabled="(app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador)"
-            :class="{ 'disabled-button': (app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador) }">
-            {{ app.pregunta.respuesta_c }}
-          </button>
-          <button @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta"
-            :disabled="(app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador)"
-            :class="{ 'disabled-button': (app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador) }">
-            {{ app.pregunta.respuesta_d }}
-          </button>
-        </div>
-      </div>
+  <div v-if="app.getMostrarPreguntas()">
+    <h2>{{ app.pregunta ? app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
+    <div class="respuestas" v-if="app.getMostrarPreguntas()">
+      <button v-for="respuesta in app.pregunta.respuestas" 
+              :key="respuesta.id" 
+              @click="validateResponse(app.pregunta.id, respuesta.id)" 
+              :disabled="(app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador)"
+              :class="{ 'disabled-button': (app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador) }">
+        {{ respuesta.texto }}
+      </button>
     </div>
+  </div>
+</div>
+
   </div>
 </div>
 </template>
@@ -245,6 +233,7 @@ export default {
 
       if (this.app.esMiturno()) {
         if (colorName === this.app.turnoDe.color) {
+          alert("El país ya está conquistado por ti.");
           console.log("El país ya está conquistado por ti.");
           socket.emit('HabilitarClicks', { roomId: this.app.sala.id });
         } else if (fillColor === '#ffffff' || fillColor === 'rgb(255, 255, 255)' || colorName == 'white') { // Color blanco
@@ -266,13 +255,18 @@ export default {
       try {
         const data = await enviarAtac(name, idUser);
 
+        const respuestas = [
+                { id: 'a', texto: data.pregunta.respuesta_a },
+                { id: 'b', texto: data.pregunta.respuesta_b },
+                { id: 'c', texto: data.pregunta.respuesta_c },
+                { id: 'd', texto: data.pregunta.respuesta_d }
+            ];
+        this.mezclarRespuestas(respuestas);
+
         this.pregunta = {
           id: data.pregunta.id,
           pregunta: data.pregunta.pregunta,
-          respuesta_a: data.pregunta.respuesta_a,
-          respuesta_b: data.pregunta.respuesta_b,
-          respuesta_c: data.pregunta.respuesta_c,
-          respuesta_d: data.pregunta.respuesta_d,
+          respuestas: respuestas,
         };
 
         this.app.setPaisSeleccionado(paisId);
@@ -293,13 +287,18 @@ export default {
       try {
         const data = await enviarAtac(name, idUser);
 
+        const respuestas = [
+                { id: 'a', texto: data.pregunta.respuesta_a },
+                { id: 'b', texto: data.pregunta.respuesta_b },
+                { id: 'c', texto: data.pregunta.respuesta_c },
+                { id: 'd', texto: data.pregunta.respuesta_d }
+            ];
+        this.mezclarRespuestas(respuestas);
+
         this.pregunta = {
           id: data.pregunta.id,
           pregunta: data.pregunta.pregunta,
-          respuesta_a: data.pregunta.respuesta_a,
-          respuesta_b: data.pregunta.respuesta_b,
-          respuesta_c: data.pregunta.respuesta_c,
-          respuesta_d: data.pregunta.respuesta_d,
+          respuestas: respuestas,
         };
 
         this.mostrar = 1;
@@ -412,6 +411,13 @@ export default {
         }
 
       });
+    },
+    mezclarRespuestas(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
     },
 
     async cambiarAccion(accion) {

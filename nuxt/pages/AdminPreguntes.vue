@@ -1,32 +1,29 @@
 <template>
     <div>
-        <h2 class="text-2xl font-bold mb-4">Llista de Preguntes</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div v-for="pregunta in preguntas" :key="pregunta.id" class="border rounded p-4">
-                <p class="font-bold">Id:</p>
-                <p>{{ pregunta.id }}</p>
-                <p class="font-bold">Pregunta:</p>
-                <p>{{ pregunta.pregunta }}</p>
-                <p class="font-bold">Opció A:</p>
-                <p>{{ pregunta.a }}</p>
-                <p class="font-bold">Opció B:</p>
-                <p>{{ pregunta.b }}</p>
-                <p class="font-bold">Opció C:</p>
-                <p>{{ pregunta.c }}</p>
-                <p class="font-bold">Opció D:</p>
-                <p>{{ pregunta.d }}</p>
-                <p class="font-bold">Resposta Correcta:</p>
-                <p>{{ pregunta.respuesta_correcta }}</p>
-                <div class="flex justify-end mt-2">
-                    <button @click="editarPregunta(pregunta)"
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Editar</button>
-                    <button @click="eliminarPregunta(pregunta.id)"
-                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Eliminar</button>
+        <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Administració de Preguntes</h1>
+        <div class="overflow-auto h-screen-70">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div v-for="pregunta in preguntas" :key="pregunta.id" class="border rounded p-4">
+                    <p class="font-bold">Pregunta:</p>
+                    <p>{{ pregunta.pregunta }}</p>
+                    <p class="font-bold">Opció A:</p>
+                    <p>{{ pregunta.a }}</p>
+                    <p class="font-bold">Opció B:</p>
+                    <p>{{ pregunta.b }}</p>
+                    <p class="font-bold">Opció C:</p>
+                    <p>{{ pregunta.c }}</p>
+                    <p class="font-bold">Opció D:</p>
+                    <p>{{ pregunta.d }}</p>
+                    <p class="font-bold">Resposta Correcta:</p>
+                    <p>{{ pregunta.respuesta_correcta }}</p>
+                    <div class="flex justify-end mt-2">
+                        <button @click="editarPregunta(pregunta)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Editar</button>
+                        <button @click="eliminarPregunta(pregunta.id)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Eliminar</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <button @click="abrirModalCrearPregunta()"
-            class="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Crear Pregunta</button>
+        <button @click="abrirModalCrearPregunta()" class="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Crear Pregunta</button>
         <!-- Modal per crear pregunta -->
         <div v-if="showModalCrear" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
             <div class="bg-white w-full md:w-2/3 lg:w-1/2 px-12 py-10 rounded shadow-md">
@@ -48,10 +45,8 @@
                     <option value="d">Opció D</option>
                 </select>
                 <div class="flex justify-end">
-                    <button @click="guardarNuevaPregunta()"
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Guardar</button>
-                    <button @click="cancelarEdicion()"
-                        class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Cancel·lar</button>
+                    <button @click="guardarNuevaPregunta()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Guardar</button>
+                    <button @click="cancelarEdicion()" class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Cancel·lar</button>
                 </div>
             </div>
         </div>
@@ -78,10 +73,8 @@
                     <option value="d">Opció D</option>
                 </select>
                 <div class="flex justify-end">
-                    <button @click="guardarEdicion(preguntaEditada)"
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Guardar</button>
-                    <button @click="cancelarEdicion()"
-                        class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Cancelar</button>
+                    <button @click="guardarEdicion(preguntaEditada)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Guardar</button>
+                    <button @click="cancelarEdicion()" class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Cancelar</button>
                 </div>
             </div>
         </div>
@@ -177,3 +170,9 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+.h-screen-70 {
+    height: 70vh;
+}
+</style>
