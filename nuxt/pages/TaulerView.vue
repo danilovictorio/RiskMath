@@ -1,4 +1,5 @@
 <template>
+  <div class="w-screen h-screen flex items-center justify-center bg-center bg-cover bg-no-repeat" style="background-image: url('/mar.gif');">
   <div class="container">
     <div class="turno-de">
       <h3>{{ app.turnoDe.estado }}</h3>
@@ -32,7 +33,7 @@
       </div>
     </div>
     <div class="jugadores">
-      <div v-for="(cantidad, jugador) in app.paisesConquistados" :key="jugador">
+      <div v-for="(cantidad, jugador) in paisesConquistadosLocal" :key="jugador">
         <p>{{ jugador }}</p>
         <p>{{ cantidad }}</p>
       </div>
@@ -50,7 +51,7 @@
           <!-- All areas are listed in the line below. You can use this list in your script. -->
           <!--{id:"ES-AN"},{id:"ES-AR"},{id:"ES-AS"},{id:"ES-CB"},{id:"ES-CL"},{id:"ES-CM"},{id:"ES-CN"},{id:"ES-CT"},{id:"ES-EX"},{id:"ES-GA"},{id:"ES-RI"},{id:"ES-MD"},{id:"ES-MC"},{id:"ES-NC"},{id:"ES-IB"},{id:"ES-PV"},{id:"ES-VC"}-->
         </defs>
-        <path id="ES-AN" title="Andalusia" class="land" :class="{'disabled': esTrunoJugador}"
+        <path id="ES-AN" title="Andalusia" class="land" :class="{ 'disabled': esTrunoJugador }"
           d="m 201.66,253.99 -0.01,0.64 -1.23,0.51 -0.44,1.01 -1.72,0.46 -2.19,-2.7 -1.48,-1.17 -1.33,-0.24 -1.63,1.04 -1.35,-0.9 0.35,0.36 -0.44,-0.32 -2.25,0.65 -1.68,3.23 -0.68,0.73 -1.44,0.57 -1.91,0.06 -1.17,-0.81 -0.95,0.35 -2.01,-1.94 -1.45,0.48 -7.49,-0.55 -2.3,0.53 -0.72,0.81 -1.5,0.69 -1.64,-0.11 -1.26,-0.95 0.11,0.23 -0.9,0.12 -1.26,-0.99 -1.5,-0.09 -0.55,0.58 -1.03,-0.11 -0.38,0.46 -0.55,-0.62 -0.48,0.27 -1.83,-0.84 -3.32,0.95 -3.05,-0.75 -0.99,0.82 -2.11,0.31 -3.96,0.11 -1.82,-0.38 -0.58,0.53 0.04,-0.39 -2.68,4.01 -0.6,0.61 -1.92,0.69 -0.9,1.82 -2.84,0.77 -2.97,-0.73 -1.61,0.02 -2.56,1.58 -2.04,0.29 -2.02,1.19 -0.61,-0.03 -1.15,1.33 -0.77,2.24 -1.85,2.64 -0.62,2.51 -0.7,-0.04 -0.58,-0.73 -1.08,0.11 -0.6,1.16 0.46,2.38 -0.92,0.69 -0.59,-0.13 -3.3,1.59 -0.99,-1.41 -1.16,-0.62 -0.99,0.21 -1.52,-0.93 -0.519999,0.33 -1.72,-2.25 -1.54,-1.3 -3.24,0.08 -1.86,-3.46 -1.04,-0.39 -1.01,-2.36 -1,-0.91 -1.97,-4.35 -0.78,-0.16 1.04,-0.51 -0.32,0.33 0.35,0.1 0.06,-0.32 -0.12,0.42 0.52,1 0.13,-0.39 0.08,0.25 0.74,-1.3 0.23,-0.92 -0.25,-0.46 -1,0.05 -0.92,-1.27 -0.61,0.18 0.28,-0.18 -0.5,-0.23 0.09,0.48 -0.5,-0.53 -0.37,0.36 -0.99,-0.64 -1.33,-3.52 2.32,-1.85 -1.11,-0.65 -1.29,-3.12 -2.24,-2.67 -6.37,-4.23 -2.78,-1.28 -1.89,-1.49 0.6,0.96 2.21,1.81 -3.02,-2.61 -0.65,-0.08 0.39,0.42 -0.34,-0.02 -2.69,-1.23 -7.37,0.57 -0.99,0.79 -0.97,-0.38 -0.3,-1.66 -0.5,-0.67 0.32,-0.8 -0.56,-1.25 0.03,-2.71 -0.62,-0.66 0.5,-0.32 -0.66,-1.73 0.17,-0.59 -0.57,-0.38 -0.21,-0.84 -0.54,-0.06 -0.33,-1.05 0.42,-0.2 0.1,-1.55 1.36,-1.49 0.92,-3.74 0.75,-0.23 2.54,-2.58 0.53,-1.92 0.71,-1.01 -0.09,-1.9 1.55,-0.7 1.97,-0.01 0.11,-0.89 0.67,-0.48 1.1,0.84 1.47,-0.13 0.57,-2.79 0.94,-1.72 -0.38,-0.21 0.03,-0.51 0.92,-1.15 v 0 l 2.32,1.04 1.38,-0.04 -0.44,2.28 1.05,-0.02 0.03,0.43 0.63,0.27 0.72,-0.31 1.94,0.35 0.56,-0.27 0.69,0.73 v 0 l 0.43,0.52 v 0 l 0.12,1.33 0.66,-0.2 v 0 h 0.32 v 0 l 1.94,0.75 0.31,-0.21 -0.16,-0.61 0.73,-0.58 -0.25,-0.32 1.03,-0.1 1.24,0.32 0.28,1.15 0.74,0.63 v 0 l 0.13,0.05 v 0 l 0.62,0.63 1.4,0.25 0.37,0.41 1.03,-0.1 0.56,0.74 1.77,-1.51 1.78,-0.46 2.67,0.09 0.49,-1.78 0.71,-0.72 -0.57,-0.73 0.08,-0.58 1.24,-0.93 0.08,-0.79 0.71,-0.56 1.41,-0.1 0.489999,-0.38 0.69,0.17 0.78,-0.56 1.13,0.53 0.04,0.73 -0.26,-0.36 -0.31,0.17 0.26,0.54 -1.24,0.79 0.19,1.39 0.77,0.23 1.93,-1.93 1.42,0.22 0.19,-0.64 1.03,-0.44 -0.15,-0.77 0.35,-0.66 v 0 l 0.1,-0.05 v 0 l 0.04,-2 -1.3,-2.28 0.44,-1.28 -0.74,-0.71 0.03,-0.55 1.01,-1.66 0.72,-0.46 h 0.96 l 0.13,-0.72 1.85,-1.25 v 0 l -0.11,-0.26 v 0 l 0.39,-0.67 0.47,0.26 -0.22,-0.5 0.62,-1.03 1.7,0.17 -0.09,-0.51 0.52,-0.64 0.97,-0.5 0.88,-1.1 0.25,0.26 0.15,-0.63 0.22,0.38 0.1,-0.35 0.33,0.27 -0.01,-0.53 0.47,-0.06 v 0 l 0.04,-0.08 v 0 l -0.46,-1.34 2.35,0.36 1.4,-0.77 v 0 l 0.99,0.43 0.21,0.78 1.57,0.43 1.88,-0.08 0.51,2.45 4.1,1.41 0.12,0.67 1.02,0.17 1.18,0.89 0.78,1.27 0.22,-0.28 0.52,0.18 0.2,0.5 0.48,-0.18 2.39,2.81 4.49,2 0.49,-0.13 -0.25,-1.13 0.37,-0.69 3.64,0.72 5.87,0.38 1.61,-0.2 0.67,-0.63 0.19,-0.79 0.67,-0.2 v 0 l 0.5,-0.16 v 0 l 1.14,0.39 0.27,-0.35 3.12,1.06 0.73,-0.38 0.16,-1.5 0.38,-0.07 0.85,0.31 0.21,1.12 1.64,0.38 1.2,-0.3 1.31,-1.18 -0.04,-0.68 v 0 l 0.11,-0.31 v 0 l 1.31,-0.42 v 0 l 0.15,0.07 v 0 l 1.21,0.74 3.8,0.64 1.93,-1.33 1.74,2.39 0.23,-1.48 0.75,-0.63 1.66,0.01 0.63,0.57 0.54,-0.8 0.63,-0.34 0.21,0.26 v -0.34 l 1.06,-0.51 0.11,-0.43 0.2,0.17 0.29,-0.77 2.58,1.27 1.79,-0.62 v 0 h 0.25 v 0 l 0.86,0.78 -0.11,2.64 2.44,0.62 -0.06,3.28 1.19,0.55 0.16,0.72 -0.5,1.68 0.2,1.08 -2.91,3.53 0.75,0.44 v 0 h 0.35 v 0 l 2.49,1.32 2.22,0.2 v 0 l 1.11,0.78 1.25,2.23 2.19,1.7 1.31,-0.41 1.07,0.94 0.6,-0.35 1.11,0.51 0.44,-0.39 0.49,0.21 v 0 l 0.17,-0.01 v 0 l 0.2,0.26 -0.57,0.79 -0.37,2.29 0.37,1.65 -0.47,0.92 0.3,1.64 v 0 l 0.18,0.19 v 0 l 4.08,6.6 0.98,0.72 -0.04,-0.62 2.05,0.37 2.96,2.32 v 0 l -1.34,0.7 -0.88,1.64 -2.49,2.7 -1.34,5.33 -1.4,2.71 0.13,1.37 -0.29,0.42 h -0.91 l -0.72,1.26 -0.63,0.13 -0.35,0.47 0.11,1.39 -1.07,0.51 z"
           :fill="resultadoPregunta && app.getPaisSeleccionado() == 'ES-AN' ? app.turnoDe.color : '#ffffff'"
           fill-opacity="1" stroke="#000000" stroke-width="0.5"
@@ -132,29 +133,30 @@
         <h2>{{ app.pregunta ? app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
         <div class="respuestas" v-if="app.getMostrarPreguntas()">
           <button @click="validateResponse(app.pregunta.id, 'a')" v-if="app.pregunta"
-          :disabled="(app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador)"
-          :class="{ 'disabled-button': (app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador) }">
-          {{ app.pregunta.respuesta_a }}
-        </button>
-        <button @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta"
-          :disabled="(app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador)"
-          :class="{ 'disabled-button': (app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador) }">
-          {{ app.pregunta.respuesta_b }}
-        </button>
-        <button @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta"
-          :disabled="(app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador)"
-          :class="{ 'disabled-button': (app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador) }">
-          {{ app.pregunta.respuesta_c }}
-        </button>
-        <button @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta"
-          :disabled="(app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador)"
-          :class="{ 'disabled-button': (app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador) }">
-          {{ app.pregunta.respuesta_d }}
-        </button>
+            :disabled="(app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador)"
+            :class="{ 'disabled-button': (app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador) }">
+            {{ app.pregunta.respuesta_a }}
+          </button>
+          <button @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta"
+            :disabled="(app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador)"
+            :class="{ 'disabled-button': (app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador) }">
+            {{ app.pregunta.respuesta_b }}
+          </button>
+          <button @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta"
+            :disabled="(app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador)"
+            :class="{ 'disabled-button': (app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador) }">
+            {{ app.pregunta.respuesta_c }}
+          </button>
+          <button @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta"
+            :disabled="(app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador)"
+            :class="{ 'disabled-button': (app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador) }">
+            {{ app.pregunta.respuesta_d }}
+          </button>
         </div>
       </div>
     </div>
   </div>
+</div>
 </template>
 
 
@@ -162,7 +164,7 @@
 import { obtenerPaises, enviarAtac, confirmarAtaque, validarResposta } from '../services/communicationManager.js';
 import { socket } from '@/utils/socket.js';
 import { useAppStore } from '../stores/app';
-import tinycolor from 'tinycolor2';
+//import tinycolor from 'tinycolor2';
 export default {
   data() {
     return {
@@ -183,6 +185,7 @@ export default {
       contadorPaises: 0,
       pregDuelo: false,
       clicksDeshabilitados: false,
+      paisesConquistadosLocal: {},
     };
   }, computed: {
 
@@ -192,12 +195,22 @@ export default {
 
 
   },
+  watch: {
+    'app.paisesConquistados': {
+      handler(newVal) {
+        // Actualiza la variable local cuando app.paisesConquistados cambie
+        this.paisesConquistadosLocal = { ...newVal };
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   methods: {
     manejarClic(name, idPais, idUser) {
       if (this.clicksDeshabilitados) {
-      return;  // Ignorar clics si los clics están deshabilitados
-    }
-    this.clicksDeshabilitados = true;
+        return;  // Ignorar clics si los clics están deshabilitados
+      }
+      this.clicksDeshabilitados = true;
       this.asignarPais(idPais);
       this.paisId = name;
       let paisElement = document.getElementById(name);
@@ -214,17 +227,18 @@ export default {
         fillColor = paisElement.getAttribute('fill');
       }
 
-      const turnoColorHex = tinycolor(this.app.turnoDe.color).toHex(); // Convertir a hexadecimal
-      const turnoColorRGB = tinycolor(this.app.turnoDe.color).toRgbString();
+      //const turnoColorHex = tinycolor(this.app.turnoDe.color).toHex(); // Convertir a hexadecimal
+      //const turnoColorRGB = tinycolor(this.app.turnoDe.color).toRgbString();
       console.log("fillColor", fillColor);
       console.log("colorName", colorName);
-      console.log("turnoColorHex", turnoColorHex);
-      console.log("turnoColorRGB", turnoColorRGB);
+      //console.log("turnoColorHex", turnoColorHex);
+      //console.log("turnoColorRGB", turnoColorRGB);
       console.log(this.app.turnoDe.color);
 
       if (this.app.esMiturno()) {
-        if (colorName === this.app.turnoDe.color || fillColor === turnoColorHex || fillColor === turnoColorRGB) {
+        if (colorName === this.app.turnoDe.color) {
           console.log("El país ya está conquistado por ti.");
+          this.clicksDeshabilitados = false;
         } else if (fillColor === '#ffffff' || fillColor === 'rgb(255, 255, 255)' || colorName == 'white') { // Color blanco
           console.log("El país no está conquistado.");
           this.enviarAtac(idPais, name, idUser);
@@ -328,7 +342,6 @@ export default {
           console.log("La respuesta es falsa");
           this.resultadoPregunta = false;
         }
-        console.log("paises conquistados", this.app.paisesConquistados);
 
         socket.emit("respuestaJugador", {
           turnoDe: this.app.turnoDe.nombre,
@@ -346,7 +359,7 @@ export default {
           console.log("Ocultar preguntas");
           socket.emit('OcultarPreguntas', { roomId: this.app.sala.id });
           if (this.app.duelo) {
-            console.log("Duelo terminado"); 
+            console.log("Duelo terminado");
             socket.emit('dueloTerminado', { roomId: this.app.sala.id });
             socket.emit('habilitarBotonesDuelo', { roomId: this.app.sala.id });
           }
@@ -415,8 +428,8 @@ export default {
   grid-gap: 20px;
   width: 100vw;
   height: 100vh;
-  background-image: url('/mar.gif');
-  background-size: 100% 100%;
+  background-size: cover;
+  background-position: center;
   justify-items: center;
   align-items: center;
 }
@@ -430,6 +443,7 @@ export default {
   border-radius: 10px;
   color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  font-size: 1.5em; 
 }
 
 .torn {
@@ -441,6 +455,7 @@ export default {
   border-radius: 10px;
   color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  font-size: 1.5em; 
 }
 
 .jugadores {
@@ -452,7 +467,9 @@ export default {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  font-size: 1.5em; 
 }
+
 
 .mapa {
   grid-column: 1 / 3;
@@ -470,6 +487,8 @@ export default {
   flex-direction: column;
   justify-content: start;
   align-items: center;
+  color: white;
+  font-size: 1.5em; 
 }
 
 .turn-container {
@@ -498,6 +517,7 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 10px;
+  font-size: 1.0em; 
 }
 
 button {
@@ -658,12 +678,15 @@ button:hover {
     height: 30vh;
   }
 }
+
 button:disabled {
-  opacity: 0.5; /* Cambia la opacidad de los botones deshabilitados */
+  opacity: 0.5;
+  /* Cambia la opacidad de los botones deshabilitados */
 }
 
 /* Agrega una clase para aplicar un estilo adicional a los botones deshabilitados */
 .disabled-button {
-  filter: blur(2px); /* Aplica un desenfoque a los botones deshabilitados */
+  filter: blur(0.5px);
+  /* Aplica un desenfoque a los botones deshabilitados */
 }
 </style>

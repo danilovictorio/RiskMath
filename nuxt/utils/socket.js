@@ -34,7 +34,7 @@ socket.on('salas', (salas) => {
 socket.on('usuarioUnidoSala', (data) => {
   let store = useAppStore();
   store.setSala(data.sala);
-  store.setpaisesConquistados(data.sala.recuentoPaises);
+  store.setpaisesConquistados(data.sala.recuentoPaises || {});
   console.log('Datos de la sala DE UNIDO SALA:', store.sala);
 });
 
@@ -93,7 +93,7 @@ socket.on('habilitarBotonesDuelo', () => {
 socket.on('paisesConquistados', (recuentoPaises) => {
   console.log('Recuento de paises:', recuentoPaises.recuentoPaises);
   const appStore = useAppStore();
-  appStore.setpaisesConquistados(recuentoPaises.recuentoPaises);
+  appStore.setpaisesConquistados(recuentoPaises.recuentoPaises || {});
 });
 
 socket.on('respuestaCorrecta', ({ paisId, jugador, color }) => {
