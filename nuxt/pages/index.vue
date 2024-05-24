@@ -12,11 +12,10 @@
       <h2>Risk Math</h2>
       <div class="input-container">
         <input v-model="nombreUsuario" />
-        <label for="nombreUsuario">Nombre de usuario</label>
-
+        <label for="nombreUsuario">Nom d'usuari</label>
       </div>
       <button @click="crearSala">Crear sala</button>
-      <button @click="unirseSala">Unirse a sala</button>
+      <button @click="unirseSala">Unir-se a la sala</button>
       <nuxt-link to="/AdminPreguntes" class="adminPreg">Administrar Preguntes</nuxt-link>
       <img src="../public/info_icon.png" @click="popupInfo" class="info-icon">
       <div class="superpuesto" id="superpuesto">
@@ -30,6 +29,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import { socket } from '@/utils/socket.js';

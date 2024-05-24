@@ -4,20 +4,20 @@
     <div class="max-w-md w-full space-y-8 bg-blue-300 p-6 rounded-xl shadow-md text-blue-1100">
       <div>
         <h2 class="mt-6 text-center text-3xl font-extrabold text-blue-800">
-          Sala de espera
+          Sala d'espera
         </h2>
         <p class="mt-2 text-center text-sm text-blue-800">
-          {{ sala ? sala.nombre : 'Nombre de la sala no disponible' }}
+          {{ sala ? sala.nombre : 'Nom de la sala no disponible' }}
         </p>
         <p class="mt-2 text-center text-sm relative group text-blue-800">
-          Código de la sala: {{ sala ? sala.id : 'Código de la sala no disponible' }}
+          Codi de la sala: {{ sala ? sala.id : 'Codi de la sala no disponible' }}
           <span
             class="absolute right-0 top-0 mt-2 mr-2 text-xs text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out cursor-pointer"
-            @click="copyToClipboard(sala ? sala.id : '')">Copy</span>
+            @click="copyToClipboard(sala ? sala.id : '')">Copiar</span>
         </p>
       </div>
       <div class="mt-8 space-y-6">
-        <p class="text-lg mb-2 text-blue-800">Usuarios en la sala:</p>
+        <p class="text-lg mb-2 text-blue-800">Usuaris a la sala:</p>
         <div class="grid grid-cols-1 gap-4">
           <div class="flex items-center p-2 bg-blue-400 rounded-lg shadow-md text-blue-900" v-for="(jugador, index) in sala.jugadores"
             :key="index">
@@ -29,7 +29,7 @@
                 {{ jugador.nombre }}
               </p>
               <p class="text-xs text-blue-600">
-                Esperando para jugar...
+                Esperant per jugar...
               </p>
             </div>
           </div>
@@ -43,6 +43,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 // SalaEspera.vue

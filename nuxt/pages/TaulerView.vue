@@ -1,5 +1,5 @@
 <template>
-  <div class="w-screen h-screen flex items-center justify-center bg-center bg-cover bg-no-repeat" style="background-image: url('/mar.gif');">
+  <div class="w-screen h-screen flex items-center justify-center bg-center bg-cover bg-no-repeat" style="background-image: url('/mar3.jpg');">
   <div class="container">
     <div class="turno-de">
       <h3>{{ app.turnoDe.estado }}</h3>
@@ -253,7 +253,7 @@ export default {
     },
     async enviarAtac(name, paisId, idUser) {
 
-      this.cambiarAccion("Atacando");
+      this.cambiarAccion("Atacant");
       try {
         const data = await enviarAtac(name, idUser);
 
@@ -279,7 +279,7 @@ export default {
     },
     async enviarDuelo(name, paisId, idUser) {
       console.log("Enviar duelo");
-      this.cambiarAccion("Atancado");
+      this.cambiarAccion("Atancant");
       try {
         const data = await enviarAtac(name, idUser);
 
@@ -329,7 +329,7 @@ export default {
         const result = await validarResposta(questionId, selectedOption);
 
         if (result.resultado === true) {
-          this.cambiarAccion("Conquistado");
+          this.cambiarAccion("Conquistat");
           console.log("La respuesta es verdadera");
           this.confirmarAtaque(this.app.turnoDe.nombre, this.paisId);
           this.resultadoPregunta = true;
@@ -338,7 +338,7 @@ export default {
           }
           this.contadorPaises++;
         } else {
-          this.cambiarAccion("Derrotado");
+          this.cambiarAccion("Derrotat");
           console.log("La respuesta es falsa");
           this.resultadoPregunta = false;
         }
@@ -414,7 +414,7 @@ export default {
   async mounted() {
     //this.obtenerPreguntas();
     this.obtenerDatosPaises();
-    this.cambiarAccion("Esperando ataque");
+    this.cambiarAccion("Esperant Atac");
 
   },
 };
