@@ -407,6 +407,7 @@ export default {
 };
 </script>
 <style scoped>
+
 .container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -415,8 +416,7 @@ export default {
   width: 100vw;
   height: 100vh;
   background-image: url('/mar.gif');
-  background-size: cover;
-  background-position: center;
+  background-size: 100% 100%;
   justify-items: center;
   align-items: center;
 }
