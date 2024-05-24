@@ -249,7 +249,8 @@ export default {
           this.enviarAtac(idPais, name, idUser);
         } else {
           console.log("El país ya está conquistado por otro jugador.");
-          this.enviarDuelo();
+          console.log("DAtos enviar Ataca "+ name," "+ idUser);
+          this.enviarDuelo(idPais, name, idUser);
         }
       } else {
         console.log("No es tu turno.");
@@ -257,7 +258,7 @@ export default {
       }
     },
     async enviarAtac(name, paisId, idUser) {
-
+      console.log("DAtos enviar Ataca "+ name," "+ idUser);
       this.cambiarAccion("Atacant");
       try {
         const data = await enviarAtac(name, idUser);
@@ -285,6 +286,7 @@ export default {
     async enviarDuelo(name, paisId, idUser) {
       console.log("Enviar duelo");
       this.cambiarAccion("Atancant");
+      console.log("DAtos enviar Duelo "+ name," "+ idUser);
       try {
         const data = await enviarAtac(name, idUser);
 
