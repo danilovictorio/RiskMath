@@ -22,13 +22,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
+      - name: Set up Node.js and npm
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+          # Especifica la versión de npm compatible con lockfileVersion 3
+          npm-version: '7.x'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Lint code
         run: npm run lint
