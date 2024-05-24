@@ -1,5 +1,5 @@
 <template>
-  <div class="w-screen h-screen flex items-center justify-center bg-center bg-cover bg-no-repeat" style="background-image: url('/mapaRisk.jpg');">
+  <div class="w-screen h-screen flex items-center justify-center bg-center bg-cover bg-no-repeat" style="background-image: url('/mapaRisk.png');">
     <div class="result-container text-center"> <!-- Añadido el contenedor de resultados -->
       <h1 class="text-4xl font-bold mb-4 text-white-500">¡El ganador es:</h1>
       <h1 class="ganador text-6xl font-bold text-green-500 mb-8">{{ ganador }}!</h1>

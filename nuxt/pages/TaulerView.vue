@@ -1,4 +1,5 @@
 <template>
+  <div class="w-screen h-screen flex items-center justify-center bg-center bg-cover bg-no-repeat" style="background-image: url('/mar.gif');">
   <div class="container">
     <div class="turno-de">
       <h3>{{ app.turnoDe.estado }}</h3>
@@ -155,6 +156,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 
 
@@ -418,6 +420,7 @@ export default {
 };
 </script>
 <style scoped>
+
 .container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -425,7 +428,6 @@ export default {
   grid-gap: 20px;
   width: 100vw;
   height: 100vh;
-  background-image: url('/mar.gif');
   background-size: cover;
   background-position: center;
   justify-items: center;
@@ -441,6 +443,7 @@ export default {
   border-radius: 10px;
   color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  font-size: 1.5em; 
 }
 
 .torn {
@@ -452,6 +455,7 @@ export default {
   border-radius: 10px;
   color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  font-size: 1.5em; 
 }
 
 .jugadores {
@@ -463,7 +467,9 @@ export default {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  font-size: 1.5em; 
 }
+
 
 .mapa {
   grid-column: 1 / 3;
@@ -481,6 +487,8 @@ export default {
   flex-direction: column;
   justify-content: start;
   align-items: center;
+  color: white;
+  font-size: 1.5em; 
 }
 
 .turn-container {
@@ -509,6 +517,7 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 10px;
+  font-size: 1.0em; 
 }
 
 button {
@@ -677,7 +686,7 @@ button:disabled {
 
 /* Agrega una clase para aplicar un estilo adicional a los botones deshabilitados */
 .disabled-button {
-  filter: blur(2px);
+  filter: blur(0.5px);
   /* Aplica un desenfoque a los botones deshabilitados */
 }
 </style>
