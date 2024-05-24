@@ -49,12 +49,7 @@ io.on('connection', (socket) => {
     });
   });
 
-  socket.on('obtenerSalas', () => {
-    console.log('Evento obtenerSalas recibido');
-    const salas = Object.values(rooms);
-    socket.emit('salas', salas);
-  });
-
+  
   socket.on('unirseSala', (roomId, nombreJugador, callback) => {
     const room = rooms[roomId];
     if (room && room.jugadores.length < room.capacidad) {
@@ -75,6 +70,11 @@ io.on('connection', (socket) => {
     } else {
       callback({ success: false, message: 'La sala está llena o no existe.' });
     }
+  });
+  socket.on('obtenerSalas', () => {
+    console.log('Evento obtenerSalas recibido');
+    const salas = Object.values(rooms);
+    socket.emit('salas', salas);
   });
 
   socket.on('iniciarPartida', (roomId, callback) => {
@@ -118,16 +118,13 @@ io.on('connection', (socket) => {
       io.to(roomId).emit('cambiarPrimerTurno', { turno_de: jugadorInicial.nombre });
     }
   });
-
-  socket.on('asignarPais', ({ roomId, pais }) => {
-    io.to(roomId).emit('nombrePaisAsignado', { pais });
-  });
-
   socket.on('marcarTerritorioSeleccionado', ({ roomId, paisId }) => {
     console.log("Territorio SELECCIONADO SERVER");
     io.to(roomId).emit('marcarTerritorio', { paisId });
   });
-
+  socket.on('asignarPais', ({ roomId, pais }) => {
+    io.to(roomId).emit('nombrePaisAsignado', { pais });
+  });
   socket.on('disconnect', () => {
     console.log("Se ha desconectado alguien!! con id " + socket.id);
 

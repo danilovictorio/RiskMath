@@ -1,3 +1,9 @@
+<!-- RUTAS PARA FETCH A LARAVEL
+  En LOCAL : http://localhost:8000
+  En PRODUCCIÓN : http://trfinal.a17danvicfer.daw.inspedralbes.cat/laravel/public
+
+  sustituir valor en variable global:  ruta
+ -->
 <template>
   <div class="w-screen h-screen flex items-center justify-center bg-center bg-cover bg-no-repeat" style="background-image: url('/mar3.jpg');">
   <div class="container">
@@ -181,7 +187,6 @@ export default {
       esActivo: true,
       resultadoPregunta: false,
       miTurno: false,
-      ruta: 'http://localhost:8000',
       contadorPaises: 0,
       pregDuelo: false,
       clicksDeshabilitados: false,
@@ -244,7 +249,7 @@ export default {
           this.enviarAtac(idPais, name, idUser);
         } else {
           console.log("El país ya está conquistado por otro jugador.");
-          this.enviarDuelo(idPais, name, idUser);
+          this.enviarDuelo();
         }
       } else {
         console.log("No es tu turno.");
@@ -386,7 +391,7 @@ export default {
         this.comprovarFinal();
       } catch (error) {
         console.error("Error en la solicitud:", error);
-      }
+    }
     },
 
     //funció per a comprovar el final del joc
@@ -403,6 +408,7 @@ export default {
 
       });
     },
+
     async cambiarAccion(accion) {
       socket.emit('cambiarAccion', { roomId: this.app.sala.id, accion: accion });
     },
@@ -420,6 +426,43 @@ export default {
 };
 </script>
 <style scoped>
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+#preg{
+margin-left: 20%;
+margin-right: 20%;
+padding-bottom: 5%;
+padding-left: 5%;
+padding-right: 5%;
+border-radius: 10%;
+}
+
+#cont-preg {
+  margin-top: 5%;
+  margin-bottom: 5%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.button {
+  padding: 2rem;
+  text-align: center;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  background-color: #4299e1;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
+}
+
+.button:hover {
+  background-color: #2b6cb0;
+  transform: scale(1.05);
+}
 
 .container {
   display: grid;
