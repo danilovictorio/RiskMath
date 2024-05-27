@@ -49,7 +49,7 @@ io.on('connection', (socket) => {
     });
   });
 
-  
+
   socket.on('unirseSala', (roomId, nombreJugador, callback) => {
     const room = rooms[roomId];
     if (room && room.jugadores.length < room.capacidad) {
@@ -249,7 +249,7 @@ io.on('connection', (socket) => {
         io.to(roomId).emit('dueloAcabado', { roomId });
         io.to(roomId).emit('ocultarPreguntas', { roomId });
         io.to(roomId).emit('paisesConquistados', { recuentoPaises: room.recuentoPaises });
-     
+
         console.log('Cambio de turno:', nextName);
       } else {
         io.to(roomId).emit('cambiarTurno', { turno_de: userName, usuarios: room.jugadores });
