@@ -53,14 +53,14 @@ Programació:
 
 Para desplegar la aplicación, sigue las instrucciones detalladas en los documentos de despliegue:
 
-- [Despliegue Local para Pruebas](/doc/LocalDeploy.md)
-- [Despliegue Remoto](/doc/RemoteDeploy.pdf)
+- [Despliegue Local para Pruebas](/doc/fitxersDoc/LocalDeploy.md)
+- [Despliegue Remoto](/doc/fitxersDoc/RemoteDeploy.pdf)
 
 ## Enlaces al Repositorio de GitHub
 
 - [Repositorio de GitHub](https://github.com/inspedralbes/tr2-MultipliCAT-G7)
 
 ## Codgio fuente de las diferentes partes del projecto
--[Codigo Fuente del BACK/Laravel](/doc/codiFontBack.md)
--[Codigo Fuente del Front/Nuxt](/doc/codiFontFront.md)
--[Codigo Fuente del Node/sockets](/doc/codiFontNode.md)
+-[Codigo Fuente del BACK/Laravel](/doc/fitxersDoc/codiFontBack.md)
+-[Codigo Fuente del Front/Nuxt](/doc/fitxersDoc/codiFontFront.md)
+-[Codigo Fuente del Node/sockets](/doc/fitxersDoc/codiFontNode.md)
