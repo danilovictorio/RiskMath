@@ -1,3 +1,0 @@
-color1 #00E68B
-color2 #E67200
-color3 #6600E6

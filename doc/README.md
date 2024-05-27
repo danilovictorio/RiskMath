@@ -1,5 +1,3 @@
-# Documentació bàsica del projecte
-Ha d'incloure, com a mínim
 
 # Instruccions per crear un entorn de desenvolupament
 EINES:
@@ -44,8 +42,25 @@ Programació:
 
 *Aquestes extensions que anem a utilitzar són útils per a desenvolupadors la pàgina web i ajuden a millorar l'eficiència de la mateixa.
 
+## Estructura del Proyecto
 
-# Instruccions de desplegament
+- [backend/](/laravel): Carpeta que contiene el código fuente del backend Laravel.
+- [frontend/](/nuxt): Carpeta que contiene el código fuente del frontend Vue.js.
+- [Doc/](/doc): Documentacion del proyecto 
+- [scripts/](/scripts): Scripts útiles para instalación y despliegue.
 
-- [Desplegament Local per probes](https://github.com/inspedralbes/tr2-MultipliCAT-G7/blob/docUpdate/doc/LocalDeploy.md)
-- [Desplegament Remot](https://github.com/inspedralbes/tr2-MultipliCAT-G7/blob/docUpdate/doc/RemoteDeploy.pdf)
+## Instrucciones de Desplegamiento
+
+Para desplegar la aplicación, sigue las instrucciones detalladas en los documentos de despliegue:
+
+- [Despliegue Local para Pruebas](/doc/LocalDeploy.md)
+- [Despliegue Remoto](/doc/RemoteDeploy.pdf)
+
+## Enlaces al Repositorio de GitHub
+
+- [Repositorio de GitHub](https://github.com/inspedralbes/tr2-MultipliCAT-G7)
+
+## Codgio fuente de las diferentes partes del projecto
+-[Codigo Fuente del BACK/Laravel](/doc/codiFontBack.md)
+-[Codigo Fuente del Front/Nuxt](/doc/codiFontFront.md)
+-[Codigo Fuente del Node/sockets](/doc/codiFontNode.md)

@@ -24,7 +24,7 @@ Route::post('/crear-pregunta', [PreguntaController::class, 'crearPregunta']);
 Route::post('/verificar-respuesta', [PreguntaController::class, 'verificarRespuesta']);
 
 
-    //Rutas de Atacs
+//Rutas de Atacs
 Route::post('/enviar-atac', [AtacController::class, 'enviarAtac']);
 Route::post('/cambiar-estado-ataque', [AtacController::class, 'cambiarEstadoAtaque']);
 
@@ -42,4 +42,3 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 // routes/api.php
-
