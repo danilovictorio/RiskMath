@@ -77,6 +77,19 @@ socket.on('marcarTerritorio', ({ paisId }) => {
     paisElement.style.fill = 'grey';
   }
 });
+
+socket.on('clicksDesHabilitados', () => {
+  console.log('Clicks deshabilitados');
+  const appStore = useAppStore();
+  appStore.setClicksDeshabilitados(true);
+});
+
+socket.on('clicksHabilitados', () => {
+  const appStore = useAppStore();
+  appStore.setClicksDeshabilitados(false);
+});
+
+
 socket.on('deshabilitarBotones', ({ userName }) => {
   const appStore = useAppStore();
   if (appStore.nombre === userName) {

@@ -1,34 +1,102 @@
 [
-    {
-      "pregunta": "¿Cuántos mililitros hay en 3.5 litros?",
+  {
+      "pregunta": "Quants mil·lilitres hi ha en 3.5 litres?",
       "opciones": {
-        "a": "35 ml",
-        "b": "350 ml",
-        "c": "verdadera",
-        "d": "0.35 ml"
+          "a": "35 ml",
+          "b": "350 ml",
+          "c": "3500 ml",
+          "d": "0.35 ml"
       },
       "respuesta_correcta": "c"
-    },
-    {
-      "pregunta": "¿Cuántos mililitros hay en 3.5 litros?",
+  },
+  {
+      "pregunta": "Quant és 5 + 3?",
       "opciones": {
-        "a": "35 ml",
-        "b": "350 ml",
-        "c": "verdadera",
-        "d": "0.35 ml"
+          "a": "53",
+          "b": "8",
+          "c": "2",
+          "d": "10"
       },
-      "respuesta_correcta": "c"
-    },
-    {
-      "pregunta": "¿Cuántos mililitros hay en 3.5 litros?",
+      "respuesta_correcta": "b"
+  },
+  {
+      "pregunta": "Quin és el resultat de 12 - 4?",
       "opciones": {
-        "a": "35 ml",
-        "b": "350 ml",
-        "c": "verdadera",
-        "d": "0.35 ml"
+          "a": "8",
+          "b": "6",
+          "c": "10",
+          "d": "4"
       },
-      "respuesta_correcta": "c"
-    }
- 
-    
-  ]
+      "respuesta_correcta": "a"
+  },
+  {
+      "pregunta": "Quant és 3 x 7?",
+      "opciones": {
+          "a": "21",
+          "b": "10",
+          "c": "14",
+          "d": "27"
+      },
+      "respuesta_correcta": "a"
+  },
+  {
+      "pregunta": "Quin és el valor de 10 ÷ 2?",
+      "opciones": {
+          "a": "5",
+          "b": "8",
+          "c": "2",
+          "d": "10"
+      },
+      "respuesta_correcta": "a"
+  },
+  {
+      "pregunta": "Si tens 2 pomes i en compres 3 més, quantes pomes tens en total?",
+      "opciones": {
+          "a": "2",
+          "b": "5",
+          "c": "3",
+          "d": "4"
+      },
+      "respuesta_correcta": "b"
+  },
+  {
+      "pregunta": "Quin nombre és més gran, 7 o 5?",
+      "opciones": {
+          "a": "7",
+          "b": "5",
+          "c": "Iguals",
+          "d": "Cap"
+      },
+      "respuesta_correcta": "a"
+  },
+  {
+      "pregunta": "Quants minuts hi ha en una hora?",
+      "opciones": {
+          "a": "60",
+          "b": "100",
+          "c": "30",
+          "d": "120"
+      },
+      "respuesta_correcta": "a"
+  },
+  {
+      "pregunta": "Quina és la meitat de 8?",
+      "opciones": {
+          "a": "4",
+          "b": "6",
+          "c": "2",
+          "d": "8"
+      },
+      "respuesta_correcta": "a"
+  },
+  {
+      "pregunta": "Si un triangle té 3 costats, quants costats té un quadrat?",
+      "opciones": {
+          "a": "3",
+          "b": "4",
+          "c": "5",
+          "d": "6"
+      },
+      "respuesta_correcta": "b"
+  }
+]

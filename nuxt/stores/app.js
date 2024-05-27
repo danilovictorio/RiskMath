@@ -27,8 +27,15 @@ export const useAppStore = defineStore('app', {
     duelo: false,
     mostrarPreguntas: false,
     puedeResponder: true,
+    clicksDeshabilitados: false,
   }),
   actions: {
+    setClicksDeshabilitados(valor){
+      this.clicksDeshabilitados = valor;
+    },
+    getClicksDeshabilitados(){
+      return this.clicksDeshabilitados;
+    },
     setPaisSeleccionado(paisId){
       this.paisSeleccionado = paisId;
     },

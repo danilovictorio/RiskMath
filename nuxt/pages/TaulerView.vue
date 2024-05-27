@@ -5,7 +5,7 @@
   sustituir valor en variable global:  ruta
  -->
 <template>
-  <div class="w-screen h-screen flex items-center justify-center bg-center bg-cover bg-no-repeat" style="background-image: url('/mar3.jpg');">
+  <div class="w-screen h-screen flex items-center justify-center bg-center bg-cover bg-no-repeat" style="background-image: url('/mapaTauler.png');">
   <div class="container">
     <div class="turno-de">
       <h3>{{ app.turnoDe.estado }}</h3>
@@ -135,32 +135,20 @@
       </svg>
     </div>
     <div class="preguntas">
-      <div v-if="app.getMostrarPreguntas()">
-        <h2>{{ app.pregunta ? app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
-        <div class="respuestas" v-if="app.getMostrarPreguntas()">
-          <button @click="validateResponse(app.pregunta.id, 'a')" v-if="app.pregunta"
-            :disabled="(app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador)"
-            :class="{ 'disabled-button': (app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador) }">
-            {{ app.pregunta.respuesta_a }}
-          </button>
-          <button @click="validateResponse(app.pregunta.id, 'b')" v-if="app.pregunta"
-            :disabled="(app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador)"
-            :class="{ 'disabled-button': (app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador) }">
-            {{ app.pregunta.respuesta_b }}
-          </button>
-          <button @click="validateResponse(app.pregunta.id, 'c')" v-if="app.pregunta"
-            :disabled="(app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador)"
-            :class="{ 'disabled-button': (app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador) }">
-            {{ app.pregunta.respuesta_c }}
-          </button>
-          <button @click="validateResponse(app.pregunta.id, 'd')" v-if="app.pregunta"
-            :disabled="(app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador)"
-            :class="{ 'disabled-button': (app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador) }">
-            {{ app.pregunta.respuesta_d }}
-          </button>
-        </div>
-      </div>
+  <div v-if="app.getMostrarPreguntas()">
+    <h2>{{ app.pregunta ? app.pregunta.pregunta : 'No hay pregunta disponible' }}</h2>
+    <div class="respuestas" v-if="app.getMostrarPreguntas()">
+      <button v-for="respuesta in app.pregunta.respuestas" 
+              :key="respuesta.id" 
+              @click="validateResponse(app.pregunta.id, respuesta.id)" 
+              :disabled="(app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador)"
+              :class="{ 'disabled-button': (app.duelo && !app.puedeResponder) || (!app.duelo && !esTrunoJugador) }">
+        {{ respuesta.texto }}
+      </button>
     </div>
+  </div>
+</div>
+
   </div>
 </div>
 </template>
@@ -189,7 +177,6 @@ export default {
       miTurno: false,
       contadorPaises: 0,
       pregDuelo: false,
-      clicksDeshabilitados: false,
       paisesConquistadosLocal: {},
     };
   }, computed: {
@@ -212,10 +199,14 @@ export default {
   },
   methods: {
     manejarClic(name, idPais, idUser) {
-      if (this.clicksDeshabilitados) {
+      if (!this.app.esMiturno()) {
+            console.log("No es tu turno.");
+            return;  // Ignorar clics si no es el turno del jugador
+        }
+      if (this.app.getClicksDeshabilitados()) {
         return;  // Ignorar clics si los clics están deshabilitados
       }
-      this.clicksDeshabilitados = true;
+      socket.emit('desHabilitarClicks', { roomId: this.app.sala.id });
       this.asignarPais(idPais);
       this.paisId = name;
       let paisElement = document.getElementById(name);
@@ -242,8 +233,9 @@ export default {
 
       if (this.app.esMiturno()) {
         if (colorName === this.app.turnoDe.color) {
+          alert("El país ya está conquistado por ti.");
           console.log("El país ya está conquistado por ti.");
-          this.clicksDeshabilitados = false;
+          socket.emit('HabilitarClicks', { roomId: this.app.sala.id });
         } else if (fillColor === '#ffffff' || fillColor === 'rgb(255, 255, 255)' || colorName == 'white') { // Color blanco
           console.log("El país no está conquistado.");
           this.enviarAtac(idPais, name, idUser);
@@ -254,7 +246,7 @@ export default {
         }
       } else {
         console.log("No es tu turno.");
-        this.clicksDeshabilitados = false;
+        socket.emit('HabilitarClicks', { roomId: this.app.sala.id });
       }
     },
     async enviarAtac(name, paisId, idUser) {
@@ -263,13 +255,18 @@ export default {
       try {
         const data = await enviarAtac(name, idUser);
 
+        const respuestas = [
+                { id: 'a', texto: data.pregunta.respuesta_a },
+                { id: 'b', texto: data.pregunta.respuesta_b },
+                { id: 'c', texto: data.pregunta.respuesta_c },
+                { id: 'd', texto: data.pregunta.respuesta_d }
+            ];
+        this.mezclarRespuestas(respuestas);
+
         this.pregunta = {
           id: data.pregunta.id,
           pregunta: data.pregunta.pregunta,
-          respuesta_a: data.pregunta.respuesta_a,
-          respuesta_b: data.pregunta.respuesta_b,
-          respuesta_c: data.pregunta.respuesta_c,
-          respuesta_d: data.pregunta.respuesta_d,
+          respuestas: respuestas,
         };
 
         this.app.setPaisSeleccionado(paisId);
@@ -290,13 +287,18 @@ export default {
       try {
         const data = await enviarAtac(name, idUser);
 
+        const respuestas = [
+                { id: 'a', texto: data.pregunta.respuesta_a },
+                { id: 'b', texto: data.pregunta.respuesta_b },
+                { id: 'c', texto: data.pregunta.respuesta_c },
+                { id: 'd', texto: data.pregunta.respuesta_d }
+            ];
+        this.mezclarRespuestas(respuestas);
+
         this.pregunta = {
           id: data.pregunta.id,
           pregunta: data.pregunta.pregunta,
-          respuesta_a: data.pregunta.respuesta_a,
-          respuesta_b: data.pregunta.respuesta_b,
-          respuesta_c: data.pregunta.respuesta_c,
-          respuesta_d: data.pregunta.respuesta_d,
+          respuestas: respuestas,
         };
 
         this.mostrar = 1;
@@ -373,7 +375,7 @@ export default {
         }
 
         this.resultadoPregunta = false;
-        this.clicksDeshabilitados = false;
+        socket.emit('HabilitarClicks', { roomId: this.app.sala.id });
       } catch (error) {
         console.error("Error validating response:", error);
       }
@@ -409,6 +411,13 @@ export default {
         }
 
       });
+    },
+    mezclarRespuestas(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
     },
 
     async cambiarAccion(accion) {
@@ -522,7 +531,10 @@ border-radius: 10%;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80%;
+  width: 60%;
+  position: relative;
+  right: 20%;
+  bottom: 5%;
 }
 
 .preguntas {
