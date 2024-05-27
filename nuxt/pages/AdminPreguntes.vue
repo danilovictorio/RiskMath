@@ -118,7 +118,7 @@ export default {
             this.showModalEditar = true; // Mostramos el modal de edición
         },
         async guardarEdicion(pregunta) {
-            console.log('Guardar edición de la pregunta:', pregunta);
+            //console.log('Guardar edición de la pregunta:', pregunta);
             try {
                 // Llamar a la función del communicationManager para enviar la pregunta editada
                 await actualizarPreguntaEditada(pregunta);

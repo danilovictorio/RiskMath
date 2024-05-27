@@ -1,5 +1,5 @@
-const url = 'http://localhost:8000';
-//const url = 'http://trfinal.a17danvicfer.daw.inspedralbes.cat/laravel/public'; //producción
+//const url = 'http://localhost:8000';
+const url = 'http://trfinal.a17danvicfer.daw.inspedralbes.cat/laravel/public'; //producción
 
 export async function enviarAtac(name, idUser) {
     try {
@@ -19,7 +19,7 @@ export async function enviarAtac(name, idUser) {
         }
 
         const data = await response.json();
-        console.log("Respuesta del servidor:", data);
+        //console.log("Respuesta del servidor:", data);
         return data; // Retornar los datos de respuesta
     } catch (error) {
         console.error("Error en la solicitud:", error);
@@ -56,7 +56,7 @@ export async function validarResposta(questionId, selectedOption) {
         }
 
         const data = await response.json();
-        console.log("Respuesta del servidor:", data);
+        //console.log("Respuesta del servidor:", data);
         return data; // Retornar los datos de respuesta
     } catch (error) {
         console.error("Error en la solicitud:", error);
@@ -96,7 +96,7 @@ export async function mostrarPreguntas() {
             throw new Error(`Error en la solicitud: ${response.status}`);
         }
         const data = await response.json();
-        console.log("Preguntas:", data.preguntas);
+        //console.log("Preguntas:", data.preguntas);
         return data.preguntas;
     } catch (error) {
         throw new Error(`Error al obtener datos de preguntas: ${error.message}`);
@@ -119,7 +119,7 @@ export async function eliminarPregunta(id) {
         }
 
         const data = await response.json();
-        console.log("Respuesta del servidor:", data);
+        //console.log("Respuesta del servidor:", data);
         return data; // Retornar los datos de respuesta
     } catch (error) {
         console.error("Error en la solicitud:", error);
@@ -141,7 +141,7 @@ export async function actualizarPreguntaEditada(pregunta) {
         }
 
         const data = await response.json();
-        console.log("Respuesta del servidor:", data);
+        //console.log("Respuesta del servidor:", data);
         return data; // Retornar los datos de respuesta si es necesario
     } catch (error) {
         console.error("Error en la solicitud:", error);
@@ -163,7 +163,7 @@ export async function crearPregunta(preguntaData) {
         }
 
         const data = await response.json();
-        console.log("Pregunta creada:", data);
+        //console.log("Pregunta creada:", data);
         return data; // Retornar los datos de la pregunta creada
     } catch (error) {
         console.error("Error al crear la pregunta:", error);

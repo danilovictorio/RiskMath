@@ -69,7 +69,7 @@ export default {
     iniciarPartida() {
       socket.emit('iniciarPartida', this.sala.id, (response) => {
         if (response.success) {
-          console.log(response.message);
+          //console.log(response.message);
           socket.emit('peticion_jugar', { nombreUsuario: 'Usuario' + socket.id }, this.sala.id);
         } else {
           console.error(response.message);
@@ -78,7 +78,7 @@ export default {
     },
     handleIniciarPartidaResponse(response) {
       if (response.success) {
-        console.log(response.message);
+        //console.log(response.message);
         socket.emit('peticion_jugar', { nombreUsuario: 'Usuario' + socket.id }, this.sala.id);
       } else {
         console.error(response.message);
@@ -86,19 +86,19 @@ export default {
     },
     copyToClipboard(text) {
       navigator.clipboard.writeText(text).then(() => {
-        console.log('Copied to clipboard');
+        //console.log('Copied to clipboard');
       }).catch(err => {
         console.error('Could not copy text: ', err);
       });
     },
     handlePeticionJugarAceptada(datos) {
-      console.log('peticion_jugar_aceptada', datos);
+      //console.log('peticion_jugar_aceptada', datos);
       this.$router.push({ name: 'TaulerView' });
     },
   },
   created() {
     socket.on('peticion_jugar_aceptada', (datos) => {
-      console.log('peticion_jugar_aceptada', datos);
+      //console.log('peticion_jugar_aceptada', datos);
       this.$router.push({ name: 'TaulerView' });
     });
   },

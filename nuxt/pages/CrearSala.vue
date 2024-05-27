@@ -1,4 +1,5 @@
 <template>
+  <div>
   <p class="text-center text-blue-700 mb-4">Aquí pots crear una nova sala per jugar amb els teus amics. <br>Només cal que introdueixis el nom de la sala i la capacitat màxima de jugadors.</p>
 
   <div class="flex flex-col items-center justify-center h-full">
@@ -27,6 +28,7 @@
       <button @click="goBack" class="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Enrere</button>
     </div>
   </div>
+</div>
 </template>
 
 

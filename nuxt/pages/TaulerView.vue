@@ -200,7 +200,7 @@ export default {
   methods: {
     manejarClic(name, idPais, idUser) {
       if (!this.app.esMiturno()) {
-            console.log("No es tu turno.");
+            //console.log("No es tu turno.");
             return;  // Ignorar clics si no es el turno del jugador
         }
       if (this.app.getClicksDeshabilitados()) {
@@ -225,32 +225,32 @@ export default {
 
       //const turnoColorHex = tinycolor(this.app.turnoDe.color).toHex(); // Convertir a hexadecimal
       //const turnoColorRGB = tinycolor(this.app.turnoDe.color).toRgbString();
-      console.log("fillColor", fillColor);
-      console.log("colorName", colorName);
-      //console.log("turnoColorHex", turnoColorHex);
-      //console.log("turnoColorRGB", turnoColorRGB);
-      console.log(this.app.turnoDe.color);
+      //console.log("fillColor", fillColor);
+      //console.log("colorName", colorName);
+      ////console.log("turnoColorHex", turnoColorHex);
+      ////console.log("turnoColorRGB", turnoColorRGB);
+      //console.log(this.app.turnoDe.color);
 
       if (this.app.esMiturno()) {
         if (colorName === this.app.turnoDe.color) {
           alert("El país ya está conquistado por ti.");
-          console.log("El país ya está conquistado por ti.");
+          //console.log("El país ya está conquistado por ti.");
           socket.emit('HabilitarClicks', { roomId: this.app.sala.id });
         } else if (fillColor === '#ffffff' || fillColor === 'rgb(255, 255, 255)' || colorName == 'white') { // Color blanco
-          console.log("El país no está conquistado.");
+          //console.log("El país no está conquistado.");
           this.enviarAtac(idPais, name, idUser);
         } else {
-          console.log("El país ya está conquistado por otro jugador.");
-          console.log("DAtos enviar Ataca "+ name," "+ idUser);
+          //console.log("El país ya está conquistado por otro jugador.");
+          //console.log("DAtos enviar Ataca "+ name," "+ idUser);
           this.enviarDuelo(idPais, name, idUser);
         }
       } else {
-        console.log("No es tu turno.");
+        //console.log("No es tu turno.");
         socket.emit('HabilitarClicks', { roomId: this.app.sala.id });
       }
     },
     async enviarAtac(name, paisId, idUser) {
-      console.log("DAtos enviar Ataca "+ name," "+ idUser);
+      //console.log("DAtos enviar Ataca "+ name," "+ idUser);
       this.cambiarAccion("Atacant");
       try {
         const data = await enviarAtac(name, idUser);
@@ -272,18 +272,18 @@ export default {
         this.app.setPaisSeleccionado(paisId);
 
         //this.app.setEstado("Respondiendo");
-        console.log("ROOMID SELECCIONADO", this.app.sala.id);
+        //console.log("ROOMID SELECCIONADO", this.app.sala.id);
         socket.emit('marcarTerritorioSeleccionado', { roomId: this.app.sala.id, paisId: paisId });
         socket.emit('enviarPreguntas', { roomId: this.app.sala.id, preguntas: this.pregunta });
-        console.log("TaulerView MostrarPreguntas" + this.app.getMostrarPreguntas());
+        //console.log("TaulerView MostrarPreguntas" + this.app.getMostrarPreguntas());
       } catch (error) {
         console.error(error);
       }
     },
     async enviarDuelo(name, paisId, idUser) {
-      console.log("Enviar duelo");
+      //console.log("Enviar duelo");
       this.cambiarAccion("Atancant");
-      console.log("DAtos enviar Duelo "+ name," "+ idUser);
+      //console.log("DAtos enviar Duelo "+ name," "+ idUser);
       try {
         const data = await enviarAtac(name, idUser);
 
@@ -305,14 +305,14 @@ export default {
         this.app.setPaisSeleccionado(paisId);
         socket.emit('marcarTerritorioSeleccionado', { roomId: this.app.sala.id, paisId: paisId });
         socket.emit('enviarDuelo', { roomId: this.app.sala.id, preguntas: this.pregunta });
-        console.log("TaulerView MostrarPreguntasDUELO" + this.app.getMostrarPreguntas());
+        //console.log("TaulerView MostrarPreguntasDUELO" + this.app.getMostrarPreguntas());
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }
     },
 
     async propietariosPaises() {
-      console.log("propietariosPaises" + " " + this.app.sala.jugadores);
+      //console.log("propietariosPaises" + " " + this.app.sala.jugadores);
 
       socket.emit("contadorPaises", {
         roomId: this.app.sala.id,
@@ -324,7 +324,7 @@ export default {
       try {
         const paises = await obtenerPaises();
         this.paises = paises;
-        console.log(paises);
+        //console.log(paises);
       } catch (error) {
         console.error("Error al obtener datos de países:", error);
       }
@@ -333,13 +333,13 @@ export default {
     //funció que valida si la resposta d'un usuari es la correcta
     async validateResponse(questionId, selectedOption) {
       //this.app.setEstado("Acabado");
-      console.log("Pregunta ID:", questionId);
+      //console.log("Pregunta ID:", questionId);
       try {
         const result = await validarResposta(questionId, selectedOption);
 
         if (result.resultado === true) {
           this.cambiarAccion("Conquistat");
-          console.log("La respuesta es verdadera");
+          //console.log("La respuesta es verdadera");
           this.confirmarAtaque(this.app.turnoDe.nombre, this.paisId);
           this.resultadoPregunta = true;
           if (this.app.nombre == this.app.turnoDe.nombre) {
@@ -348,7 +348,7 @@ export default {
           this.contadorPaises++;
         } else {
           this.cambiarAccion("Derrotat");
-          console.log("La respuesta es falsa");
+          //console.log("La respuesta es falsa");
           this.resultadoPregunta = false;
         }
 
@@ -362,13 +362,13 @@ export default {
         });
         if (!this.resultadoPregunta && this.app.duelo) {
           // Si es duelo y falló
-          console.log("Falló la respuesta en duelo");
+          //console.log("Falló la respuesta en duelo");
         } else {
           // Si no es duelo o la respuesta fue correcta, ocultar las preguntas
-          console.log("Ocultar preguntas");
+          //console.log("Ocultar preguntas");
           socket.emit('OcultarPreguntas', { roomId: this.app.sala.id });
           if (this.app.duelo) {
-            console.log("Duelo terminado");
+            //console.log("Duelo terminado");
             socket.emit('dueloTerminado', { roomId: this.app.sala.id });
             socket.emit('habilitarBotonesDuelo', { roomId: this.app.sala.id });
           }
@@ -383,14 +383,14 @@ export default {
 
     //funció per confirmar atac
     async confirmarAtaque(idUser, paisId) {
-      console.log("ID QUE PASO AL CONFIRMAR ATAUQE", idUser + paisId);
+      //console.log("ID QUE PASO AL CONFIRMAR ATAUQE", idUser + paisId);
 
       try {
         const result = await confirmarAtaque(idUser, paisId);
 
-        console.log(result.message);
+        //console.log(result.message);
         this.propietariosPaises();
-        console.log("Usuario: " + idUser, "Conquista Pais: " + paisId);
+        //console.log("Usuario: " + idUser, "Conquista Pais: " + paisId);
 
         this.comprovarFinal();
       } catch (error) {
@@ -403,11 +403,11 @@ export default {
       socket.on('comprovarFinal', ({ paisesConquistados, usuarioGanador }) => {
         this.app.jugadorGanador = usuarioGanador;
         if (Object.keys(paisesConquistados).length == 15) {
-          console.log("¡Todos los países han sido conquistados!");
+          //console.log("¡Todos los países han sido conquistados!");
 
           this.$router.push({ name: 'PaginaFinalitzada' });
         } else {
-          console.log("Aún no se han conquistado todos los países.");
+          //console.log("Aún no se han conquistado todos los países.");
         }
 
       });
