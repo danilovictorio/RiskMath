@@ -60,7 +60,7 @@ Para desplegar la aplicación, sigue las instrucciones detalladas en los documen
 
 - [Repositorio de GitHub](https://github.com/inspedralbes/tr2-MultipliCAT-G7)
 
-## Codgio fuente de las diferentes partes del projecto
+## Codigo fuente de las diferentes partes del projecto
 -[Codigo Fuente del BACK/Laravel](/doc/fitxersDoc/codiFontBack.md)
 -[Codigo Fuente del Front/Nuxt](/doc/fitxersDoc/codiFontFront.md)
 -[Codigo Fuente del Node/sockets](/doc/fitxersDoc/codiFontNode.md)
