@@ -77,10 +77,10 @@ export default {
   },
   methods: {
     async login() {
-        console.log(this.email, this.password)
+        //console.log(this.email, this.password)
         try {
         const data = await login(this.email, this.password);
-        console.log(data);
+       //console.log(data);
 
         if (data.role == "admin") {
 

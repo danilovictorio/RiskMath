@@ -19,7 +19,7 @@ export async function login(email, password) {
         }
 
         const data = await response.json();
-        console.log("Respuesta del servidor:", data);
+        //console.log("Respuesta del servidor:", data);
         return data; // Retornar los datos de respuesta
     } catch (error) {
         console.error("Error en la solicitud:", error);
