@@ -6,6 +6,7 @@ use App\Http\Controllers\PreguntaController;
 use App\Http\Controllers\PaisController;
 use App\Http\Controllers\AtacController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\AuthController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,6 +24,9 @@ Route::delete('/eliminar-pregunta', [PreguntaController::class, 'eliminarPregunt
 Route::post('/crear-pregunta', [PreguntaController::class, 'crearPregunta']);
 Route::post('/verificar-respuesta', [PreguntaController::class, 'verificarRespuesta']);
 
+//Rutas de AUTH
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
 
     //Rutas de Atacs
 Route::post('/enviar-atac', [AtacController::class, 'enviarAtac']);

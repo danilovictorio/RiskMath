@@ -35,7 +35,7 @@
         </div>
       </div>
       <div v-else>
-        <h1>DUELO INICIADO</h1>
+        <h1>DUEL INICIAT</h1>
       </div>
     </div>
     <div class="jugadores">
