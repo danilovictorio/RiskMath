@@ -1,6 +1,32 @@
 //const url = 'http://localhost:8000';
 const url = 'http://trfinal.a17danvicfer.daw.inspedralbes.cat/laravel/public'; //producción
 
+export async function login(email, password) {
+    try {
+        const response = await fetch(`${url}/api/login`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error("Credenciales inválidas");
+        }
+
+        const data = await response.json();
+        //console.log("Respuesta del servidor:", data);
+        return data; // Retornar los datos de respuesta
+    } catch (error) {
+        console.error("Error en la solicitud:", error);
+        throw error; // Propagar el error hacia arriba
+    }
+}
+
 export async function enviarAtac(name, idUser) {
     try {
         const response = await fetch(`${url}/api/enviar-atac`, {

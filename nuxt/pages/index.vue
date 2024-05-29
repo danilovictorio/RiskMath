@@ -16,7 +16,7 @@
       </div>
       <button @click="crearSala">Crear sala</button>
       <button @click="unirseSala">Unir-se a la sala</button>
-      <nuxt-link to="/AdminPreguntes" class="adminPreg">Administrar Preguntes</nuxt-link>
+      <nuxt-link to="/Login" class="adminPreg">Administrar Preguntes</nuxt-link>
       <img src="../public/info_icon.png" @click="popupInfo" class="info-icon">
       <div class="superpuesto" id="superpuesto">
         <button @click="popoffInfo" class="poppup_btn">x</button>
