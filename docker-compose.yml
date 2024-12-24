@@ -1,0 +1,65 @@
+
+services:
+  laravel:
+    build:
+      context: .
+      dockerfile: ./laravel/Dockerfile.dev
+    container_name: laravel
+    working_dir: /var/www
+    volumes:
+      - ./laravel:/var/www
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=risk
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+    command: >
+      bash -c "composer install && php artisan key:generate && php artisan migrate --seed && php artisan serve --host=0.0.0.0 --port=8000"
+
+  nuxt-app:
+    build:
+      context: .
+      dockerfile: ./nuxt/Dockerfile.dev
+    container_name: nuxt
+    working_dir: /app
+    volumes:
+      - ./nuxt:/app
+    ports:
+      - "3000:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: npm run dev
+
+  db:
+    image: mysql:8.2.0
+    container_name: mysql_db
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: risk
+    ports:
+      - "3307:3306"
+
+  node-sockets:
+    build:
+      context: .
+      dockerfile: ./node/Dockerfile.dev
+    container_name: node_sockets
+    working_dir: /app
+    volumes:
+      - ./node:/app
+    ports:
+      - "3123:3123"
+    command: node index.js
+
+volumes:
+  db_data:
