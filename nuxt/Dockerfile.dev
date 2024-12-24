@@ -1,16 +1,20 @@
-FROM node:18-bullseye
+# Etapa 1: Desarrollo
+FROM node:18-bullseye as development
 
+# Establecer el directorio de trabajo
 WORKDIR /app
 
-# Copiar package.json y package-lock.json primero para aprovechar la caché
+# Copiar los archivos de configuración de dependencias primero para aprovechar la caché
 COPY ./nuxt/package*.json ./
 
-# Instalar dependencias
+# Instalar dependencias de desarrollo
 RUN npm install
 
 # Copiar el resto del proyecto
 COPY ./nuxt ./
 
+# Exponer el puerto para desarrollo
 EXPOSE 3000
 
+# Comando para iniciar la aplicación en modo desarrollo
 CMD ["npm", "run", "dev"]
