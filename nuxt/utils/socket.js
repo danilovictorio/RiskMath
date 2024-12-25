@@ -1,8 +1,8 @@
 // Importar el cliente Socket.io
 import { io } from "socket.io-client";
 import { useAppStore } from '../stores/app';
-//const url = 'http://localhost:3123';
-const url = 'http://trfinal.a17danvicfer.daw.inspedralbes.cat:3123'; //producción
+const url = 'http://localhost:3123';
+//const url = 'http://trfinal.a17danvicfer.daw.inspedralbes.cat:3123'; //producción
 
 export const socket = io(url);
 

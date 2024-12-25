@@ -1,5 +1,5 @@
 # Etapa 1: Desarrollo
-FROM node:18-bullseye as development
+FROM node:18-bullseye 
 
 # Establecer el directorio de trabajo
 WORKDIR /app
