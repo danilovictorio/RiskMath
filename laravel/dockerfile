@@ -1,6 +1,38 @@
+# Imagen base con PHP 8.1 y FPM
 FROM php:8.1-fpm
-RUN apt-get update
-RUN docker-php-ext-install mysqli pdo pdo_mysql
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN apt-get install -y libzip-dev zip 
-RUN docker-php-ext-install zip
+
+# Establece el directorio de trabajo
+WORKDIR /var/www
+
+# Instala las dependencias necesarias
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    zip \
+    unzip \
+    git \
+    libonig-dev \
+    libxml2-dev \
+    curl \
+    && docker-php-ext-install pdo pdo_mysql gd \
+    && rm -rf /var/lib/apt/lists/*
+
+# Instala Composer
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
+
+# Copia el código de la aplicación
+COPY ./laravel /var/www
+
+# Instala las dependencias de Laravel
+RUN composer install --no-dev --optimize-autoloader
+
+# Copia wait-for-it para manejar dependencias de servicio
+ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /wait-for-it.sh
+RUN chmod +x /wait-for-it.sh
+
+# Expone el puerto
+EXPOSE 8000
+
+# Comando por defecto (ideal para desarrollo)
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
